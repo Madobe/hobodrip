@@ -44,5 +44,5 @@
         });
 
         document.getElementById( "member-list-table" ).appendChild( tr );
-    })
+    });
 })();
