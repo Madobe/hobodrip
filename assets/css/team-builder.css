@@ -1,0 +1,8 @@
+figure > img {
+    max-height: 90px;
+    max-width: 90px;
+    cursor: pointer;
+}
+figure > figcaption {
+    cursor: pointer;
+}
