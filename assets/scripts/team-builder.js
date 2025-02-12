@@ -101,17 +101,17 @@
                         figcaption.text( nextSlot.find( "figcaption" ).text() )
                     }
 
-                    // Reset the doll's selected status
-                    state.selectedDolls = state.selectedDolls.filter( name => name !== doll )
-
                     // Find the doll in the selector and remove the opacity change
                     const listImg = Object.values( $( "#doll-list" ).find( "img" ) )
-                        .find( el => el.src.includes( doll ) )
+                        .find( el => getDollName( el.src ) === doll )
 
                     // Because a doll can be present in multiple teams if they're a support, we need to only remove the opacity
                     // filter if they're gone from every team
                     if ( !getSelectedTeams().flat().includes( doll ) ) {
                         $( listImg ).removeClass( "opacity-25" )
+
+                        // Reset the doll's selected status
+                        state.selectedDolls = state.selectedDolls.filter( name => name !== doll )
                     }
                 }
             })
@@ -141,6 +141,14 @@
 
             $( "#team-roster" ).append( container )
         }
+    }
+
+    const hasTooManyDupes = ( arr ) => {
+        let count = {}
+        arr
+            .filter( value => value !== "placeholder" )
+            .forEach( value => count[value] = count[value] ? count[value] + 1 : 1 )
+        return Object.values( count ).filter( n => n >= 3 ).length > 1
     }
 
     /**
@@ -182,7 +190,8 @@
             // * They're being chosen as a support
             //
             // If they're being chosen as a support, we can determine if that is possible based on whether the resulting team
-            // would have two dolls that are in another team.
+            // would have three dolls that are in another team. This is because 2 dolls can trade the support slot, but 3 is
+            // just not possible.
             const teamSelections = getSelectedTeams()
 
             if ( teamSelections[state.selectedTeam].includes( doll ) ) return;
@@ -194,7 +203,7 @@
 
                 if ( i === state.selectedTeam ) {
                     continue
-                } else if ( intersections.length >= 2 ) {
+                } else if ( intersections.length >= 3 || hasTooManyDupes( teamSelections.flat().concat( doll ) ) ) {
                     return
                 }
             }
