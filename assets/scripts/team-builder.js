@@ -165,54 +165,52 @@
      * Actual execution
      */
 
-    getDollNames()
-        .then( data => {
-            let row;
+    const data = getDollNames()
+    let row;
 
-            data.forEach( ( doll, i ) => {
-                // 4 columns per row
-                if ( i % 4 === 0 ) {
-                    row = $( "<div>", { "class": "row" } )
-                    $( "#doll-list" ).append( row )
-                }
+    data.forEach( ( doll, i ) => {
+        // 4 columns per row
+        if ( i % 4 === 0 ) {
+            row = $( "<div>", { "class": "row" } )
+            $( "#doll-list" ).append( row )
+        }
 
-                let cell = $( "<div>", { "class": "col-md-3" } )
-                let figure = $( "<figure>", { "class": "figure" } )
+        let cell = $( "<div>", { "class": "col-md-3" } )
+        let figure = $( "<figure>", { "class": "figure" } )
 
-                let img = $( "<img>", { "class": "img-fluid rounded mx-auto d-block user-select-none bg-secondary", src: DOLL_FOLDER + doll + ".png" } )
-                let figcaption = $( "<figcaption>", { "class": "figure-caption text-center user-select-none" } ).text( doll )
+        let img = $( "<img>", { "class": "img-fluid rounded mx-auto d-block user-select-none bg-secondary", src: DOLL_FOLDER + doll + ".png" } )
+        let figcaption = $( "<figcaption>", { "class": "figure-caption text-center user-select-none" } ).text( doll )
 
-                cell.append( figure )
+        cell.append( figure )
 
-                figure.append( img )
-                figure.append( figcaption )
+        figure.append( img )
+        figure.append( figcaption )
 
-                row.append( cell )
+        row.append( cell )
 
-                $( img ).on( "click", ( event ) => {
-                    const lastDoll = state.dollSlots[state.selectedTeam].at( -1 ).children().children( "img" )
+        $( img ).on( "click", ( event ) => {
+            const lastDoll = state.dollSlots[state.selectedTeam].at( -1 ).children().children( "img" )
 
-                    if ( !lastDoll.attr( "src" ).includes( "placeholder" ) ) return;
+            if ( !lastDoll.attr( "src" ).includes( "placeholder" ) ) return;
 
-                    const doll = getDollName( event.target.src )
+            const doll = getDollName( event.target.src )
 
-                    if ( state.selectedDolls.includes( doll ) ) return;
+            if ( state.selectedDolls.includes( doll ) ) return;
 
-                    const firstEmpty = state.dollSlots[state.selectedTeam]
-                        .filter( el => el.children().children( "img" ).attr( "src" ).includes( "placeholder" ) )
-                        .at( 0 )
-                        .children()
-                    const img = firstEmpty.children( "img" )
-                    const figcaption = firstEmpty.children( "figcaption" )
+            const firstEmpty = state.dollSlots[state.selectedTeam]
+                .filter( el => el.children().children( "img" ).attr( "src" ).includes( "placeholder" ) )
+                .at( 0 )
+                .children()
+            const img = firstEmpty.children( "img" )
+            const figcaption = firstEmpty.children( "figcaption" )
 
-                    img.attr( "src", DOLL_FOLDER + doll + ".png" )
-                    figcaption.text( doll )
+            img.attr( "src", DOLL_FOLDER + doll + ".png" )
+            figcaption.text( doll )
 
-                    state.selectedDolls.push( doll )
-                    $( event.target ).addClass( "opacity-25" )
-                })
-            })
+            state.selectedDolls.push( doll )
+            $( event.target ).addClass( "opacity-25" )
         })
+    })
 
     generateInitialState()
 })()
