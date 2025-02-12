@@ -57,6 +57,12 @@
         ]
     }
 
+    const getSelectedTeams = () => {
+        return state.dollSlots.map( team => {
+            return team.map( figure => getDollName( figure.find( "img" ).attr( "src" ) ) )
+        })
+    }
+
     const generateInitialState = () => {
         for ( let i = 0; i < 3; i++ ) {
             let container = $( "<div>", { "class": "container-fluid col-8 bg-secondary rounded mt-2 pt-4 pe-4 team-box" } )
@@ -102,7 +108,11 @@
                     const listImg = Object.values( $( "#doll-list" ).find( "img" ) )
                         .find( el => el.src.includes( doll ) )
 
-                    $( listImg ).removeClass( "opacity-25" )
+                    // Because a doll can be present in multiple teams if they're a support, we need to only remove the opacity
+                    // filter if they're gone from every team
+                    if ( !getSelectedTeams().flat().includes( doll ) ) {
+                        $( listImg ).removeClass( "opacity-25" )
+                    }
                 }
             })
 
@@ -162,11 +172,32 @@
         $( img ).on( "click", ( event ) => {
             const lastDoll = state.dollSlots[state.selectedTeam].at( -1 ).children().children( "img" )
 
+            // If the team is full, don't add another
             if ( !lastDoll.attr( "src" ).includes( "placeholder" ) ) return;
 
             const doll = getDollName( event.target.src )
 
-            if ( state.selectedDolls.includes( doll ) ) return;
+            // There are two reasons we can allow a selection:
+            // * They haven't been selected yet
+            // * They're being chosen as a support
+            //
+            // If they're being chosen as a support, we can determine if that is possible based on whether the resulting team
+            // would have two dolls that are in another team.
+            const teamSelections = getSelectedTeams()
+
+            if ( teamSelections[state.selectedTeam].includes( doll ) ) return;
+
+            for ( let i = 0; i < 3; i++ ) {
+                const intersections = teamSelections[state.selectedTeam]
+                    .concat( doll )
+                    .filter( d => teamSelections[i].includes( d ) && d !== "placeholder" )
+
+                if ( i === state.selectedTeam ) {
+                    continue
+                } else if ( intersections.length >= 2 ) {
+                    return
+                }
+            }
 
             const firstEmpty = state.dollSlots[state.selectedTeam]
                 .filter( el => el.children().children( "img" ).attr( "src" ).includes( "placeholder" ) )
