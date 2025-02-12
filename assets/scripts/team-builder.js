@@ -131,34 +131,6 @@
             "Vepley",
             "Zhaohui",
         ]
-
-        // The below is not possible to use on Github without possibly running into the upper end of their request limits.
-        // It would also require a URL change to tap into the API.
-        return new Promise( ( resolve, reject ) => {
-            try {
-                $.ajax({
-                    success: data => {
-                        let images = []
-                        const anchors = $( data ).find( "li > a" )
-
-                        Object.values( anchors ).forEach( anchor => {
-                            const href = $( anchor ).attr( "href" )
-
-                            // If there's no path name, it's a folder node
-                            if ( !href || !href.endsWith( ".png" ) ) return;
-
-                            images.push( getDollName( $( anchor ).attr( "href" ) ) )
-                        })
-
-                        Object.freeze( images )
-
-                        resolve( images )
-                    },
-                    url: DOLL_FOLDER,
-                });
-            } catch ( err ) {
-                reject( new Error( err ) );            }
-        })
     }
 
     /**
