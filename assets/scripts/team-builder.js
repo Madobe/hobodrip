@@ -1,6 +1,7 @@
 ( function () {
     var DOLL_FOLDER = "assets/images/dolls/"
     var DOLLS_PER_TEAM = 5
+    var NUMBER_OF_TEAMS = 3
     var PLACEHOLDER_IMG = "assets/images/placeholder.png"
 
     var state = {
@@ -78,11 +79,23 @@
         })
     }
 
+    const getTeamsOnlyDolls = () => {
+        return state.dollSlots
+            .map( team => {
+                return team.map( figure => {
+                    const name = getDollName( figure.find( "img" ).attr( "src" ) )
+
+                    if ( name === "placeholder" ) return ""
+                    else return name
+                })
+            })
+    }
+
     /**
      * Creates the initial state of the team boxes on the right.
      */
     const generateInitialState = () => {
-        for ( let i = 0; i < 3; i++ ) {
+        for ( let i = 0; i < NUMBER_OF_TEAMS; i++ ) {
             let container = $( "<div>", { "class": "container-fluid col-8 bg-secondary rounded mt-2 pt-4 pe-4 team-box" } )
             let row = $( "<div>", { "class": "row" } )
             let teamLabel = $( "<div>", { "class": "col-2 d-flex justify-content-center align-items-center" } )
@@ -159,6 +172,28 @@
 
             $( "#team-roster" ).append( container )
         }
+
+        // Set up the modal for importing/exporting
+        const saveButton = $( "<button>", {
+            "class": "btn btn-light col-2 offset-8 mt-3",
+            "data-bs-target": "#import-export-modal",
+            "data-bs-toggle": "modal",
+            type: "button"
+        })
+        saveButton.text( "Import/Export" )
+        $( "#team-roster" ).append( saveButton )
+
+        saveButton.on( "click", () => {
+            $( "#import-export-modal" ).find( "textarea" ).val( JSON.stringify( getTeamsOnlyDolls() ) )
+        })
+
+        $( "#import-export-modal" ).find( ".modal-footer > button" ).on( "click", () => {
+            try {
+                loadData( JSON.parse( $( "#import-export-modal" ).find( "textarea" ).val() ) )
+            } catch ( err ) {
+                window.alert( err )
+            }
+        })
     }
 
     /**
@@ -167,12 +202,32 @@
      * @param {String[]} arr The flattened array of doll names that have been selected (appear in the team boxes).
      * @returns {Boolean}
      */
-    const hasTooManyDupes = ( arr ) => {
+    const hasTooManyDupes = arr => {
         let count = {}
         arr
             .filter( value => value !== "placeholder" )
             .forEach( value => count[value] = count[value] ? count[value] + 1 : 1 )
         return Object.values( count ).filter( n => n >= 3 ).length > 1
+    }
+
+    /**
+     * Loads data into the team builder.
+     * @param {String[][]} data The teams data to load.
+     */
+    const loadData = data => {
+        for ( let a = 0; a < NUMBER_OF_TEAMS; a++ ) {
+            for ( let b = 0; b < DOLLS_PER_TEAM; b++ ) {
+                if ( data[a][b] ) {
+                    state.dollSlots[a][b].find( "img" ).attr( "src", DOLL_FOLDER + data[a][b] + ".png" )
+                    state.dollSlots[a][b].find( "figcaption" ).text( data[a][b] )
+
+                    const listImg = Object.values( $( "#doll-list" ).find( "img" ) )
+                        .find( el => getDollName( el.src ) === data[a][b] )
+
+                    $( listImg ).addClass( "opacity-25" )
+                }
+            }
+        }
     }
 
     // ============================================================================================
@@ -220,7 +275,7 @@
 
             if ( teamSelections[state.selectedTeam].includes( doll ) ) return;
 
-            for ( let i = 0; i < 3; i++ ) {
+            for ( let i = 0; i < NUMBER_OF_TEAMS; i++ ) {
                 const intersections = teamSelections[state.selectedTeam]
                     .concat( doll )
                     .filter( d => teamSelections[i].includes( d ) && d !== "placeholder" )
@@ -248,4 +303,14 @@
     })
 
     generateInitialState()
+
+    $( window ).on( "beforeunload", () => {
+        localStorage.setItem( "hobodrip.teambuilder", JSON.stringify( getTeamsOnlyDolls() ) )
+    })
+
+    $( document ).ready( () => {
+        const data = localStorage.getItem( "hobodrip.teambuilder" )
+
+        if ( data ) loadData( JSON.parse( data ) )
+    })
 })()
