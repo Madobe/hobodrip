@@ -9,14 +9,25 @@
         selectedTeam: 0,
     }
 
-    /**
-     * Functions
-     */
+    // ============================================================================================
+    // = Functions
+    // ============================================================================================
 
+    /**
+     * Removes the path elements and extension.
+     * @param {String} pathname The image source string to parse.
+     * @returns {String}
+     */
     const getDollName = pathname => {
         return pathname.split( "/" ).at( -1 ).replace( ".png", "" )
     }
 
+    /**
+     * Gets the dolls that have images in the folder. This is hard-coded because Github Pages doesn't provide a folder view and
+     * there's an API request limit on the alternative. While it's unlikely we'd go over 5k requests/hr, it's just better to not 
+     * open the risk, since somebody could refresh spam.
+     * @returns {String[]}
+     */
     const getDollNames = () => {
         return [
             "Andoris",
@@ -57,12 +68,19 @@
         ]
     }
 
+    /**
+     * Resolves the DOM elements into which dolls they currently represent.
+     * @returns {String[][]}
+     */
     const getSelectedTeams = () => {
         return state.dollSlots.map( team => {
             return team.map( figure => getDollName( figure.find( "img" ).attr( "src" ) ) )
         })
     }
 
+    /**
+     * Creates the initial state of the team boxes on the right.
+     */
     const generateInitialState = () => {
         for ( let i = 0; i < 3; i++ ) {
             let container = $( "<div>", { "class": "container-fluid col-8 bg-secondary rounded mt-2 pt-4 pe-4 team-box" } )
@@ -143,6 +161,12 @@
         }
     }
 
+    /**
+     * Determines whether there is more than one doll that is part of 3 teams. This should not be possible. The input array is
+     * expected to have the doll added, so it will be 1 longer than the actual state.
+     * @param {String[]} arr The flattened array of doll names that have been selected (appear in the team boxes).
+     * @returns {Boolean}
+     */
     const hasTooManyDupes = ( arr ) => {
         let count = {}
         arr
@@ -151,9 +175,9 @@
         return Object.values( count ).filter( n => n >= 3 ).length > 1
     }
 
-    /**
-     * Actual execution
-     */
+    // ============================================================================================
+    // = Actual execution
+    // ============================================================================================
 
     let row;
 
