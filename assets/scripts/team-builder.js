@@ -145,6 +145,7 @@
                         state.selectedDolls = state.selectedDolls.filter( name => name !== doll )
                     }
                 }
+                updateTeamIndicators();
             })
 
             figure.append( img )
@@ -228,7 +229,30 @@
                 }
             }
         }
+        updateTeamIndicators();
     }
+
+    /**
+     * Updates the team number and support indicators on the doll list.
+     */
+    const updateTeamIndicators = () => {
+        $( "#doll-list" ).find( ".team-indicator, .support-indicator" ).remove();
+        state.dollSlots.forEach((team, teamIndex) => {
+            team.forEach((figure, slotIndex) => {
+                const dollName = getDollName(figure.find("img").attr("src"));
+                if (dollName !== "placeholder") {
+                    const listImg = Object.values($("#doll-list").find("img")).find(el => getDollName(el.src) === dollName);
+                    if (listImg) {
+                        if (slotIndex === DOLLS_PER_TEAM - 1) {
+                            $(listImg).parent().append(`<span class="support-indicator">S</span>`);
+                        } else {
+                            $(listImg).parent().append(`<span class="team-indicator">${teamIndex + 1}</span>`);
+                        }
+                    }
+                }
+            });
+        });
+    };
 
     // ============================================================================================
     // = Actual execution
@@ -244,7 +268,7 @@
         }
 
         let cell = $( "<div>", { "class": "col-md-3" } )
-        let figure = $( "<figure>", { "class": "figure" } )
+        let figure = $( "<figure>", { "class": "figure position-relative" } )
 
         let img = $( "<img>", { "class": "img-fluid rounded mx-auto d-block user-select-none bg-secondary", src: DOLL_FOLDER + doll + ".png" } )
         let figcaption = $( "<figcaption>", { "class": "figure-caption text-center user-select-none" } ).text( doll )
@@ -299,6 +323,7 @@
 
             state.selectedDolls.push( doll )
             $( event.target ).addClass( "opacity-25" )
+            updateTeamIndicators();
         })
     })
 
@@ -306,11 +331,13 @@
 
     $( window ).on( "beforeunload", () => {
         localStorage.setItem( "hobodrip.teambuilder", JSON.stringify( getTeamsOnlyDolls() ) )
+        updateTeamIndicators();
     })
 
     $( document ).ready( () => {
         const data = localStorage.getItem( "hobodrip.teambuilder" )
 
         if ( data ) loadData( JSON.parse( data ) )
+        updateTeamIndicators();
     })
 })()
