@@ -244,9 +244,9 @@
                     const listImg = Object.values($("#doll-list").find("img")).find(el => getDollName(el.src) === dollName);
                     if (listImg) {
                         if (slotIndex === DOLLS_PER_TEAM - 1) {
-                            $(listImg).parent().append(`<span class="support-indicator badge bg-dark text-white rounded-circle">S</span>`);
+                            $(listImg).parent().append(`<span class="support-indicator badge bg-dark text-white rounded-circle top-0 position-absolute end-0">S</span>`);
                         } else {
-                            $(listImg).parent().append(`<span class="team-indicator badge bg-dark text-white rounded-circle">${teamIndex + 1}</span>`);
+                            $(listImg).parent().append(`<span class="team-indicator badge bg-dark text-white rounded-circle position-absolute top-0">${teamIndex + 1}</span>`);
                         }
                     }
                 }
