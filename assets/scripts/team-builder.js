@@ -331,7 +331,36 @@
             // just not possible.
             const teamSelections = getSelectedTeams()
 
-            if ( teamSelections[state.selectedTeam].includes( doll ) ) return;
+            // Check if the doll is already in the selected team
+            if ( teamSelections[state.selectedTeam].includes( doll ) ) {
+                const clickedIndex = state.dollSlots[state.selectedTeam]
+                    .findIndex( el => getDollName( el.find( "img" ).attr( "src" ) ) === doll )
+
+                for ( let i = clickedIndex; i < DOLLS_PER_TEAM; i++ ) {
+                    const currentSlot = state.dollSlots[state.selectedTeam][i]
+                    const img = currentSlot.find( "img" )
+                    const figcaption = currentSlot.find( "figcaption" )
+
+                    if ( i >= DOLLS_PER_TEAM - 1 ) {
+                        img.attr( "src", PLACEHOLDER_IMG )
+                        figcaption.text( "" )
+                    } else {
+                        const nextSlot = state.dollSlots[state.selectedTeam][i + 1]
+                        img.attr( "src", nextSlot.find( "img" ).attr( "src" ) )
+                        figcaption.text( nextSlot.find( "figcaption" ).text() )
+                    }
+
+                    const listImg = Object.values( $( "#doll-list" ).find( "img" ) )
+                        .find( el => getDollName( el.src ) === doll )
+
+                    if ( !getSelectedTeams().flat().includes( doll ) ) {
+                        $( listImg ).removeClass( "opacity-25" )
+                        state.selectedDolls = state.selectedDolls.filter( name => name !== doll )
+                    }
+                }
+                updateTeamIndicators();
+                return;
+            }
 
             for ( let i = 0; i < NUMBER_OF_TEAMS; i++ ) {
                 const intersections = teamSelections[state.selectedTeam]
