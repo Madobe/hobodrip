@@ -94,6 +94,46 @@
     }
 
     const getDollNames = () => {
+        return [
+            "Andoris",
+            "Belka",
+            "Centaureissi",
+            "Cheeta",
+            "Colphne",
+            "Daiyan",
+            "Dushevnaya",
+            "Faye",
+            "Groza",
+            "Jiangyu",
+            "Klukai",
+            "Krolik",
+            "Ksenia",
+            "Lenna",
+            "Littara",
+            "Lotta",
+            "Makiatto",
+            "Mechty",
+            "Mosin-Nagant",
+            "Nagant",
+            "Nemesis",
+            "Papasha",
+            "Peri",
+            "Peritya",
+            "Qiongjiu",
+            "Qiuhua",
+            "Sabrina",
+            "Sharkry",
+            "Springfield",
+            "Suomi",
+            "Tololo",
+            "Ullrid",
+            "Vector",
+            "Vepley",
+            "Zhaohui",
+        ]
+
+        // The below is not possible to use on Github without possibly running into the upper end of their request limits.
+        // It would also require a URL change to tap into the API.
         return new Promise( ( resolve, reject ) => {
             try {
                 $.ajax({
