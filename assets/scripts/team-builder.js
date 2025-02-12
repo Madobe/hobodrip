@@ -187,7 +187,12 @@
             $( "#import-export-modal" ).find( "textarea" ).val( JSON.stringify( getTeamsOnlyDolls() ) )
         })
 
-        $( "#import-export-modal" ).find( ".modal-footer > button" ).on( "click", () => {
+        $( "#import-export-modal" ).find( ".modal-footer > .btn-secondary" ).on( "click", () => {
+            navigator.clipboard.writeText( JSON.stringify( getTeamsOnlyDolls() ) )
+            bootstrap.Toast.getOrCreateInstance( $( "#copied-to-clipboard-toast" )[0] ).show()
+        })
+
+        $( "#import-export-modal" ).find( ".modal-footer > .btn-primary" ).on( "click", () => {
             try {
                 loadData( JSON.parse( $( "#import-export-modal" ).find( "textarea" ).val() ) )
             } catch ( err ) {
