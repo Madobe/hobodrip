@@ -174,27 +174,46 @@
             $( "#team-roster" ).append( container )
         }
 
+        // Create a flex container for the buttons
+        const buttonContainer = $("<div>", {
+            "class": "d-flex justify-content-between mt-3 col-8 pe-0 ps-0 container-fluid"
+        });
+        
+        // Set up the reset button
+        const resetButton = $( "<button>", {
+            "class": "btn btn-danger",
+            type: "button"
+        });
+        resetButton.text( "Reset" );
+        buttonContainer.append( resetButton );
+
+        resetButton.on( "click", resetChosenCharacters );
+
         // Set up the modal for importing/exporting
         const saveButton = $( "<button>", {
-            "class": "btn btn-light col-2 offset-8 mt-3",
+            "class": "btn btn-light",
             "data-bs-target": "#import-export-modal",
             "data-bs-toggle": "modal",
             type: "button"
-        })
-        saveButton.text( "Import/Export" )
-        $( "#team-roster" ).append( saveButton )
+        });
+        saveButton.text( "Import/Export" );
+        buttonContainer.append( saveButton );
 
         saveButton.on( "click", () => {
-            $( "#import-export-modal" ).find( "textarea" ).val( JSON.stringify( getTeamsOnlyDolls() ) )
-        })
+            $( "#import-export-modal" ).find( "textarea" ).val( JSON.stringify( getTeamsOnlyDolls() ) );
+        });
 
         $( "#import-export-modal" ).find( ".modal-footer > button" ).on( "click", () => {
             try {
-                loadData( JSON.parse( $( "#import-export-modal" ).find( "textarea" ).val() ) )
+            loadData( JSON.parse( $( "#import-export-modal" ).find( "textarea" ).val() ) );
             } catch ( err ) {
-                window.alert( err )
+            window.alert( err );
             }
-        })
+        });
+
+
+        // Append the button container to the team roster
+        $( "#team-roster" ).append( buttonContainer );
     }
 
     /**
@@ -252,6 +271,21 @@
                 }
             });
         });
+    };
+
+    /**
+     * Resets the chosen characters.
+     */
+    const resetChosenCharacters = () => {
+        state.dollSlots.forEach(team => {
+            team.forEach(slot => {
+                slot.find("img").attr("src", PLACEHOLDER_IMG);
+                slot.find("figcaption").text("");
+            });
+        });
+        state.selectedDolls = [];
+        $( "#doll-list" ).find( "img" ).removeClass( "opacity-25" );
+        updateTeamIndicators();
     };
 
     // ============================================================================================
