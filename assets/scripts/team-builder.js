@@ -17,6 +17,46 @@
         return pathname.split( "/" ).at( -1 ).replace( ".png", "" )
     }
 
+    const getDollNames = () => {
+        return [
+            "Andoris",
+            "Belka",
+            "Centaureissi",
+            "Cheeta",
+            "Colphne",
+            "Daiyan",
+            "Dushevnaya",
+            "Faye",
+            "Groza",
+            "Jiangyu",
+            "Klukai",
+            "Krolik",
+            "Ksenia",
+            "Lenna",
+            "Littara",
+            "Lotta",
+            "Makiatto",
+            "Mechty",
+            "Mosin-Nagant",
+            "Nagant",
+            "Nemesis",
+            "Papasha",
+            "Peri",
+            "Peritya",
+            "Qiongjiu",
+            "Qiuhua",
+            "Sabrina",
+            "Sharkry",
+            "Springfield",
+            "Suomi",
+            "Tololo",
+            "Ullrid",
+            "Vector",
+            "Vepley",
+            "Zhaohui",
+        ]
+    }
+
     const generateInitialState = () => {
         for ( let i = 0; i < 3; i++ ) {
             let container = $( "<div>", { "class": "container-fluid col-8 bg-secondary rounded mt-2 pt-4 pe-4 team-box" } )
@@ -93,54 +133,13 @@
         }
     }
 
-    const getDollNames = () => {
-        return [
-            "Andoris",
-            "Belka",
-            "Centaureissi",
-            "Cheeta",
-            "Colphne",
-            "Daiyan",
-            "Dushevnaya",
-            "Faye",
-            "Groza",
-            "Jiangyu",
-            "Klukai",
-            "Krolik",
-            "Ksenia",
-            "Lenna",
-            "Littara",
-            "Lotta",
-            "Makiatto",
-            "Mechty",
-            "Mosin-Nagant",
-            "Nagant",
-            "Nemesis",
-            "Papasha",
-            "Peri",
-            "Peritya",
-            "Qiongjiu",
-            "Qiuhua",
-            "Sabrina",
-            "Sharkry",
-            "Springfield",
-            "Suomi",
-            "Tololo",
-            "Ullrid",
-            "Vector",
-            "Vepley",
-            "Zhaohui",
-        ]
-    }
-
     /**
      * Actual execution
      */
 
-    const data = getDollNames()
     let row;
 
-    data.forEach( ( doll, i ) => {
+    getDollNames().forEach( ( doll, i ) => {
         // 4 columns per row
         if ( i % 4 === 0 ) {
             row = $( "<div>", { "class": "row" } )
