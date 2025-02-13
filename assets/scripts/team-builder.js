@@ -49,7 +49,7 @@
 
             $( "#account-swap-modal" ).find( ".btn-light" ).eq( 1 ).on( "click", () => {
                 state.savedTeams.push({
-                    name: "Account " + ( state.savedTeams.length + 1 ),
+                    name: `Account ${state.savedTeams.length + 1}`,
                     teams: [Array( 5 ).fill( "" ), Array( 5 ).fill( "" ), Array( 5 ).fill( "" )]
                 })
                 generateAccountSelector( state.savedTeams.length - 1 )
@@ -62,16 +62,16 @@
      * @param {Number} n The index of the account.
      */
     const generateAccountSelector = n => {
-        const container = $( "<div>", { "class": "container-fluid p-3 rounded " + ( n === 0 ? "bg-primary" : "mt-2 bg-secondary" ) } )
+        const container = $( "<div>", { "class": `container-fluid p-3 rounded ${n === 0 ? "bg-primary" : "mt-2 bg-secondary"}` } )
         const selector = $( "<div>", { "class": "form-floating" })
         const field = $( "<input>", {
             "class": "form-control",
-            id: "account-name-input-" + n,
-            placeholder: "Account " + ( n + 1 ),
+            id: `account-name-input-${n}`,
+            placeholder: `Account ${n + 1}`,
             type: "text",
             value: state.savedTeams[n].name
         })
-        const label = $( "<label>", { for: "account-name-input-" + n } )
+        const label = $( "<label>", { for: `account-name-input-${n}` } )
 
         field.on( "change", function ( event ) {
             state.savedTeams[n].name = $( event.target ).val()
@@ -113,7 +113,7 @@
             })
         })
 
-        label.text( "Set " + ( n + 1 ) )
+        label.text( `Set ${n + 1}` )
         selector.append( field )
         selector.append( label )
         container.append( selector )
@@ -136,7 +136,7 @@
             let cell = $( "<div>", { "class": "col-md-3" } )
             let figure = $( "<figure>", { "class": "figure position-relative" } )
 
-            let img = $( "<img>", { "class": "img-fluid rounded mx-auto d-block user-select-none bg-secondary", src: DOLL_FOLDER + doll + ".png" } )
+            let img = $( "<img>", { "class": "img-fluid rounded mx-auto d-block user-select-none bg-secondary", src: `${DOLL_FOLDER}${doll}.png` } )
             let figcaption = $( "<figcaption>", { "class": "figure-caption text-center user-select-none" } ).text( doll )
 
             cell.append( figure )
@@ -184,7 +184,7 @@
                 const img = firstEmpty.children( "img" )
                 const figcaption = firstEmpty.children( "figcaption" )
 
-                img.attr( "src", DOLL_FOLDER + doll + ".png" )
+                img.attr( "src", `${DOLL_FOLDER}${doll}.png` )
                 figcaption.text( doll )
 
                 state.selectedDolls.push( doll )
@@ -293,7 +293,7 @@
             dollBox.append( figure )
 
             teamLabel.append( labelFormat )
-            labelFormat.text( "Team " + ( i + 1 ) )
+            labelFormat.text( `Team ${i + 1}` )
 
             row.append( teamLabel )
 
@@ -488,7 +488,7 @@
                         $( "<span>", {
                             "class": "team-indicator bg-dark badge text-white rounded-circle position-absolute top-0"
                         })
-                            .text( `${a + 1}`)
+                            .text( `${a + 1}` )
                     )
                 }
             })
