@@ -251,6 +251,8 @@
                 const doll = getDollName( teamBox.find( "img" ).attr( "src" ) )
                 const clickedIndex = getTeamsOnlyDolls()[teamIndex].findIndex( d => d === doll )
 
+                if ( doll === "placeholder" ) return
+
                 for ( let i = clickedIndex; i < DOLLS_PER_TEAM; i++ ) {
                     const currentSlot = state.dollSlots[teamIndex][i]
 
@@ -308,7 +310,7 @@
                 state.selectedTeam = i;
 
                 let teamBox = $( event.target )
-                if ( !teamBox.hasClass( "team-box" ) ) teamBox = $( event.target.parents( ".team-box" ) )
+                if ( !teamBox.hasClass( "team-box" ) ) teamBox = $( event.target ).parents( ".team-box" )
 
                 teamBox.removeClass( "bg-secondary" ).addClass( "bg-primary" )
             })
