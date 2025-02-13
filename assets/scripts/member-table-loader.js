@@ -22,7 +22,7 @@
         ["mak0s", 16996, "mk0i"],
         ["Rooi", 53801, ".texastheomertosa"],
         ["Kuu Aro", 29548, "kuuaro"],
-        ["UnJ", 137630, "N/A", "Kuu Aro's friend"],
+        ["UnJ", 137630, "", "Kuu Aro's friend"],
         ["Khanwan00", 820342, "khanwan"],
         ["Aorinji", 981945, "aorinji"],
         ["Neip", 13003, "neepa"],
