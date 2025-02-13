@@ -456,11 +456,11 @@
             const parsedData = JSON.parse( data )
 
             // Convert legacy data to the new format
-            if ( data && typeof data[0][0] === "string" ) {
-                data = JSON.stringify([{
+            if ( parsedData && typeof parsedData[0][0] === "string" ) {
+                parsedData = {
                     name: "Account 1",
                     teams: data
-                }])
+                }
             }
 
             state.savedTeams = parsedData
@@ -472,6 +472,8 @@
             for ( let i = 0; i < parsedData.length; i++ ) {
                 generateAccountSelector( i )
             }
+        } else {
+            generateAccountSelector( 0 )
         }
     })
 })()
