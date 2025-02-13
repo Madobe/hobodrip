@@ -21,17 +21,17 @@
 
     /**
      * Generates the buttons for interacting with the modal to change accounts.
-     * @param {jQuery} row The row to add this button to.
+     * @param {jQuery} container The container to add this button to.
      */
-    const generateAccountChangeButton = row => {
+    const generateAccountChangeButton = container => {
         const accountButton = $( "<button>", {
-            "class": "btn btn-light col-2 offset-6 mt-3",
+            "class": "btn btn-light",
             "data-bs-target": "#account-swap-modal",
             "data-bs-toggle": "modal",
             type: "button"
         })
         accountButton.text( "Change Set" )
-        row.append( accountButton )
+        container.append( accountButton )
 
         $( document ).ready( () => {
             $( "#account-swap-modal" ).find( ".btn-light" ).eq( 0 ).on( "click", () => {
@@ -134,7 +134,7 @@
             }
 
             let cell = $( "<div>", { "class": "col-md-3" } )
-            let figure = $( "<figure>", { "class": "figure" } )
+            let figure = $( "<figure>", { "class": "figure position-relative" } )
 
             let img = $( "<img>", { "class": "img-fluid rounded mx-auto d-block user-select-none bg-secondary", src: DOLL_FOLDER + doll + ".png" } )
             let figcaption = $( "<figcaption>", { "class": "figure-caption text-center user-select-none" } ).text( doll )
@@ -189,23 +189,25 @@
 
                 state.selectedDolls.push( doll )
                 $( event.target ).addClass( "opacity-25" )
+
+                updateTeamIndicators()
             })
         })
     }
 
     /**
      * Generates the buttons for interacting with the modal to import/export data.
-     * @param {jQuery} row The row to add this button to.
+     * @param {jQuery} container The container to add this button to.
      */
-    const generateImportExportModalButton = row => {
+    const generateImportExportModalButton = container => {
         const saveButton = $( "<button>", {
-            "class": "btn btn-light col-2 mt-3 ms-3",
+            "class": "btn btn-light ms-2",
             "data-bs-target": "#import-export-modal",
             "data-bs-toggle": "modal",
             type: "button"
         })
         saveButton.text( "Import/Export" )
-        row.append( saveButton )
+        container.append( saveButton )
 
         saveButton.on( "click", () => {
             $( "#import-export-modal" ).find( "textarea" ).val( JSON.stringify( getTeamsOnlyDolls() ) )
@@ -246,9 +248,8 @@
 
             dollBox.on( "click", event => {
                 const teamBox = $( event.target ).parents( "figure" )
-                const doll = getDollName( teamBox.children( "img" ).attr( "src" ) )
-                const clickedIndex = state.dollSlots[state.selectedTeam]
-                    .findIndex( el => getDollName( el.find( "img" ).attr( "src" ) ) === doll )
+                const doll = getDollName( teamBox.find( "img" ).attr( "src" ) )
+                const clickedIndex = getTeamsOnlyDolls()[state.selectedTeam].findIndex( d => d === doll )
 
                 for ( let i = clickedIndex; i < DOLLS_PER_TEAM; i++ ) {
                     const currentSlot = state.dollSlots[state.selectedTeam][i]
@@ -282,6 +283,8 @@
                         state.selectedDolls = state.selectedDolls.filter( name => name !== doll )
                     }
                 }
+
+                updateTeamIndicators()
             })
 
             figure.append( img )
@@ -309,6 +312,35 @@
 
             $( "#team-roster" ).append( container )
         }
+    }
+
+    /**
+     * Generates the button to reset all teams.
+     * @param {jQuery} container The container to add this button to.
+     */
+    const generateResetButton = container => {
+        const resetButton = $( "<button>", { "class": "btn btn-danger me-auto", type: "button" } )
+        resetButton.text( "Reset" )
+        container.append( resetButton )
+
+        resetButton.on( "click", () => {
+            // Modify the visuals in the team boxes
+            state.dollSlots.forEach( team => {
+                team.forEach( figure => {
+                    figure.find( "img" ).attr( "src", PLACEHOLDER_IMG )
+                    figure.find( "figcaption" ).text( "" )
+                })
+            })
+
+            // Remove the opacity filter on each selected doll in the doll list
+            $( "#doll-list" ).find( "img" ).removeClass( "opacity-25" )
+
+            // Empty the selection lists
+            Object.assign( state.savedTeams[state.currentAccount], {
+                teams: [Array( 5 ).fill( "" ), Array( 5 ).fill( "" ), Array( 5 ).fill( "" )]
+            })
+            state.selectedDolls = []
+        })
     }
 
     /**
@@ -414,7 +446,7 @@
         for ( let a = 0; a < NUMBER_OF_TEAMS; a++ ) {
             for ( let b = 0; b < DOLLS_PER_TEAM; b++ ) {
                 if ( data[a][b] ) {
-                    state.dollSlots[a][b].find( "img" ).attr( "src", DOLL_FOLDER + data[a][b] + ".png" )
+                    state.dollSlots[a][b].find( "img" ).attr( "src", `${DOLL_FOLDER}${data[a][b]}.png` )
                     state.dollSlots[a][b].find( "figcaption" ).text( data[a][b] )
 
                     const listImg = Object.values( $( "#doll-list" ).find( "img" ) )
@@ -427,6 +459,39 @@
                 }
             }
         }
+
+        updateTeamIndicators()
+    }
+
+    /**
+     * Updates the team and support doll indicators for the left panel to match the current selections.
+     */
+    const updateTeamIndicators = () => {
+        $( "#doll-list" ).find( ".team-indicator, .support-indicator" ).remove()
+
+        getTeamsOnlyDolls().forEach( ( team, a ) => {
+            team.forEach( ( doll, b ) => {
+                if ( doll ) {
+                    const figure = $( "#doll-list" ).find( `[src*='${doll}']` ).parent()
+
+                    if ( b === DOLLS_PER_TEAM - 1 ) {
+                        figure.append(
+                            $( "<span>", {
+                                "class": "support-indicator bg-dark badge text-white rounded-circle position-absolute top-0 end-0"
+                            })
+                                .text( "S" )
+                        )
+                    }
+
+                    figure.append(
+                        $( "<span>", {
+                            "class": "team-indicator bg-dark badge text-white rounded-circle position-absolute top-0"
+                        })
+                            .text( `${a + 1}`)
+                    )
+                }
+            })
+        })
     }
 
     // ============================================================================================
@@ -437,10 +502,11 @@
     generateInitialState()
 
     // Modal buttons
-    const row = $( "<div>", { "class": "row" } )
-    generateAccountChangeButton( row )
-    generateImportExportModalButton( row )
-    $( "#team-roster" ).append( row )
+    const buttonContainer = $( "<div>", { "class": "container-fluid col-8 mt-3 d-flex flex-row justify-content-end" } )
+    generateResetButton( buttonContainer )
+    generateAccountChangeButton( buttonContainer )
+    generateImportExportModalButton( buttonContainer )
+    $( "#team-roster" ).append( buttonContainer )
 
     // Handle the storage
     $( window ).on( "beforeunload", () => {
