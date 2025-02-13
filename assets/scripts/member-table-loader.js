@@ -29,8 +29,6 @@
         ["Neip", 13003, "neepa"],
         ["Chin Chin", 51138, "chievic2030"],
         ["Cris", 124428, "stickwalker"],
-        ["Commander Wolf", 62644, "girlsfrontlinem82a1", "Left server"],
-        ["Artillery", 648877, "1sstd"],
     ].forEach( ( member, i ) => {
         var tr = document.createElement( "tr" );
 
