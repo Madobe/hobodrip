@@ -341,6 +341,9 @@
                 teams: [Array( 5 ).fill( "" ), Array( 5 ).fill( "" ), Array( 5 ).fill( "" )]
             })
             state.selectedDolls = []
+
+            // Remove the team/support indicators
+            updateTeamIndicators()
         })
     }
 
