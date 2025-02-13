@@ -248,11 +248,12 @@
 
             dollBox.on( "click", event => {
                 const teamBox = $( event.target ).parents( "figure" )
+                const teamIndex = parseInt( teamBox.parent().siblings().eq( 0 ).text().at( -1 ) ) - 1
                 const doll = getDollName( teamBox.find( "img" ).attr( "src" ) )
-                const clickedIndex = getTeamsOnlyDolls()[state.selectedTeam].findIndex( d => d === doll )
+                const clickedIndex = getTeamsOnlyDolls()[teamIndex].findIndex( d => d === doll )
 
                 for ( let i = clickedIndex; i < DOLLS_PER_TEAM; i++ ) {
-                    const currentSlot = state.dollSlots[state.selectedTeam][i]
+                    const currentSlot = state.dollSlots[teamIndex][i]
 
                     if ( !currentSlot ) continue
 
@@ -265,7 +266,7 @@
                         figcaption.text( "" )
                     } else {
                         // Copy the next slot's values over
-                        const nextSlot = state.dollSlots[state.selectedTeam][i + 1]
+                        const nextSlot = state.dollSlots[teamIndex][i + 1]
                         img.attr( "src", nextSlot.find( "img" ).attr( "src" ) )
                         figcaption.text( nextSlot.find( "figcaption" ).text() )
                     }
