@@ -15,7 +15,6 @@
         ["Vargas", 1837372, "nanamin", "Nanamin's alt"],
         ["RUBEIDO", 41218, "rubeido"],
         ["Kairu", 466557, "xdkairu"],
-        ["neonzaro", 968316, ""],
         ["cupkate", 1470046, "cupkate"],
         ["Kelvin", 471754, "kelvinkhant"],
         ["Kayo", 456185, "_henkayo_"],
