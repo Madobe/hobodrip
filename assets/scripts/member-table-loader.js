@@ -27,6 +27,8 @@
         ["Neip", 13003, "neepa"],
         ["Chin Chin", 51138, "chievic2030"],
         ["Cris", 124428, "stickwalker"],
+        ["John Frontline", 2231453, "", "Random"],
+        ["Stasia", 1454158, "", "Random"],
     ].forEach( ( member, i ) => {
         var tr = document.createElement( "tr" );
 
