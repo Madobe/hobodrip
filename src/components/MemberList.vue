@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router"
-
 const members = [
     {
         ign: "Fives",
