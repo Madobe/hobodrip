@@ -1,0 +1,10 @@
+@import "bootstrap/dist/css/bootstrap.css";
+
+body {
+    max-height: 100vh;
+}
+
+/* Copying Bootstrap elements */
+.router-link-active {
+    color: var(--bs-navbar-active-color);
+}
