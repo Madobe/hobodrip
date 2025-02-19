@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue"
 import DailyChecklist from "@/views/DailyChecklist.vue"
 import TeamBuilder from "@/views/TeamBuilder.vue"
 import GiftBoxes from "@/views/GiftBoxes.vue"
+import GachaSimulator from "@/views/GachaSimulator.vue"
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
             path: "/gift-boxes",
             name: "gift-boxes",
             component: GiftBoxes,
+        },
+        {
+            path: "/gacha-simulator",
+            name: "gacha-simulator",
+            component: GachaSimulator,
         },
     ],
 })

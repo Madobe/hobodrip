@@ -1,0 +1,259 @@
+{
+    "data": [
+        {
+            "category": 0,
+            "name": "Andoris",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Belka",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Centaureissi",
+            "splash": ""
+        },
+        {
+            "category": 1,
+            "name": "Cheeta",
+            "splash": ""
+        },
+        {
+            "category": 1,
+            "name": "Colphne",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Daiyan",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Dushevnaya",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Faye",
+            "splash": ""
+        },
+        {
+            "category": 1,
+            "name": "Groza",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Jiangyu",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Klukai",
+            "splash": ""
+        },
+        {
+            "category": 1,
+            "name": "Krolik",
+            "splash": ""
+        },
+        {
+            "category": 1,
+            "name": "Ksenia",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Lenna",
+            "splash": ""
+        },
+        {
+            "category": 1,
+            "name": "Littara",
+            "splash": ""
+        },
+        {
+            "category": 1,
+            "name": "Lotta",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Makiatto",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Mechty",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Mosin-Nagant",
+            "splash": ""
+        },
+        {
+            "category": 1,
+            "name": "Nagant",
+            "splash": ""
+        },
+        {
+            "category": 1,
+            "name": "Nemesis",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Papasha",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Peri",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Peritya",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Qiongjiu",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Qiuhua",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Sabrina",
+            "splash": ""
+        },
+        {
+            "category": 1,
+            "name": "Sharkry",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Springfield",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Suomi",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Tololo",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Ullrid",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Vector",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Vepley",
+            "splash": ""
+        },
+        {
+            "category": 0,
+            "name": "Zhaohui",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "KSVK",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "Hare",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "Model ARM",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": ".380 Curva",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "OTs-14",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "MP7H1",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "Robinson Modular Rifle",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "Nagant M1895",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "Vepr-12",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "Pecheneg-SP",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "Model Alpha",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "QBZ-191",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "Sportivo Calibro 12",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "Three-Line Rifle M1891",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": "Stechkin",
+            "splash": ""
+        },
+        {
+            "category": 3,
+            "name": ".50 Nemesis",
+            "splash": ""
+        }
+    ]
+}
