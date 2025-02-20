@@ -27,7 +27,7 @@ onMounted(() => {
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-body">
-                    <video class="ratio ratio-16x9" :src="src" autoplay muted></video>
+                    <video class="ratio ratio-16x9" :src="src" autoplay></video>
                 </div>
             </div>
         </div>
