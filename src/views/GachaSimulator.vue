@@ -274,7 +274,7 @@ function handleMulti() {
             </div>
             <div class="col-md-8 p-0 border border-secondary order-0 order-md-1">
                 <img class="img-fluid" :src="banner" alt="Current banner">
-                <div class="container-fluid d-flex flex-md-row">
+                <div class="container-fluid d-flex flex-column flex-md-row">
                     <div class="container-fluid">
                         <div class="container d-flex justify-content-between">
                             <span>Elites: {{ pulls.elites }}</span>
@@ -285,7 +285,7 @@ function handleMulti() {
                             <span>{{ (pulls.standards / pulls.total * 100 || 0).toFixed(2) }}% of total pulls</span>
                         </div>
                     </div>
-                    <div class="container-fluid d-flex justify-content-end py-2">
+                    <div class="container-fluid d-flex justify-content-around justify-content-md-end py-2">
                         <button class="btn btn-secondary" @click="handleSingle">Pull</button>
                         <button class="btn btn-secondary ms-2" @click="handleMulti">Pull x10</button>
                     </div>
