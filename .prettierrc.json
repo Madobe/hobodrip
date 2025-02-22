@@ -4,5 +4,6 @@
     "bracketSpacing": true,
     "printWidth": 80,
     "semi": false,
-    "tabWidth": 4
+    "tabWidth": 4,
+    "experimentalTernaries": true
 }

@@ -17,6 +17,7 @@ import NavLink from "./NavLink.vue"
                     <NavLink to="/">Member List</NavLink>
                     <NavLink to="daily-checklist">Daily Checklist</NavLink>
                     <NavLink to="team-builder">Team Builder</NavLink>
+                    <NavLink to="attachment-appraiser">Appraiser</NavLink>
                     <NavLink to="gacha-simulator">Simulator</NavLink>
                     <NavLink to="gift-boxes">Gift Boxes</NavLink>
                 </ul>

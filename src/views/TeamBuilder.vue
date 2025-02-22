@@ -76,8 +76,8 @@ if (data) {
 /**
  * Determines what positions in the selection array the doll occupies. This does not distinguish
  * between core team and support.
- * @param doll {string} The doll name being checked.
- * @return {number[]} The indices that the doll occupies in the teams array.
+ * @param doll The doll name being checked.
+ * @return The indices that the doll occupies in the teams array.
  */
 function getDollIndices(doll: string) {
     return teams.selectedDolls.reduce((arr, val, i) => {
@@ -87,8 +87,8 @@ function getDollIndices(doll: string) {
 }
 /**
  * Determines what teams a doll that is not a support is on.
- * @param doll {string} The doll name being checked.
- * @return {number[]} The teams that the doll is on.
+ * @param doll The doll name being checked.
+ * @return The teams that the doll is on.
  */
 function getMainTeams(doll: string) {
     return getDollIndices(doll)
@@ -98,8 +98,8 @@ function getMainTeams(doll: string) {
 
 /**
  * Determines what teams a doll is supporting.
- * @param doll {string} The doll name being checked.
- * @return {number[]} The teams that the doll is supporting.
+ * @param doll The doll name being checked.
+ * @return The teams that the doll is supporting.
  */
 function getSupportTeams(doll: string) {
     return getDollIndices(doll)
@@ -109,7 +109,7 @@ function getSupportTeams(doll: string) {
 
 /**
  * Determines whether the given doll is in a support slot.
- * @param doll {string} The doll name being checked.
+ * @param doll The doll name being checked.
  */
 function isSupport(doll: string) {
     return !!getDollIndices(doll).filter(i => i % 5 === 4).length
@@ -176,7 +176,7 @@ function isSupport(doll: string) {
 }
 
 .team-roster {
-    height: calc(100vh - 4rem);
+    height: calc(100vh - 3.5rem);
     min-height: 100%;
 }
 

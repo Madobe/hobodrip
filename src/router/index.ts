@@ -4,6 +4,7 @@ import DailyChecklist from "@/views/DailyChecklist.vue"
 import TeamBuilder from "@/views/TeamBuilder.vue"
 import GiftBoxes from "@/views/GiftBoxes.vue"
 import GachaSimulator from "@/views/GachaSimulator.vue"
+import AttachmentComparer from "@/views/AttachmentAppraiser.vue"
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
             path: "/gacha-simulator",
             name: "gacha-simulator",
             component: GachaSimulator,
+        },
+        {
+            path: "/attachment-appraiser",
+            name: "attachment-appraiser",
+            component: AttachmentComparer,
         },
     ],
 })

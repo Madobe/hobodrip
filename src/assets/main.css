@@ -1,7 +1,21 @@
 @import "bootstrap/dist/css/bootstrap.css";
 
-body {
-    max-height: 100vh;
+html,
+body,
+#app {
+    min-height: 100vh;
+}
+
+.bg-elite {
+    background-color: #ffb348;
+    color: black;
+    font-weight: bold;
+}
+
+.bg-standard {
+    background-color: #7028e4;
+    color: white;
+    font-weight: bold;
 }
 
 /* Copying Bootstrap elements */
