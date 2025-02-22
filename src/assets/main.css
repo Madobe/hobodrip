@@ -18,6 +18,18 @@ body,
     font-weight: bold;
 }
 
+.bg-elite {
+    background-color: #ffb348;
+    color: black;
+    font-weight: bold;
+}
+
+.bg-standard {
+    background-color: #7028e4;
+    color: white;
+    font-weight: bold;
+}
+
 /* Copying Bootstrap elements */
 .router-link-active {
     color: var(--bs-navbar-active-color);
