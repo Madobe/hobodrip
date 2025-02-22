@@ -6,7 +6,9 @@
         "defaultWeapon": "Aglaea",
         "defense": 642,
         "health": 2288,
-        "img_path": "@/assets/images/dolls/Andoris.png"
+        "img_path": "/src/assets/images/dolls/Andoris.png",
+        "rarity": 1,
+        "type": 0
     },
     "Belka": {
         "attack": 757,
@@ -15,7 +17,9 @@
         "defaultWeapon": "Forest Faerie",
         "defense": 528,
         "health": 1770,
-        "img_path": "@/assets/images/dolls/Belka.png"
+        "img_path": "/src/assets/images/dolls/Belka.png",
+        "rarity": 1,
+        "type": 0
     },
     "Centaureissi": {
         "attack": 696,
@@ -24,7 +28,9 @@
         "defaultWeapon": "Maid's Standards",
         "defense": 585,
         "health": 1893,
-        "img_path": "@/assets/images/dolls/Centaureissi.png"
+        "img_path": "/src/assets/images/dolls/Centaureissi.png",
+        "rarity": 1,
+        "type": 0
     },
     "Cheeta": {
         "attack": 591,
@@ -33,7 +39,9 @@
         "defaultWeapon": "MP7H1",
         "defense": 494,
         "health": 1842,
-        "img_path": "@/assets/images/dolls/Cheeta.png"
+        "img_path": "/src/assets/images/dolls/Cheeta.png",
+        "rarity": 0,
+        "type": 5
     },
     "Colphne": {
         "attack": 515,
@@ -42,7 +50,9 @@
         "defaultWeapon": ".380 Curva",
         "defense": 503,
         "health": 1787,
-        "img_path": "@/assets/images/dolls/Colphne.png"
+        "img_path": "/src/assets/images/dolls/Colphne.png",
+        "rarity": 0,
+        "type": 2
     },
     "Daiyan": {
         "attack": 722,
@@ -51,7 +61,9 @@
         "defaultWeapon": "Heavy Strings",
         "defense": 504,
         "health": 1616,
-        "img_path": "@/assets/images/dolls/Daiyan.png"
+        "img_path": "/src/assets/images/dolls/Daiyan.png",
+        "rarity": 1,
+        "type": 0
     },
     "Dushevnaya": {
         "attack": 757,
@@ -60,7 +72,9 @@
         "defaultWeapon": "Eulogistic Verse",
         "defense": 585,
         "health": 1851,
-        "img_path": "@/assets/images/dolls/Dushevnaya.png"
+        "img_path": "/src/assets/images/dolls/Dushevnaya.png",
+        "rarity": 1,
+        "type": 6
     },
     "Faye": {
         "attack": 731,
@@ -69,7 +83,9 @@
         "defaultWeapon": "Hestia",
         "defense": 528,
         "health": 1609,
-        "img_path": "@/assets/images/dolls/Faye.png"
+        "img_path": "/src/assets/images/dolls/Faye.png",
+        "rarity": 1,
+        "type": 2
     },
     "Groza": {
         "attack": 539,
@@ -78,7 +94,9 @@
         "defaultWeapon": "OTs-14",
         "defense": 553,
         "health": 1981,
-        "img_path": "@/assets/images/dolls/Groza.png"
+        "img_path": "/src/assets/images/dolls/Groza.png",
+        "rarity": 0,
+        "type": 0
     },
     "Jiangyu": {
         "attack": 802,
@@ -87,7 +105,9 @@
         "defaultWeapon": "Leaping Tiger",
         "defense": 519,
         "health": 1932,
-        "img_path": "@/assets/images/dolls/Jiangyu.png"
+        "img_path": "/src/assets/images/dolls/Jiangyu.png",
+        "rarity": 1,
+        "type": 0
     },
     "Klukai": {
         "attack": 827,
@@ -96,7 +116,9 @@
         "defaultWeapon": "Scylla",
         "defense": 504,
         "health": 1893,
-        "img_path": "@/assets/images/dolls/Klukai.png"
+        "img_path": "/src/assets/images/dolls/Klukai.png",
+        "rarity": 1,
+        "type": 0
     },
     "Krolik": {
         "attack": 618,
@@ -105,7 +127,9 @@
         "defaultWeapon": "Hare",
         "defense": 463,
         "health": 1397,
-        "img_path": "@/assets/images/dolls/Krolik.png"
+        "img_path": "/src/assets/images/dolls/Krolik.png",
+        "rarity": 0,
+        "type": 1
     },
     "Ksenia": {
         "attack": 539,
@@ -114,7 +138,9 @@
         "defaultWeapon": "Stechkin",
         "defense": 463,
         "health": 1842,
-        "img_path": "@/assets/images/dolls/Ksenia.png"
+        "img_path": "/src/assets/images/dolls/Ksenia.png",
+        "rarity": 0,
+        "type": 2
     },
     "Lenna": {
         "attack": 689,
@@ -123,7 +149,9 @@
         "defaultWeapon": "Young Lion",
         "defense": 550,
         "health": 2081,
-        "img_path": "@/assets/images/dolls/Lenna.png"
+        "img_path": "/src/assets/images/dolls/Lenna.png",
+        "rarity": 1,
+        "type": 5
     },
     "Littara": {
         "attack": 670,
@@ -132,7 +160,9 @@
         "defaultWeapon": "Model ARM",
         "defense": 487,
         "health": 1656,
-        "img_path": "@/assets/images/dolls/Littara.png"
+        "img_path": "/src/assets/images/dolls/Littara.png",
+        "rarity": 0,
+        "type": 3
     },
     "Lotta": {
         "attack": 696,
@@ -141,7 +171,9 @@
         "defaultWeapon": "M1 Super 90",
         "defense": 487,
         "health": 1599,
-        "img_path": "@/assets/images/dolls/Lotta.png"
+        "img_path": "/src/assets/images/dolls/Lotta.png",
+        "rarity": 0,
+        "type": 4
     },
     "Makiatto": {
         "attack": 844,
@@ -153,7 +185,9 @@
         "defaultWeapon": "Bittersweet Caramel",
         "defense": 504,
         "health": 1819,
-        "img_path": "@/assets/images/dolls/Makiatto.png"
+        "img_path": "/src/assets/images/dolls/Makiatto.png",
+        "rarity": 1,
+        "type": 6
     },
     "Mechty": {
         "attack": 723,
@@ -162,7 +196,9 @@
         "defaultWeapon": "Daydream",
         "defense": 577,
         "health": 1876,
-        "img_path": "@/assets/images/dolls/Mechty.png"
+        "img_path": "/src/assets/images/dolls/Mechty.png",
+        "rarity": 1,
+        "type": 0
     },
     "Mosin-Nagant": {
         "attack": 820,
@@ -171,7 +207,9 @@
         "defaultWeapon": "Samosek",
         "defense": 528,
         "health": 1859,
-        "img_path": "@/assets/images/dolls/Mosin-Nagant.png"
+        "img_path": "/src/assets/images/dolls/Mosin-Nagant.png",
+        "rarity": 1,
+        "type": 6
     },
     "Nagant": {
         "attack": 609,
@@ -180,7 +218,9 @@
         "defaultWeapon": "Nagant M1895",
         "defense": 512,
         "health": 1656,
-        "img_path": "@/assets/images/dolls/Nagant.png"
+        "img_path": "/src/assets/images/dolls/Nagant.png",
+        "rarity": 0,
+        "type": 2
     },
     "Nemesis": {
         "attack": 703,
@@ -189,7 +229,9 @@
         "defaultWeapon": ".50 Nemesis",
         "defense": 463,
         "health": 1656,
-        "img_path": "@/assets/images/dolls/Nemesis.png"
+        "img_path": "/src/assets/images/dolls/Nemesis.png",
+        "rarity": 0,
+        "type": 6
     },
     "Papasha": {
         "attack": 802,
@@ -198,7 +240,9 @@
         "defaultWeapon": "Svarog",
         "defense": 528,
         "health": 1893,
-        "img_path": "@/assets/images/dolls/Papasha.png"
+        "img_path": "/src/assets/images/dolls/Papasha.png",
+        "rarity": 1,
+        "type": 5
     },
     "Peri": {
         "attack": 696,
@@ -207,7 +251,9 @@
         "defaultWeapon": "Emerita",
         "defense": 560,
         "health": 2191,
-        "img_path": "@/assets/images/dolls/Peri.png"
+        "img_path": "/src/assets/images/dolls/Peri.png",
+        "rarity": 1,
+        "type": 5
     },
     "Peritya": {
         "attack": 765,
@@ -216,7 +262,9 @@
         "defaultWeapon": "Optical Illusion",
         "defense": 536,
         "health": 1948,
-        "img_path": "@/assets/images/dolls/Peritya.png"
+        "img_path": "/src/assets/images/dolls/Peritya.png",
+        "rarity": 1,
+        "type": 3
     },
     "Qiongjiu": {
         "attack": 802,
@@ -225,7 +273,9 @@
         "defaultWeapon": "Golden Melody",
         "defense": 528,
         "health": 1893,
-        "img_path": "@/assets/images/dolls/Qiongjiu.png"
+        "img_path": "/src/assets/images/dolls/Qiongjiu.png",
+        "rarity": 1,
+        "type": 0
     },
     "Qiuhua": {
         "attack": 757,
@@ -234,7 +284,9 @@
         "defaultWeapon": "Chasing Light",
         "defense": 536,
         "health": 1713,
-        "img_path": "@/assets/images/dolls/Qiuhua.png"
+        "img_path": "/src/assets/images/dolls/Qiuhua.png",
+        "rarity": 1,
+        "type": 4
     },
     "Sabrina": {
         "attack": 609,
@@ -243,7 +295,9 @@
         "defaultWeapon": "Mezzaluna",
         "defense": 642,
         "health": 2249,
-        "img_path": "@/assets/images/dolls/Sabrina.png"
+        "img_path": "/src/assets/images/dolls/Sabrina.png",
+        "rarity": 1,
+        "type": 4
     },
     "Sharkry": {
         "attack": 679,
@@ -252,7 +306,9 @@
         "defaultWeapon": "Robinson Modular Rifle",
         "defense": 463,
         "health": 1706,
-        "img_path": "@/assets/images/dolls/Sharkry.png"
+        "img_path": "/src/assets/images/dolls/Sharkry.png",
+        "rarity": 0,
+        "type": 0
     },
     "Springfield": {
         "attack": 696,
@@ -261,7 +317,9 @@
         "defaultWeapon": "Faithpiercer",
         "defense": 585,
         "health": 1909,
-        "img_path": "@/assets/images/dolls/Springfield.png"
+        "img_path": "/src/assets/images/dolls/Springfield.png",
+        "rarity": 1,
+        "type": 6
     },
     "Suomi": {
         "attack": 672,
@@ -270,7 +328,9 @@
         "defaultWeapon": "Unspoken Calling",
         "defense": 617,
         "health": 1955,
-        "img_path": "@/assets/images/dolls/Suomi.png"
+        "img_path": "/src/assets/images/dolls/Suomi.png",
+        "rarity": 1,
+        "type": 5
     },
     "Tololo": {
         "attack": 836,
@@ -279,7 +339,9 @@
         "defaultWeapon": "Planeta",
         "defense": 528,
         "health": 1819,
-        "img_path": "@/assets/images/dolls/Tololo.png"
+        "img_path": "/src/assets/images/dolls/Tololo.png",
+        "rarity": 1,
+        "type": 0
     },
     "Ullrid": {
         "attack": 740,
@@ -288,7 +350,9 @@
         "defaultWeapon": "Rectrix",
         "defense": 528,
         "health": 1519,
-        "img_path": "@/assets/images/dolls/Ullrid.png"
+        "img_path": "/src/assets/images/dolls/Ullrid.png",
+        "rarity": 1,
+        "type": 1
     },
     "Vector": {
         "attack": 748,
@@ -297,7 +361,9 @@
         "defaultWeapon": "Echoes of Sorrow",
         "defense": 569,
         "health": 1819,
-        "img_path": "@/assets/images/dolls/Vector.png"
+        "img_path": "/src/assets/images/dolls/Vector.png",
+        "rarity": 1,
+        "type": 5
     },
     "Vepley": {
         "attack": 696,
@@ -306,7 +372,9 @@
         "defaultWeapon": "Heartseeker",
         "defense": 528,
         "health": 1851,
-        "img_path": "@/assets/images/dolls/Vepley.png"
+        "img_path": "/src/assets/images/dolls/Vepley.png",
+        "rarity": 1,
+        "type": 4
     },
     "Yoohee": {
         "attack": 757,
@@ -315,7 +383,9 @@
         "defaultWeapon": "Starfall Spark",
         "defense": 585,
         "health": 1851,
-        "img_path": "@/assets/images/dolls/Yoohee.png"
+        "img_path": "/src/assets/images/dolls/Yoohee.png",
+        "rarity": 1,
+        "type": 0
     },
     "Zhaohui": {
         "attack": 757,
@@ -324,6 +394,8 @@
         "defaultWeapon": "Unstoppable",
         "defense": 502,
         "health": 1975,
-        "img_path": "@/assets/images/dolls/Zhaohui.png"
+        "img_path": "/src/assets/images/dolls/Zhaohui.png",
+        "rarity": 1,
+        "type": 5
     }
 }

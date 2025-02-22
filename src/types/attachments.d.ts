@@ -16,6 +16,8 @@ export interface Doll {
     defense: number
     health: number
     img_path: string
+    rarity: number
+    type: number
 }
 
 export interface Stat {

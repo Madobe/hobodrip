@@ -8,6 +8,23 @@ import _weapons from "@/assets/data/weapon-db.json"
 
 const weapons: { [key: string]: Weapon } = _weapons
 
+/**
+ * The stats that an attachment can have.
+ */
+export const AVAILABLE_STATS = [
+    "Attack",
+    "Attack Boost",
+    "Crit Rate",
+    "Crit DMG",
+    "Defense",
+    "Defense Boost",
+    "Health",
+    "Health Boost",
+]
+
+/**
+ * The types of weapons, keyed by their numerical representations.
+ */
 export const WEAPON_TYPES = {
     0: "AR",
     1: "BLD",
@@ -18,7 +35,15 @@ export const WEAPON_TYPES = {
     6: "RF",
 }
 
-export function calculateCombatEfficiency(
+/**
+ * Calculate the CE value for the doll, given their equips.
+ * @param doll The data for the doll.
+ * @param neuralHelix The amount of neural helix nodes that have been unlocked.
+ * @param fortifications The amount of dupes the doll has.
+ * @param attachments The attachments on the doll's weapon.
+ * @returns The doll's combat effectiveness value.
+ */
+export function calculateCombatEffectiveness(
     doll: Doll,
     neuralHelix: number,
     fortifications: number,
@@ -134,21 +159,6 @@ export function getAttachmentTypes() {
         "RF Underbarrel",
     ]
 }
-
-/**
- * Provides the stats that an attachment can have.
- * @returns The stats which can be on an attachment.
- */
-export const getPossibleStats = () => [
-    "Attack",
-    "Attack Boost",
-    "Crit Rate",
-    "Crit DMG",
-    "Defense",
-    "Defense Boost",
-    "Health",
-    "Health Boost",
-]
 
 /**
  * Organizes weapons by weapon type.

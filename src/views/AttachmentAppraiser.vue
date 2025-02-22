@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { Toast } from 'bootstrap';
+import { Modal, Toast } from 'bootstrap';
 import { createWorker } from 'tesseract.js';
 
 import type { Attachment, Doll, Stat, Weapon } from '@/types/attachments';
 
 import { useAttachmentsStore } from '@/stores/attachments';
-import { calculateCombatEfficiency, getAttachmentTypeFromText, getAttachmentTypes, getPossibleStats, getWeaponsByType } from '@/utils/stats';
+import { AVAILABLE_STATS, calculateCombatEffectiveness, getAttachmentTypeFromText, getAttachmentTypes, getWeaponsByType } from '@/utils/stats';
 import _dolls from '@/assets/data/doll-db.json'
 import _weapons from '@/assets/data/weapon-db.json'
+import DollSelectorModal from '@/components/DollSelectorModal.vue';
+import { reactive } from 'vue';
 
 const dolls: { [name: string]: Doll } = _dolls
 const weapons: { [name: string]: Weapon } = _weapons
@@ -31,7 +33,6 @@ const toasts: {
         }
     ]
 
-const possibleStats = getPossibleStats()
 const attachmentTypes = getAttachmentTypes()
 const attachments = useAttachmentsStore()
 
@@ -41,43 +42,24 @@ const addedDolls: {
     fortifications: number
     type: number
     attachments: Attachment[]
-}[] = [
-        {
-            name: "Papasha",
-            neuralHelix: 6,
-            fortifications: 6,
-            type: 5,
-            attachments: [
-                {
-                    type: "AR Muzzle",
-                    stats: [
-                        { stat: "Attack", value: 10 },
-                        { stat: "Attack", value: 10 },
-                        { stat: "Attack", value: 10 },
-                        { stat: "Attack", value: 10 },
-                    ],
-                },
-                {
-                    type: "AR Muzzle",
-                    stats: [
-                        { stat: "Attack", value: 10 },
-                        { stat: "Attack", value: 10 },
-                        { stat: "Attack", value: 10 },
-                        { stat: "Attack", value: 10 },
-                    ],
-                },
-                {
-                    type: "AR Muzzle",
-                    stats: [
-                        { stat: "Attack", value: 10 },
-                        { stat: "Attack", value: 10 },
-                        { stat: "Attack", value: 10 },
-                        { stat: "Attack", value: 10 },
-                    ],
-                }
-            ]
-        }
-    ]
+}[] = reactive([])
+
+/**
+ * Adds the given doll.
+ * @param name The name of the doll to add.
+ */
+function addDoll(name: string) {
+    const doll = dolls[name]
+
+    addedDolls.push({
+        name,
+        neuralHelix: 6,
+        fortifications: 0,
+        type: doll.type,
+        attachments: [] as Attachment[]
+    })
+    Modal.getOrCreateInstance("#doll-selector-modal").hide()
+}
 
 /**
  * Parses the random gibberish that Tesseract spits out and figures out what the stats for the
@@ -92,12 +74,12 @@ function processOCROutput(text: string) {
 
     let stats = [] as Stat[]
 
-    possibleStats.forEach(ps => {
-        const match = RegExp(`${ps}.+?([0-9.]+)`).exec(text)
+    AVAILABLE_STATS.forEach(stat => {
+        const match = RegExp(`${stat}.+?([0-9.]+)`).exec(text)
 
         if (match) {
             stats.push({
-                stat: ps,
+                stat: stat,
                 value: parseFloat(match[1])
             })
         }
@@ -109,6 +91,21 @@ function processOCROutput(text: string) {
 
     attachments.addAttachment(attachmentType, stats)
     showToast("image-processing-success")
+}
+
+/**
+ * Removes the given doll.
+ * @param name The doll to remove.
+ */
+function removeDoll(name: string) {
+    addedDolls.splice(addedDolls.findIndex(doll => doll.name === name), 1)
+}
+
+/**
+ * Displays the doll selector modal.
+ */
+function showDollSelector() {
+    Modal.getOrCreateInstance("#doll-selector-modal").show()
 }
 
 /**
@@ -152,6 +149,7 @@ document.onpaste = function (event) {
 </script>
 
 <template>
+    <DollSelectorModal :addedDolls="addedDolls.map(d => d.name)" @selectDoll="addDoll"></DollSelectorModal>
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true"
             v-for="toast in toasts" :id="toast.id">
@@ -178,16 +176,17 @@ document.onpaste = function (event) {
             </div>
             <div class="col-12 col-md-9 py-3 doll-boxes">
                 <template v-for="addedDoll in addedDolls">
-                    <div class="border border-3 border-secondary-subtle text-secondary-emphasis d-flex flex-row">
+                    <div class="border border-3 border-secondary-subtle text-secondary-emphasis d-flex flex-row mb-3">
                         <div class="d-flex flex-column justify-content-center align-items-center m-3">
                             <img :src="`/src/assets/images/dolls/${addedDoll.name}.png`" :alt="addedDoll.name"
                                 class="rounded-top bg-elite">
                             <div
                                 class="container-fluid text-bg-light rounded-bottom text-align-center d-flex justify-content-center">
-                                {{ calculateCombatEfficiency(dolls[addedDoll.name], addedDoll.neuralHelix,
+                                {{ calculateCombatEffectiveness(dolls[addedDoll.name], addedDoll.neuralHelix,
                                     addedDoll.fortifications, addedDoll.attachments.flat()) }}
                             </div>
-                            <button class="w-100 btn btn-danger mt-1">Remove</button>
+                            <button class="w-100 btn btn-danger mt-1"
+                                @click="removeDoll(addedDoll.name)">Remove</button>
                         </div>
                         <div class="container-fluid my-3">
                             <div class="row">
@@ -219,8 +218,8 @@ document.onpaste = function (event) {
                         </div>
                     </div>
                 </template>
-                <div
-                    class="border border-3 border-secondary-subtle d-flex justify-content-center align-items-center text-secondary-emphasis pt-2 mt-3">
+                <div class="border border-3 border-secondary-subtle d-flex justify-content-center align-items-center text-secondary-emphasis pt-2"
+                    @click="showDollSelector">
                     Add Doll
                 </div>
             </div>
@@ -245,6 +244,7 @@ document.onpaste = function (event) {
 
 .doll-boxes>div:last-child {
     border-style: dashed !important;
+    cursor: pointer;
     font: 400 3rem "Noto Sans";
     height: 7rem;
 }
