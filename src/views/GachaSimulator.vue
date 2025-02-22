@@ -2,7 +2,7 @@
 import { Modal } from "bootstrap"
 import { ref } from "vue"
 
-import banner from "@/assets/images/banner.jpg"
+import banner from "@/assets/images/banner.png"
 import supply from "@/assets/data/gacha-db.json"
 
 import { getRandomElement } from "@/utils/array"
@@ -23,9 +23,9 @@ let modalVideoType = ref(0)
 let modalVideoTimeout = 0
 
 const currentRateUps = [
-    "Dushevnaya",
-    "Littara",
-    "Krolik"
+    "Centaureissi",
+    "Sharkry",
+    "Cheeta"
 ]
 
 const processedSupply = supply.data.reduce<GachaSupply>((accumulator, value) => {
@@ -152,7 +152,7 @@ function doSinglePull() {
 
 /**
  * Hides the video modal.
- * @param time {number} The time in milliseconds to wait before hiding the video.
+ * @param time The time in milliseconds to wait before hiding the video.
  */
 function hideVideo(time: number) {
     if (modalVideoTimeout) clearTimeout(modalVideoTimeout)
@@ -168,7 +168,7 @@ function hideVideo(time: number) {
 
 /**
  * Determines whether the given pull is of elite quality.
- * @param name {string} The name of the pull result to check.
+ * @param name The name of the pull result to check.
  */
 function isElite(name: string) {
     return processedSupply.dolls.elites.includes(name) || processedSupply.weapons.elites.includes(name)
@@ -176,7 +176,7 @@ function isElite(name: string) {
 
 /**
  * Determines whether the given pull is of standard quality.
- * @param name {string} The name of the pull result to check.
+ * @param name The name of the pull result to check.
  */
 function isStandard(name: string) {
     return processedSupply.dolls.standards.includes(name) || processedSupply.weapons.standards.includes(name)
@@ -184,7 +184,7 @@ function isStandard(name: string) {
 
 /**
  * Displays the given video in the video modal.
- * @param type {number} The type of video to show in the modal.
+ * @param type The type of video to show in the modal.
  */
 function showVideo(type: number) {
     const videoModal = Modal.getInstance("#full-screen-video-modal")
@@ -307,18 +307,6 @@ button:first-child {
 
 button:nth-child(2) {
     background-color: #e04414;
-}
-
-.bg-elite {
-    background-color: #ffb348;
-    color: black;
-    font-weight: bold;
-}
-
-.bg-standard {
-    background-color: #7028e4;
-    color: white;
-    font-weight: bold;
 }
 
 .pull-log {
