@@ -100,12 +100,12 @@ function checkFirstTime(results: string[]) {
  * so this can be considered to be a 99%
  * - 75 - 58 = 17 with a rate difference from 99 - 0.6 = 98.4, so 98.4 / 17 = 5.788 increase per
  * pull
- * 
+ *
  * - Base standard rate is 6% (3% for dolls and 3% for weapons)
  * - Standard rate has to be taken as elite + standard rates because otherwise any random value
- * below the elite rate wouldn't be part of the standard rate (so it would effectively be 
+ * below the elite rate wouldn't be part of the standard rate (so it would effectively be
  * standard - elite)
- * 
+ *
  * - Rate for blue trash is 93.4% with the rate shared equally between all trash
  */
 function doSinglePull() {
@@ -201,6 +201,7 @@ function showVideo(type: number) {
  */
 function handleSingle() {
     const result = doSinglePull()
+    const pity = pulls.count + 1
 
     pulls.increaseCount()
 
@@ -217,7 +218,7 @@ function handleSingle() {
     }
 
     checkFirstTime([result])
-    pulls.addPulls(result)
+    pulls.addPulls({ name: result, pity: pity })
 }
 
 /**
@@ -226,6 +227,7 @@ function handleSingle() {
 function handleMulti() {
     const results = Array(10).fill(0).map(() => {
         const result = doSinglePull()
+        const pity = pulls.count + 1
 
         pulls.increaseCount()
 
@@ -241,11 +243,11 @@ function handleMulti() {
             pulls.increaseStandards()
         }
 
-        return result
+        return { name: result, pity: pity}
     })
 
-    checkFirstTime(results)
-    pulls.addPulls(results.flat())
+    checkFirstTime(results.map(r => r.name))
+    pulls.addPulls(results)
 }
 </script>
 
@@ -263,10 +265,11 @@ function handleMulti() {
                     <div class="container-fluid h-100 p-0">
                         <div class="container-fluid" v-for="(pull, i) in [...pulls.pulls].reverse()">
                             <div :class="['row border-bottom border-secondary py-1',
-                                isElite(pull) ? 'bg-elite' : '',
-                                isStandard(pull) ? 'bg-standard' : '']">
+                                isElite(pull.name) ? 'bg-elite' : '',
+                                isStandard(pull.name) ? 'bg-standard' : '']">
                                 <div class="col-3">{{ pulls.pulls.length - i }}</div>
-                                <div class="col-9">{{ pull }}</div>
+                                <div class="col-6">{{ pull.name }}</div>
+                                <div class="col-3" v-if="isElite(pull.name)">Pity: {{ pull.pity }}</div>
                             </div>
                         </div>
                     </div>
