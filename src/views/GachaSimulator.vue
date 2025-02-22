@@ -73,6 +73,10 @@ const allElites = processedSupply.dolls.elites.concat(processedSupply.weapons.el
 const allStandards = processedSupply.dolls.standards.concat(processedSupply.weapons.standards)
 const pulls = usePullsStore()
 
+const showElites = ref(true)
+const showStandards = ref(true)
+const showRetired = ref(true)
+
 // Methods
 /**
  * Determines whether it's the first time any of the given results have been pulled. If so, get the
@@ -264,14 +268,26 @@ function handleMulti() {
                     </div>
                     <div class="container-fluid h-100 p-0">
                         <div class="container-fluid" v-for="(pull, i) in [...pulls.pulls].reverse()">
-                            <div :class="['row border-bottom border-secondary py-1',
-                                isElite(pull.name) ? 'bg-elite' : '',
-                                isStandard(pull.name) ? 'bg-standard' : '']">
+                            <div v-if="(isElite(pull.name) && showElites) || (isStandard(pull.name) && showStandards) || (pull.name.startsWith('Retired') && showRetired)"
+                                :class="['row border-bottom border-secondary py-1',
+                                    isElite(pull.name) ? 'bg-elite' : '',
+                                    isStandard(pull.name) ? 'bg-standard' : '']">
                                 <div class="col-3">{{ pulls.pulls.length - i }}</div>
                                 <div class="col-6">{{ pull.name }}</div>
                                 <div class="col-3" v-if="isElite(pull.name)">Pity: {{ pull.pity }}</div>
                             </div>
                         </div>
+                    </div>
+                    <div class="container-fluid py-2 position-sticky bottom-0 bg-light d-flex justify-content-center border-secondary border">
+                        <button class="btn bg-elite" :class="showElites ? 'bg-elite' : 'bg-secondary'" @click="showElites = !showElites">
+                            Elites
+                        </button>
+                        <button class="btn ms-2 bg-standard" :class="showStandards ? 'bg-standard' : 'bg-secondary'" @click="showStandards = !showStandards">
+                            Standards
+                        </button>
+                        <button class="btn ms-2" :class="showRetired ? 'bg-primary' : 'bg-secondary'" @click="showRetired = !showRetired">
+                            Retired
+                        </button>
                     </div>
                 </div>
             </div>
@@ -289,8 +305,8 @@ function handleMulti() {
                         </div>
                     </div>
                     <div class="container-fluid d-flex justify-content-around justify-content-md-end py-2">
-                        <button class="btn btn-secondary" @click="handleSingle">Pull</button>
-                        <button class="btn btn-secondary ms-2" @click="handleMulti">Pull x10</button>
+                        <button class="btn btn-secondary bg-primary one-pull" @click="handleSingle">Pull</button>
+                        <button class="btn btn-secondary ms-2 ten-pull" @click="handleMulti">Pull x10</button>
                     </div>
                 </div>
             </div>
@@ -304,11 +320,11 @@ button {
     border-radius: 2px;
 }
 
-button:first-child {
+.one-pull {
     background-color: #c0b4bc;
 }
 
-button:nth-child(2) {
+.ten-pull {
     background-color: #e04414;
 }
 
