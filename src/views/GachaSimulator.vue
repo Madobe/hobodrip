@@ -258,9 +258,9 @@ function handleMulti() {
             <div class="col-md-4 p-0 border border-secondary overflow-y-scroll pull-log order-1 order-md-0">
                 <div class="d-flex flex-column h-100">
                     <div
-                        class="container-fluid d-flex justify-space-between text-bg-success py-2 border-bottom border-secondary">
-                        <span>Current: {{ pulls.count }} (Pity: {{ pulls.pity ? "✓" : "✘" }})</span>
-                        <span class="ms-auto">Total: {{ pulls.total }}</span>
+                      class="container-fluid d-flex justify-space-between text-bg-success py-2 border-bottom border-secondary position-sticky top-0">
+                      <span>Current: {{ pulls.count }} (Pity: {{ pulls.pity ? "✓" : "✘" }})</span>
+                      <span class="ms-auto">Total: {{ pulls.total }}</span>
                     </div>
                     <div class="container-fluid h-100 p-0">
                         <div class="container-fluid" v-for="(pull, i) in [...pulls.pulls].reverse()">
