@@ -1,20 +1,25 @@
 import { defineStore } from "pinia"
 
+export interface Pull {
+    name: string
+    pity: number
+}
+
 export const usePullsStore = defineStore("pulls", {
     state: () => ({
         count: 0,
         elites: 0,
         firstTimes: {} as { [name: string]: boolean },
         pity: false,
-        pulls: [] as string[],
+        pulls: [] as Pull[],
         standardPity: 0,
         standards: 0,
         total: 0,
     }),
     actions: {
-        addPulls(newPulls: string | string[]) {
-            const intermediary: string[] = ([] as string[]).concat(newPulls)
-            intermediary.forEach(doll => (this.firstTimes[doll] = true))
+        addPulls(newPulls: Pull | Pull[]) {
+            const intermediary: Pull[] = ([] as Pull[]).concat(newPulls)
+            intermediary.forEach(doll => (this.firstTimes[doll.name] = true))
             this.pulls = this.pulls.concat(newPulls)
         },
         increaseCount() {
