@@ -82,6 +82,29 @@ export function calculateCombatEffectiveness(
 }
 
 /**
+ * Calculates the average damage the attack would do on a unit with the given defense. This foregoes
+ * individual attack damage for the average.
+ */
+export function calculateDamage(
+    attack: number,
+    defense: number,
+    buffs: number = 0,
+    crit_rate: number = 0.2,
+    crit_dmg: number = 1.2,
+    skill_modifier: number = 1,
+    elemental_advantages: number = 0,
+) {
+    const min_dmg =
+        (attack / (1 + defense / attack)) *
+        (1 + buffs) *
+        (1 + 0.1 * elemental_advantages) *
+        skill_modifier
+    const max_dmg = min_dmg * crit_dmg
+
+    return min_dmg + (max_dmg / min_dmg) * crit_rate
+}
+
+/**
  * Processes the given text (could be random output from OCR) and returns the matching attachment
  * type number.
  * @returns The attachment type number, or -1 if no matches could be made.
