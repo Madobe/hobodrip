@@ -1,0 +1,335 @@
+{
+    ".380 Curva": {
+        "attack": 209,
+        "type": 2
+    },
+    ".50 Nemesis": {
+        "attack": 278,
+        "type": 6
+    },
+    "Aglaea": {
+        "attack": 348,
+        "attack_bost": 15,
+        "unconfirmed": true,
+        "type": 0
+    },
+    "Arcana": {
+        "attack": 327,
+        "attack_boost": 15,
+        "type": 6
+    },
+    "Bittersweet Caramel": {
+        "attack": 390,
+        "crit_dmg": 25,
+        "type": 6
+    },
+    "Chasing Light": {
+        "attack": 348,
+        "crit_dmg": 25,
+        "type": 4,
+        "unconfirmed": true
+    },
+    "Classified Manuscript": {
+        "attack": 292,
+        "attack_boost": 15,
+        "type": 5
+    },
+    "Crowned Jackalope": {
+        "attack": 313,
+        "attack_boost": 15,
+        "type": 1
+    },
+    "CS/LS6": {
+        "attack": 251,
+        "type": 5,
+        "unconfirmed": true
+    },
+    "CZ75": {
+        "attack": 244,
+        "type": 2,
+        "unconfirmed": true
+    },
+    "Daewoo Precision Industries K2": {
+        "attack": 251,
+        "attack_boost": 15,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "Daydream": {
+        "attack": 341,
+        "attack_boost": 15,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "Echoes of Sorrow": {
+        "attack": 348,
+        "attack_boost": 15,
+        "type": 5,
+        "unconfirmed": true
+    },
+    "Emerita": {
+        "attack": 320,
+        "attack_boost": 15,
+        "type": 5,
+        "unconfirmed": true
+    },
+    "Eulogistic Verse": {
+        "attack": 348,
+        "attack_boost": 15,
+        "type": 6
+    },
+    "Expeditionary Pigeon": {
+        "attack": 306,
+        "attack_boost": 15,
+        "type": 4
+    },
+    "Faithpiercer": {
+        "attack": 348,
+        "attack_boost": 15,
+        "type": 6,
+        "unconfirmed": true
+    },
+    "Forest Faerie": {
+        "attack": 348,
+        "crit_dmg": 25,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "Golden Melody": {
+        "attack": 369,
+        "attack_boost": 15,
+        "type": 0
+    },
+    "Guerno": {
+        "attack": 320,
+        "attack_boost": 15,
+        "type": 0
+    },
+    "Hare": {
+        "attack": 244,
+        "type": 1
+    },
+    "Hawk Industries Type 97": {
+        "attack": 251,
+        "type": 4,
+        "unconfirmed": true
+    },
+    "Heart Seeker": {
+        "attack": 320,
+        "type": 4
+    },
+    "Heavy Strings": {
+        "attack": 341,
+        "crit_dmg": 25,
+        "type": 0
+    },
+    "Heckler & Koch G11": {
+        "attack": 244,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "Heckler & Koch G28": {
+        "attack": 251,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "Heckler & Koch G36": {
+        "attack": 230,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "Heckler & Koch G36 - Spectre": {
+        "attack": 223,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "Heckler & Koch HK416": {
+        "attack": 278,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "Heckler & Koch MP5": {
+        "attack": 230,
+        "type": 5,
+        "unconfirmed": true
+    },
+    "Heckler & Koch UMP9": {
+        "attack": 223,
+        "type": 5,
+        "unconfirmed": true
+    },
+    "Hestia": {
+        "attack": 244,
+        "type": 2,
+        "unconfirmed": true
+    },
+    "KRISS \"Shortsword\" Vector": {
+        "attack": 251,
+        "type": 5,
+        "unconfirmed": true
+    },
+    "KSVK": {
+        "attack": 251,
+        "type": 6
+    },
+    "Leaping Tiger": {
+        "attack": 369,
+        "crit_dmg": 25,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "M1 Super 90": {
+        "attack": 278,
+        "type": 4
+    },
+    "M1903 Springfield": {
+        "attack": 230,
+        "type": 6,
+        "unconfirmed": true
+    },
+    "Maid's Standards": {
+        "attack": 320,
+        "attack_boost": 15,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "Mezzaluna": {
+        "attack": 327,
+        "attack_boost": 15,
+        "type": 4
+    },
+    "Mjölnir": {
+        "attack": 327,
+        "attack_boost": 15,
+        "type": 3
+    },
+    "Model Alpha": {
+        "attack": 272,
+        "type": 0
+    },
+    "Model ARM": {
+        "attack": 265,
+        "type": 3
+    },
+    "MP7H1": {
+        "attack": 237,
+        "type": 5
+    },
+    "Nagant M1895": {
+        "attack": 244,
+        "type": 2
+    },
+    "Optical Illusion": {
+        "attack": 348,
+        "crit_rate": 25,
+        "type": 3
+    },
+    "OTs-14": {
+        "attack": 216,
+        "type": 0
+    },
+    "Papa-Figo": {
+        "attack": 285,
+        "attack_boost": 15,
+        "type": 2
+    },
+    "Pecheneg-SP": {
+        "attack": 251,
+        "type": 3
+    },
+    "Planeta": {
+        "attack": 376,
+        "crit_dmg": 25,
+        "type": 0
+    },
+    "Pluma Edge": {
+        "attack": 244,
+        "type": 1
+    },
+    "QBZ-95": {
+        "attack": 244,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "QBZ-97": {
+        "attack": 265,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "QBZ-191": {
+        "attack": 265,
+        "type": 0
+    },
+    "Rectrix": {
+        "attack": 341,
+        "crit_rate": 25,
+        "type": 1
+    },
+    "Robinson Modular Rifle": {
+        "attack": 272,
+        "type": 0
+    },
+    "Samosek": {
+        "attack": 383,
+        "crit_dmg": 25,
+        "type": 6
+    },
+    "Scylla": {
+        "attack": 390,
+        "attack_boost": 15,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "Sportivo Calibro 12": {
+        "attack": 230,
+        "type": 4
+    },
+    "Starfall Spark": {
+        "attack": 348,
+        "attack_bost": 15,
+        "type": 0,
+        "unconfirmed": true
+    },
+    "Stechkin": {
+        "attack": 216,
+        "type": 2
+    },
+    "Suomi": {
+        "attack": 223,
+        "type": 5
+    },
+    "Svarog": {
+        "attack": 369,
+        "attack_boost": 15,
+        "type": 5
+    },
+    "Three-Line Rifle M1891": {
+        "attack": 272,
+        "type": 6
+    },
+    "Unspoken Calling": {
+        "attack": 313,
+        "attack_boost": 15,
+        "type": 5
+    },
+    "Unstoppable": {
+        "attack": 348,
+        "crit_dmg": 25,
+        "type": 5,
+        "unconfirmed": true
+    },
+    "Vepr-12": {
+        "attack": 230,
+        "type": 4
+    },
+    "WA2000": {
+        "attack": 278,
+        "type": 6
+    },
+    "Young Lion": {
+        "attack": 313,
+        "attack_boost": 15,
+        "type": 5,
+        "unconfirmed": true
+    }
+}
