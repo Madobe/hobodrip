@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { Modal } from "bootstrap"
-import { ref } from "vue"
+import { ref, computed } from "vue"
+import { Pie } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js'
+
+ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
 
 import banner from "@/assets/images/banner.png"
 import supply from "@/assets/data/gacha-db.json"
@@ -8,6 +12,7 @@ import supply from "@/assets/data/gacha-db.json"
 import { getRandomElement } from "@/utils/array"
 import { usePullsStore } from "@/stores/pulls"
 import FullScreenVideoModal from "@/components/FullScreenVideoModal.vue"
+import { Interaction } from "chart.js"
 
 interface GachaCategory {
     elites: string[],
@@ -253,6 +258,33 @@ function handleMulti() {
     checkFirstTime(results.map(r => r.name))
     pulls.addPulls(results)
 }
+
+const pieData = computed(() => {
+  return {
+    labels: ['Elites', 'Standards', 'Retired'],
+    datasets: [
+      {
+        data: [pulls.elites, pulls.standards, pulls.total - pulls.elites - pulls.standards],
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+      }
+    ]
+  }
+})
+
+const pieOptions = {
+  plugins: {
+    legend: {
+      display: false
+    },
+    tooltips: {
+      enabled: true,
+    }
+  },
+  interaction: {
+    mode: 'dataset',
+  }
+}
 </script>
 
 <template>
@@ -261,10 +293,16 @@ function handleMulti() {
         <div class="row">
             <div class="col-md-4 p-0 border border-secondary overflow-y-scroll pull-log order-1 order-md-0">
                 <div class="d-flex flex-column h-100">
-                    <div
-                      class="container-fluid d-flex justify-space-between text-bg-success py-2 border-bottom border-secondary position-sticky top-0">
-                      <span>Current: {{ pulls.count }} (Pity: {{ pulls.pity ? "✓" : "✘" }})</span>
-                      <span class="ms-auto">Total: {{ pulls.total }}</span>
+                    <div class="container-fluid py-2 position-sticky bottom-0 bg-light d-flex justify-content-center border-secondary border">
+                        <button class="btn bg-elite" :class="showElites ? 'bg-elite' : 'bg-secondary'" @click="showElites = !showElites">
+                            Elites
+                        </button>
+                        <button class="btn ms-2 bg-standard" :class="showStandards ? 'bg-standard' : 'bg-secondary'" @click="showStandards = !showStandards">
+                            Standards
+                        </button>
+                        <button class="btn ms-2" :class="showRetired ? 'bg-primary' : 'bg-secondary'" @click="showRetired = !showRetired">
+                            Retired
+                        </button>
                     </div>
                     <div class="container-fluid h-100 p-0">
                         <div class="container-fluid" v-for="(pull, i) in [...pulls.pulls].reverse()">
@@ -278,36 +316,38 @@ function handleMulti() {
                             </div>
                         </div>
                     </div>
-                    <div class="container-fluid py-2 position-sticky bottom-0 bg-light d-flex justify-content-center border-secondary border">
-                        <button class="btn bg-elite" :class="showElites ? 'bg-elite' : 'bg-secondary'" @click="showElites = !showElites">
-                            Elites
-                        </button>
-                        <button class="btn ms-2 bg-standard" :class="showStandards ? 'bg-standard' : 'bg-secondary'" @click="showStandards = !showStandards">
-                            Standards
-                        </button>
-                        <button class="btn ms-2" :class="showRetired ? 'bg-primary' : 'bg-secondary'" @click="showRetired = !showRetired">
-                            Retired
-                        </button>
-                    </div>
                 </div>
             </div>
             <div class="col-md-8 p-0 border border-secondary order-0 order-md-1">
                 <img class="img-fluid" :src="banner" alt="Current banner">
                 <div class="container-fluid d-flex flex-column flex-md-row">
+                  <div class="container-fluid d-flex justify-content-around justify-content-md-end py-2">
                     <div class="container-fluid">
-                        <div class="container d-flex justify-content-between">
-                            <span>Elites: {{ pulls.elites }}</span>
-                            <span>{{ (pulls.elites / pulls.total * 100 || 0).toFixed(2) }}% of total pulls</span>
-                        </div>
-                        <div class="container d-flex justify-content-between">
-                            <span>Standards: {{ pulls.standards }}</span>
-                            <span>{{ (pulls.standards / pulls.total * 100 || 0).toFixed(2) }}% of total pulls</span>
-                        </div>
+                      <div class="container d-flex justify-content-between">
+                          <span>Total: </span>
+                          <span>{{ pulls.total }}</span>
+                      </div>
+                      <div class="container d-flex justify-content-between">
+                          <span>Elites: </span>
+                          <span>{{ pulls.elites }} ({{ (pulls.elites / pulls.total * 100 || 0).toFixed(2) }}%)</span>
+                      </div>
+                      <div class="container d-flex justify-content-between">
+                          <span>Standards: </span>
+                          <span>{{ pulls.standards }} ({{ (pulls.standards / pulls.total * 100 || 0).toFixed(2) }}%)</span>
+                      </div>
+                      <div class="container d-flex justify-content-between">
+                          <span>Current Pity: </span>
+                          <span>{{ pulls.count }} (Pity: {{ pulls.pity ? "✓" : "✘" }})</span>
+                      </div>
                     </div>
-                    <div class="container-fluid d-flex justify-content-around justify-content-md-end py-2">
-                        <button class="btn btn-secondary one-pull" @click="handleSingle">Pull</button>
-                        <button class="btn btn-secondary ms-2 ten-pull" @click="handleMulti">Pull x10</button>
+                    <div class="container-fluid" style="max-width: 120px; margin: auto;">
+                      <Pie :data="pieData" :options="pieOptions" />
                     </div>
+                  </div>
+                  <div class="container-fluid d-flex justify-content-around justify-content-md-end py-2 height-100">
+                      <button class="btn btn-secondary one-pull" @click="handleSingle">Pull</button>
+                      <button class="btn btn-secondary ms-2 ten-pull" @click="handleMulti">Pull x10</button>
+                  </div>
                 </div>
             </div>
         </div>
@@ -318,6 +358,7 @@ function handleMulti() {
 button {
     width: 150px;
     border-radius: 2px;
+    height: 40px;
 }
 
 .one-pull {
