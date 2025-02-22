@@ -305,7 +305,7 @@ function handleMulti() {
                         </div>
                     </div>
                     <div class="container-fluid d-flex justify-content-around justify-content-md-end py-2">
-                        <button class="btn btn-secondary bg-primary one-pull" @click="handleSingle">Pull</button>
+                        <button class="btn btn-secondary one-pull" @click="handleSingle">Pull</button>
                         <button class="btn btn-secondary ms-2 ten-pull" @click="handleMulti">Pull x10</button>
                     </div>
                 </div>
