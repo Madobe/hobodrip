@@ -83,9 +83,13 @@ const showElites = ref(true)
 const showStandards = ref(true)
 const showRetired = ref(true)
 
-// Load pulls from localStorage
+// Constants
+const MAX_PULLS = 1000
+
+// Load pulls and pity counter from localStorage
 onMounted(() => {
-    const savedPulls = localStorage.getItem('gachaPulls')
+    const savedPulls = localStorage.getItem('hobodrip.gachaPulls')
+    const savedPityCounter = localStorage.getItem('hobodrip.gachaPityCounter')
     if (savedPulls) {
         pulls.addPulls(JSON.parse(savedPulls))
         // Update the chart and text
@@ -95,16 +99,31 @@ onMounted(() => {
         pulls.count = pulls.pulls.length ? pulls.pulls[pulls.pulls.length - 1].pity : 0
         pulls.pity = pulls.pulls.length ? isElite(pulls.pulls[pulls.pulls.length - 1].name) : false
     }
+    if (savedPityCounter) {
+        pulls.count = JSON.parse(savedPityCounter)
+    }
 })
 
-// Watch for changes in pulls and save to localStorage
+// Watch for changes in pulls and pity counter, and save to localStorage
 watch(() => pulls.pulls, (newPulls) => {
-    localStorage.setItem('gachaPulls', JSON.stringify(newPulls))
+    localStorage.setItem('hobodrip.gachaPulls', JSON.stringify(newPulls))
 }, { deep: true })
 
-
+watch(() => pulls.count, (newCount) => {
+    localStorage.setItem('hobodrip.gachaPityCounter', JSON.stringify(newCount))
+})
 
 // Methods
+/**
+ * Shifts the saved pulls if the limit is reached.
+ */
+function shiftPullsIfNeeded() {
+    if (pulls.pulls.length > MAX_PULLS) {
+        pulls.pulls = pulls.pulls.slice(pulls.pulls.length - MAX_PULLS)
+        localStorage.setItem('hobodrip.gachaPulls', JSON.stringify(pulls.pulls))
+    }
+}
+
 /**
  * Determines whether it's the first time any of the given results have been pulled. If so, get the
  * rarity and play the corresponding movie file in an overlay.
@@ -227,11 +246,12 @@ function showVideo(type: number) {
 }
 
 /**
- * Resets the saved pulls.
+ * Resets the saved pulls and pity counter.
  */
 function resetPulls() {
     pulls.$reset()
-    localStorage.removeItem('gachaPulls')
+    localStorage.removeItem('hobodrip.gachaPulls')
+    localStorage.removeItem('hobodrip.gachaPityCounter')
 }
 
 // Event handlers
@@ -258,7 +278,8 @@ function handleSingle() {
 
     checkFirstTime([result])
     pulls.addPulls({ name: result, pity: pity })
-    localStorage.setItem('gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
+    shiftPullsIfNeeded() // Shift pulls if needed
+    localStorage.setItem('hobodrip.gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
 }
 
 /**
@@ -288,7 +309,8 @@ function handleMulti() {
 
     checkFirstTime(results.map(r => r.name))
     pulls.addPulls(results)
-    localStorage.setItem('gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
+    shiftPullsIfNeeded() // Shift pulls if needed
+    localStorage.setItem('hobodrip.gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
 }
 
 const pieData = computed(() => {
@@ -370,12 +392,12 @@ const pieOptions = {
                             <div class="container d-flex justify-content-between">
                                 <span>Elites: </span>
                                 <span>{{ pulls.elites }} ({{ (pulls.elites / pulls.total * 100 || 0).toFixed(2)
-                                    }}%)</span>
+                                }}%)</span>
                             </div>
                             <div class="container d-flex justify-content-between">
                                 <span>Standards: </span>
                                 <span>{{ pulls.standards }} ({{ (pulls.standards / pulls.total * 100 || 0).toFixed(2)
-                                    }}%)</span>
+                                }}%)</span>
                             </div>
                             <div class="container d-flex justify-content-between">
                                 <span>Current Pity: </span>
