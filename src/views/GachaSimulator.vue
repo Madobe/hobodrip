@@ -6,7 +6,7 @@ import { ref, computed, onMounted, watch } from "vue"
 import { Pie } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js'
 
-import banner from "@/assets/images/banner.png"
+import banner from "@/assets/images/banner.jpg"
 import supply from "@/assets/data/gacha-db.json"
 
 import { getRandomElement } from "@/utils/array"
@@ -31,7 +31,7 @@ let modalVideoTimeout = 0
 const currentRateUps = [
     "Centaureissi",
     "Sharkry",
-    "Cheeta"
+    "Krolik"
 ]
 
 const processedSupply = supply.data.reduce<GachaSupply>((accumulator, value) => {
@@ -356,8 +356,9 @@ const pieOptions = {
             </div>
             <div class="col-md-8 p-0 border border-secondary order-0 order-md-1">
                 <div class="position-relative">
-                  <img class="img-fluid" :src="banner" alt="Current banner">
-                  <button class="btn btn-danger m-2 position-absolute bottom-0 start-0" @click="resetPulls" style="width: 80px;">Reset</button>
+                    <img class="img-fluid" :src="banner" alt="Current banner">
+                    <button class="btn btn-danger m-2 position-absolute bottom-0 start-0" @click="resetPulls"
+                        style="width: 80px;">Reset</button>
                 </div>
                 <div class="container-fluid d-flex flex-column flex-md-row">
                     <div class="container-fluid d-flex justify-content-around justify-content-md-end py-2">
