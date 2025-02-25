@@ -2,11 +2,11 @@
 import type { InteractionMode } from "chart.js"
 
 import { Modal } from "bootstrap"
-import { ref, computed } from "vue"
+import { ref, computed, onMounted, watch } from "vue"
 import { Pie } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js'
 
-import banner from "@/assets/images/banner.png"
+import banner from "@/assets/images/banner.jpg"
 import supply from "@/assets/data/gacha-db.json"
 
 import { getRandomElement } from "@/utils/array"
@@ -31,7 +31,7 @@ let modalVideoTimeout = 0
 const currentRateUps = [
     "Centaureissi",
     "Sharkry",
-    "Cheeta"
+    "Krolik"
 ]
 
 const processedSupply = supply.data.reduce<GachaSupply>((accumulator, value) => {
@@ -82,6 +82,27 @@ const pulls = usePullsStore()
 const showElites = ref(true)
 const showStandards = ref(true)
 const showRetired = ref(true)
+
+// Load pulls from localStorage
+onMounted(() => {
+    const savedPulls = localStorage.getItem('gachaPulls')
+    if (savedPulls) {
+        pulls.addPulls(JSON.parse(savedPulls))
+        // Update the chart and text
+        pulls.total = pulls.pulls.length
+        pulls.elites = pulls.pulls.filter(pull => isElite(pull.name)).length
+        pulls.standards = pulls.pulls.filter(pull => isStandard(pull.name)).length
+        pulls.count = pulls.pulls.length ? pulls.pulls[pulls.pulls.length - 1].pity : 0
+        pulls.pity = pulls.pulls.length ? isElite(pulls.pulls[pulls.pulls.length - 1].name) : false
+    }
+})
+
+// Watch for changes in pulls and save to localStorage
+watch(() => pulls.pulls, (newPulls) => {
+    localStorage.setItem('gachaPulls', JSON.stringify(newPulls))
+}, { deep: true })
+
+
 
 // Methods
 /**
@@ -205,6 +226,14 @@ function showVideo(type: number) {
     }
 }
 
+/**
+ * Resets the saved pulls.
+ */
+function resetPulls() {
+    pulls.$reset()
+    localStorage.removeItem('gachaPulls')
+}
+
 // Event handlers
 /**
  * Handles a single pull.
@@ -229,6 +258,7 @@ function handleSingle() {
 
     checkFirstTime([result])
     pulls.addPulls({ name: result, pity: pity })
+    localStorage.setItem('gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
 }
 
 /**
@@ -258,6 +288,7 @@ function handleMulti() {
 
     checkFirstTime(results.map(r => r.name))
     pulls.addPulls(results)
+    localStorage.setItem('gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
 }
 
 const pieData = computed(() => {
@@ -266,8 +297,8 @@ const pieData = computed(() => {
         datasets: [
             {
                 data: [pulls.elites, pulls.standards, pulls.total - pulls.elites - pulls.standards],
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                backgroundColor: ['#ffb348', '#7028e4', '#36A2EB'],
+                hoverBackgroundColor: ['#ffb348', '#7028e4', '#36A2EB']
             }
         ]
     }
@@ -324,7 +355,11 @@ const pieOptions = {
                 </div>
             </div>
             <div class="col-md-8 p-0 border border-secondary order-0 order-md-1">
-                <img class="img-fluid" :src="banner" alt="Current banner">
+                <div class="position-relative">
+                    <img class="img-fluid" :src="banner" alt="Current banner">
+                    <button class="btn btn-danger m-2 position-absolute bottom-0 start-0" @click="resetPulls"
+                        style="width: 80px;">Reset</button>
+                </div>
                 <div class="container-fluid d-flex flex-column flex-md-row">
                     <div class="container-fluid d-flex justify-content-around justify-content-md-end py-2">
                         <div class="container-fluid">
