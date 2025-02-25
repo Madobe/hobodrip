@@ -88,8 +88,8 @@ const MAX_PULLS = 1000
 
 // Load pulls and pity counter from localStorage
 onMounted(() => {
-    const savedPulls = localStorage.getItem('gachaPulls')
-    const savedPityCounter = localStorage.getItem('gachaPityCounter')
+    const savedPulls = localStorage.getItem('hobodrip.gachaPulls')
+    const savedPityCounter = localStorage.getItem('hobodrip.gachaPityCounter')
     if (savedPulls) {
         pulls.addPulls(JSON.parse(savedPulls))
         // Update the chart and text
@@ -106,11 +106,11 @@ onMounted(() => {
 
 // Watch for changes in pulls and pity counter, and save to localStorage
 watch(() => pulls.pulls, (newPulls) => {
-    localStorage.setItem('gachaPulls', JSON.stringify(newPulls))
+    localStorage.setItem('hobodrip.gachaPulls', JSON.stringify(newPulls))
 }, { deep: true })
 
 watch(() => pulls.count, (newCount) => {
-    localStorage.setItem('gachaPityCounter', JSON.stringify(newCount))
+    localStorage.setItem('hobodrip.gachaPityCounter', JSON.stringify(newCount))
 })
 
 // Methods
@@ -120,7 +120,7 @@ watch(() => pulls.count, (newCount) => {
 function shiftPullsIfNeeded() {
     if (pulls.pulls.length > MAX_PULLS) {
         pulls.pulls = pulls.pulls.slice(pulls.pulls.length - MAX_PULLS)
-        localStorage.setItem('gachaPulls', JSON.stringify(pulls.pulls))
+        localStorage.setItem('hobodrip.gachaPulls', JSON.stringify(pulls.pulls))
     }
 }
 
@@ -250,8 +250,8 @@ function showVideo(type: number) {
  */
 function resetPulls() {
     pulls.$reset()
-    localStorage.removeItem('gachaPulls')
-    localStorage.removeItem('gachaPityCounter')
+    localStorage.removeItem('hobodrip.gachaPulls')
+    localStorage.removeItem('hobodrip.gachaPityCounter')
 }
 
 // Event handlers
@@ -279,7 +279,7 @@ function handleSingle() {
     checkFirstTime([result])
     pulls.addPulls({ name: result, pity: pity })
     shiftPullsIfNeeded() // Shift pulls if needed
-    localStorage.setItem('gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
+    localStorage.setItem('hobodrip.gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
 }
 
 /**
@@ -310,7 +310,7 @@ function handleMulti() {
     checkFirstTime(results.map(r => r.name))
     pulls.addPulls(results)
     shiftPullsIfNeeded() // Shift pulls if needed
-    localStorage.setItem('gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
+    localStorage.setItem('hobodrip.gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
 }
 
 const pieData = computed(() => {
@@ -392,12 +392,12 @@ const pieOptions = {
                             <div class="container d-flex justify-content-between">
                                 <span>Elites: </span>
                                 <span>{{ pulls.elites }} ({{ (pulls.elites / pulls.total * 100 || 0).toFixed(2)
-                                    }}%)</span>
+                                }}%)</span>
                             </div>
                             <div class="container d-flex justify-content-between">
                                 <span>Standards: </span>
                                 <span>{{ pulls.standards }} ({{ (pulls.standards / pulls.total * 100 || 0).toFixed(2)
-                                    }}%)</span>
+                                }}%)</span>
                             </div>
                             <div class="container d-flex justify-content-between">
                                 <span>Current Pity: </span>
