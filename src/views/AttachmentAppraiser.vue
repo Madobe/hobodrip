@@ -10,7 +10,7 @@ import helix4 from '@/assets/images/helix4.png'
 import helix5 from '@/assets/images/helix5.png'
 import helix6 from '@/assets/images/helix6.png'
 
-import type { Stat, Weapon } from '@/types/attachments';
+import type { Attachment, Stat, Weapon } from '@/types/attachments';
 
 import { useAttachmentsStore } from '@/stores/attachments';
 import { useDollsStore } from '@/stores/active-dolls';
@@ -63,7 +63,30 @@ function addDoll(name: string) {
  * Goes through each doll and calculates which set of attachments gives her the best average damage.
  */
 function optimizeAttachments() {
+    // We'll calculate attachment value off the recommended stats for the each doll by weighting
+    // them by incidence in the array. This needs to be done for both the best set (in the doll's
+    // info) and the Phase Strike set, because that's the second best set for everything.
+    addedDolls.data.forEach(doll => {
+        const attachmentsMatchingWeaponType = attachments.data[doll.weapon.info.type]
+        const attachmentsBestSet = [[], [], [], []] as Attachment[][]
+        const attachmentsPhaseStrike = [[], [], [], []] as Attachment[][]
 
+        for (let slot = 0; slot < 4; slot++) {
+            attachmentsMatchingWeaponType[slot].forEach(attachment => {
+                if (!slot) {
+                    attachmentsBestSet[slot].push(attachment)
+                    attachmentsPhaseStrike[slot].push(attachment)
+                    return
+                }
+                if (attachment.set === doll.info.best_set) attachmentsBestSet[slot].push(attachment)
+                if (attachment.set === "Phase Strike") attachmentsPhaseStrike[slot].push(attachment)
+            })
+        }
+
+        // Check whether there's an attachment for every slot in either set. If the best_set doesn't
+        // have a full set but Phase Strike does, then that's automatically the best set. If neither
+        // does, then we'll just grab the best stuff from any set.
+    })
 }
 
 /**
@@ -190,7 +213,7 @@ document.onpaste = function (event) {
                             </div>
                             <div class="d-flex flex-column justify-content-center align-items-center m-3">
                                 <img :src="`/src/assets/images/dolls/${addedDoll.name}.png`" :alt="addedDoll.name"
-                                    :class="['rounded-top', !!addedDoll.baseStats.rarity ? 'bg-elite' : 'bg-standard']">
+                                    :class="['rounded-top', !!addedDoll.info.rarity ? 'bg-elite' : 'bg-standard']">
                                 <div
                                     class="container-fluid text-bg-light rounded-bottom text-align-center d-flex justify-content-center">
                                     {{ calculateCombatEffectiveness(addedDoll) }}
@@ -252,7 +275,7 @@ document.onpaste = function (event) {
                                 <div class="d-flex justify-content-center my-1">
                                     <select class="form-select" :value="addedDoll.weapon.name"
                                         @change="addedDolls.changeWeapon(addedDoll, ($event.target as HTMLSelectElement).value)">
-                                        <option v-for="weapon in weaponsByType[addedDoll.weapon.baseStats.type]">
+                                        <option v-for="weapon in weaponsByType[addedDoll.weapon.info.type]">
                                             {{ (weapon as unknown as Weapon).name }}
                                         </option>
                                     </select>

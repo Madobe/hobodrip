@@ -20,7 +20,7 @@ export const useDollsStore = defineStore("dolls", {
             const doll = dolls[name]
 
             this.data.push({
-                baseStats: doll,
+                info: doll,
                 name,
                 neuralHelix: 6,
                 fortifications: !!doll.rarity ? 0 : 6,
@@ -28,7 +28,7 @@ export const useDollsStore = defineStore("dolls", {
                 type: doll.type,
                 weapon: {
                     attachments: {},
-                    baseStats: weapons[doll.defaultWeapon],
+                    info: weapons[doll.defaultWeapon],
                     name: doll.defaultWeapon,
                 },
             } as ActiveDoll)
@@ -38,7 +38,7 @@ export const useDollsStore = defineStore("dolls", {
 
             if (record) {
                 record.weapon.name = name
-                record.weapon.baseStats.attack = weapons[name].attack
+                record.weapon.info.attack = weapons[name].attack
             }
         },
         removeDoll(name: string) {

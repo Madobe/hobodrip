@@ -131,11 +131,11 @@ export function calculateCombatEffectiveness(doll: ActiveDoll) {
     // Because neural helix boosts are consistent for ATK/HP/DEF, we can just multiple the final
     // value from them by the correct multiplier
     const helixMultiplier = 1 + getHelixActivationMultiplier(doll)
-    const atk = doll.baseStats.attack
-    const hp = doll.baseStats.health
-    const def = doll.baseStats.defense
-    const cr = doll.baseStats.crit_rate / 100
-    const cd = doll.baseStats.crit_dmg / 100
+    const atk = doll.info.attack
+    const hp = doll.info.health
+    const def = doll.info.defense
+    const cr = doll.info.crit_rate / 100
+    const cd = doll.info.crit_dmg / 100
 
     // The number of fixed keys is assumed to be neuralHelix down to the nearest multiple of 2
     const fixedKeys = doll.neuralHelix - (doll.neuralHelix % 2)
@@ -189,15 +189,15 @@ export function calculateTotalStat(
     doll: ActiveDoll,
     stat: "Attack" | "Defense" | "Health"
 ) {
-    let baseStat = doll.baseStats[
-        stat.toLowerCase() as keyof typeof doll.baseStats
+    let baseStat = doll.info[
+        stat.toLowerCase() as keyof typeof doll.info
     ] as number
 
-    if (stat === "Attack") baseStat += doll.weapon.baseStats.attack
+    if (stat === "Attack") baseStat += doll.weapon.info.attack
 
     const attachmentFlatBoosts = getTotalAttachmentStat(doll, stat)
     const attachmentBoosts = getTotalAttachmentStat(doll, `${stat} Boost`)
-    const weaponBoost = doll.weapon.baseStats.attack_boost || 0
+    const weaponBoost = doll.weapon.info.attack_boost || 0
     const helixMultiplier = getHelixActivationMultiplier(doll)
 
     return (
@@ -213,12 +213,10 @@ export function calculateTotalStat(
  * @returns
  */
 export function calculateTotalCrit(doll: ActiveDoll, stat: "Rate" | "DMG") {
-    let baseStat =
-        doll.baseStats.crit_rate + (doll.weapon.baseStats.crit_rate || 0)
+    let baseStat = doll.info.crit_rate + (doll.weapon.info.crit_rate || 0)
 
     if (stat === "DMG")
-        baseStat =
-            doll.baseStats.crit_dmg + (doll.weapon.baseStats.crit_dmg || 0)
+        baseStat = doll.info.crit_dmg + (doll.weapon.info.crit_dmg || 0)
 
     const attachmentBoosts = getTotalAttachmentStat(doll, `Crit ${stat}`)
 

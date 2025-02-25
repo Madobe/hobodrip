@@ -5,22 +5,61 @@ import { ATTACHMENT_TYPES } from "@/utils/stats"
 
 export const useAttachmentsStore = defineStore("attachments", {
     state: () => ({
-        data: [
-            // Numbering per category can be found in @/utils/stats.ts
-            [
+        data: {
+            0: {
                 // AR
-                [], // Muzzle
-                [], // Sight
-                [], // Foregrip
-                [], // Underbarrel
-            ],
-            [[], [], [], []], // BLD
-            [[], [], [], []], // HG
-            [[], [], [], []], // MG
-            [[], [], [], []], // SG
-            [[], [], [], []], // SMG
-            [[], [], [], []], // RF
-        ] as Attachment[][][],
+                0: [] as Attachment[], // Muzzle
+                1: [] as Attachment[], // Sight
+                2: [] as Attachment[], // Foregrip
+                3: [] as Attachment[], // Underbarrel
+            },
+            1: {
+                // BLD
+                0: [] as Attachment[],
+                1: [] as Attachment[],
+                2: [] as Attachment[],
+                3: [] as Attachment[],
+            },
+            2: {
+                // HG
+                0: [] as Attachment[],
+                1: [] as Attachment[],
+                2: [] as Attachment[],
+                3: [] as Attachment[],
+            },
+            3: {
+                // MG
+                0: [] as Attachment[],
+                1: [] as Attachment[],
+                2: [] as Attachment[],
+                3: [] as Attachment[],
+            },
+            4: {
+                // SG
+                0: [] as Attachment[],
+                1: [] as Attachment[],
+                2: [] as Attachment[],
+                3: [] as Attachment[],
+            },
+            5: {
+                // SMG
+                0: [] as Attachment[],
+                1: [] as Attachment[],
+                2: [] as Attachment[],
+                3: [] as Attachment[],
+            },
+            6: {
+                // RF
+                0: [] as Attachment[],
+                1: [] as Attachment[],
+                2: [] as Attachment[],
+                3: [] as Attachment[],
+            },
+        } as {
+            [weaponType: number]: {
+                [slot: number]: Attachment[]
+            }
+        },
     }),
     actions: {
         addAttachment(

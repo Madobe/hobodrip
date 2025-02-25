@@ -1,5 +1,5 @@
 export interface ActiveDoll {
-    baseStats: Doll
+    info: Doll
     name: string
     neuralHelix: number
     fortifications: number
@@ -21,6 +21,7 @@ export interface AttachmentType {
 
 export interface Doll {
     attack: number
+    best_set: string
     crit_dmg: number
     crit_rate: number
     defaultWeapon: string
@@ -28,12 +29,13 @@ export interface Doll {
     health: number
     img_path: string
     rarity: number
+    stat_order: string[]
     type: number
 }
 
 export interface EquippedWeapon {
     attachments: { [key: number]: Attachment }
-    baseStats: Weapon
+    info: Weapon
     name: string
 }
 

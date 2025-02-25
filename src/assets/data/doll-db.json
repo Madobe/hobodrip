@@ -1,6 +1,7 @@
 {
     "Andoris": {
         "attack": 591,
+        "best_set": "Allay Support",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Aglaea",
@@ -8,10 +9,12 @@
         "health": 2288,
         "img_path": "/src/assets/images/dolls/Andoris.png",
         "rarity": 1,
+        "stat_order": ["Health Boost", "Defense Boost", "Health", "Defense"],
         "type": 0
     },
     "Belka": {
         "attack": 757,
+        "best_set": "Electric Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Forest Faerie",
@@ -19,10 +22,12 @@
         "health": 1770,
         "img_path": "/src/assets/images/dolls/Belka.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 0
     },
     "Centaureissi": {
         "attack": 696,
+        "best_set": "Emergency Repair",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Maid's Rules",
@@ -30,10 +35,17 @@
         "health": 1893,
         "img_path": "/src/assets/images/dolls/Centaureissi.png",
         "rarity": 1,
+        "stat_order": [
+            "Attack Boost",
+            "Attack",
+            "Health Boost",
+            "Defense Boost"
+        ],
         "type": 0
     },
     "Cheeta": {
         "attack": 591,
+        "best_set": "Emergency Repair",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "MP7H1",
@@ -41,10 +53,17 @@
         "health": 1842,
         "img_path": "/src/assets/images/dolls/Cheeta.png",
         "rarity": 0,
+        "stat_order": [
+            "Attack Boost",
+            "Attack",
+            "Health Boost",
+            "Defense Boost"
+        ],
         "type": 5
     },
     "Colphne": {
         "attack": 515,
+        "best_set": "Emergency Repair",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": ".380 Curva",
@@ -52,10 +71,17 @@
         "health": 1787,
         "img_path": "/src/assets/images/dolls/Colphne.png",
         "rarity": 0,
+        "stat_order": [
+            "Attack Boost",
+            "Attack",
+            "Health Boost",
+            "Defense Boost"
+        ],
         "type": 2
     },
     "Daiyan": {
         "attack": 722,
+        "best_set": "Ballistic Boost",
         "crit_dmg": 120,
         "crit_rate": 30,
         "defaultWeapon": "Heavy Strings",
@@ -63,10 +89,12 @@
         "health": 1616,
         "img_path": "/src/assets/images/dolls/Daiyan.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 0
     },
     "Dushevnaya": {
         "attack": 757,
+        "best_set": "",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Eulogistic Verse",
@@ -74,10 +102,12 @@
         "health": 1851,
         "img_path": "/src/assets/images/dolls/Dushevnaya.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 6
     },
     "Faye": {
         "attack": 731,
+        "best_set": "Ballistic Boost",
         "crit_dmg": 130,
         "crit_rate": 30,
         "defaultWeapon": "Hestia",
@@ -85,10 +115,12 @@
         "health": 1609,
         "img_path": "/src/assets/images/dolls/Faye.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 2
     },
     "Groza": {
         "attack": 539,
+        "best_set": "Allay Support",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "OTs-14",
@@ -96,10 +128,17 @@
         "health": 1981,
         "img_path": "/src/assets/images/dolls/Groza.png",
         "rarity": 0,
+        "stat_order": [
+            "Attack Boost",
+            "Health Boost",
+            "Defense Boost",
+            "Attack"
+        ],
         "type": 0
     },
     "Jiangyu": {
         "attack": 802,
+        "best_set": "Electric Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Leaping Tiger",
@@ -107,10 +146,12 @@
         "health": 1932,
         "img_path": "/src/assets/images/dolls/Jiangyu.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 0
     },
     "Klukai": {
         "attack": 827,
+        "best_set": "Corrosion Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Scylla",
@@ -118,10 +159,12 @@
         "health": 1893,
         "img_path": "/src/assets/images/dolls/Klukai.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 0
     },
     "Krolik": {
         "attack": 618,
+        "best_set": "Phase Strike",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Hare",
@@ -129,10 +172,12 @@
         "health": 1397,
         "img_path": "/src/assets/images/dolls/Krolik.png",
         "rarity": 0,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 1
     },
     "Ksenia": {
         "attack": 539,
+        "best_set": "Emergency Repair",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Stechkin",
@@ -140,10 +185,17 @@
         "health": 1842,
         "img_path": "/src/assets/images/dolls/Ksenia.png",
         "rarity": 0,
+        "stat_order": [
+            "Attack Boost",
+            "Attack",
+            "Health Boost",
+            "Defense Boost"
+        ],
         "type": 2
     },
     "Lenna": {
         "attack": 689,
+        "best_set": "Electric Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Young Lion",
@@ -151,10 +203,12 @@
         "health": 2081,
         "img_path": "/src/assets/images/dolls/Lenna.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 5
     },
     "Littara": {
         "attack": 670,
+        "best_set": "Ballistic Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Model ARM",
@@ -162,10 +216,12 @@
         "health": 1656,
         "img_path": "/src/assets/images/dolls/Littara.png",
         "rarity": 0,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 3
     },
     "Lotta": {
         "attack": 696,
+        "best_set": "Freeze Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "M1 Super 90",
@@ -173,10 +229,12 @@
         "health": 1599,
         "img_path": "/src/assets/images/dolls/Lotta.png",
         "rarity": 0,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 4
     },
     "Makiatto": {
         "attack": 844,
+        "best_set": "Freeze Boost",
         "boosts": {
             "crit_rate": 40
         },
@@ -187,10 +245,12 @@
         "health": 1819,
         "img_path": "/src/assets/images/dolls/Makiatto.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 6
     },
     "Mechty": {
         "attack": 723,
+        "best_set": "Corrosion Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Daydream",
@@ -198,10 +258,12 @@
         "health": 1876,
         "img_path": "/src/assets/images/dolls/Mechty.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 0
     },
     "Mosin-Nagant": {
         "attack": 820,
+        "best_set": "Electric Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Samosek",
@@ -209,10 +271,12 @@
         "health": 1859,
         "img_path": "/src/assets/images/dolls/Mosin-Nagant.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 6
     },
     "Nagant": {
         "attack": 609,
+        "best_set": "Phase Strike",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Nagant M1895",
@@ -220,10 +284,12 @@
         "health": 1656,
         "img_path": "/src/assets/images/dolls/Nagant.png",
         "rarity": 0,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 2
     },
     "Nemesis": {
         "attack": 703,
+        "best_set": "Phase Strike",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": ".50 Nemesis",
@@ -231,10 +297,12 @@
         "health": 1656,
         "img_path": "/src/assets/images/dolls/Nemesis.png",
         "rarity": 0,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 6
     },
     "Papasha": {
         "attack": 802,
+        "best_set": "Ballistic Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Svarog",
@@ -242,10 +310,12 @@
         "health": 1893,
         "img_path": "/src/assets/images/dolls/Papasha.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 5
     },
     "Peri": {
         "attack": 696,
+        "best_set": "Burn Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Emerita",
@@ -253,10 +323,12 @@
         "health": 2191,
         "img_path": "/src/assets/images/dolls/Peri.png",
         "rarity": 1,
+        "stat_order": ["Health Boost", "Health", "Attack Boost", "Crit DMG"],
         "type": 5
     },
     "Peritya": {
         "attack": 765,
+        "best_set": "Corrosion Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Optical Illusion",
@@ -264,10 +336,12 @@
         "health": 1948,
         "img_path": "/src/assets/images/dolls/Peritya.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 3
     },
     "Qiongjiu": {
         "attack": 802,
+        "best_set": "Phase Strike",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Golden Melody",
@@ -275,10 +349,12 @@
         "health": 1893,
         "img_path": "/src/assets/images/dolls/Qiongjiu.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 0
     },
     "Qiuhua": {
         "attack": 757,
+        "best_set": "Burn Boost",
         "crit_dmg": 130,
         "crit_rate": 30,
         "defaultWeapon": "Chasing Light",
@@ -286,10 +362,12 @@
         "health": 1713,
         "img_path": "/src/assets/images/dolls/Qiuhua.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 4
     },
     "Sabrina": {
         "attack": 609,
+        "best_set": "Phase Strike",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Mezzaluna",
@@ -297,10 +375,17 @@
         "health": 2249,
         "img_path": "/src/assets/images/dolls/Sabrina.png",
         "rarity": 1,
+        "stat_order": [
+            "Attack Boost",
+            "Defense Boost",
+            "Health Boost",
+            "Attack"
+        ],
         "type": 4
     },
     "Sharkry": {
         "attack": 679,
+        "best_set": "Phase Strike",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Robinson Modular Rifle",
@@ -308,10 +393,12 @@
         "health": 1706,
         "img_path": "/src/assets/images/dolls/Sharkry.png",
         "rarity": 0,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 0
     },
     "Springfield": {
         "attack": 696,
+        "best_set": "Hydro Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Faithpiercer",
@@ -319,10 +406,12 @@
         "health": 1909,
         "img_path": "/src/assets/images/dolls/Springfield.png",
         "rarity": 1,
+        "stat_order": ["Health Boost", "Health", "Crit Rate", "Crit DMG"],
         "type": 6
     },
     "Suomi": {
         "attack": 672,
+        "best_set": "Phase Strike",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Unspoken Calling",
@@ -330,10 +419,17 @@
         "health": 1955,
         "img_path": "/src/assets/images/dolls/Suomi.png",
         "rarity": 1,
+        "stat_order": [
+            "Attack Boost",
+            "Attack",
+            "Health Boost",
+            "Defense Boost"
+        ],
         "type": 5
     },
     "Tololo": {
         "attack": 836,
+        "best_set": "Hydro Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Planeta",
@@ -341,10 +437,12 @@
         "health": 1819,
         "img_path": "/src/assets/images/dolls/Tololo.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 0
     },
     "Ullrid": {
         "attack": 740,
+        "best_set": "Ballistic Boost",
         "crit_dmg": 130,
         "crit_rate": 40,
         "defaultWeapon": "Rectrix",
@@ -352,10 +450,12 @@
         "health": 1519,
         "img_path": "/src/assets/images/dolls/Ullrid.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 1
     },
     "Vector": {
         "attack": 748,
+        "best_set": "Burn Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Echoes of Sorrow",
@@ -363,10 +463,12 @@
         "health": 1819,
         "img_path": "/src/assets/images/dolls/Vector.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 5
     },
     "Vepley": {
         "attack": 696,
+        "best_set": "Ballistic Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Heartseeker",
@@ -374,10 +476,12 @@
         "health": 1851,
         "img_path": "/src/assets/images/dolls/Vepley.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 4
     },
     "Yoohee": {
         "attack": 757,
+        "best_set": "Ballistic Boost",
         "crit_dmg": 120,
         "crit_rate": 20,
         "defaultWeapon": "Starfall Spark",
@@ -385,10 +489,12 @@
         "health": 1851,
         "img_path": "/src/assets/images/dolls/Yoohee.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 0
     },
     "Zhaohui": {
         "attack": 757,
+        "best_set": "Phase Strike",
         "crit_dmg": 130,
         "crit_rate": 30,
         "defaultWeapon": "Unstoppable",
@@ -396,6 +502,7 @@
         "health": 1975,
         "img_path": "/src/assets/images/dolls/Zhaohui.png",
         "rarity": 1,
+        "stat_order": ["Attack Boost", "Attack", "Crit Rate", "Crit DMG"],
         "type": 5
     }
 }
