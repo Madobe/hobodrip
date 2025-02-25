@@ -83,9 +83,10 @@ const showElites = ref(true)
 const showStandards = ref(true)
 const showRetired = ref(true)
 
-// Load pulls from localStorage
+// Load pulls and pity counter from localStorage
 onMounted(() => {
     const savedPulls = localStorage.getItem('gachaPulls')
+    const savedPityCounter = localStorage.getItem('gachaPityCounter')
     if (savedPulls) {
         pulls.addPulls(JSON.parse(savedPulls))
         // Update the chart and text
@@ -95,14 +96,19 @@ onMounted(() => {
         pulls.count = pulls.pulls.length ? pulls.pulls[pulls.pulls.length - 1].pity : 0
         pulls.pity = pulls.pulls.length ? isElite(pulls.pulls[pulls.pulls.length - 1].name) : false
     }
+    if (savedPityCounter) {
+        pulls.count = JSON.parse(savedPityCounter)
+    }
 })
 
-// Watch for changes in pulls and save to localStorage
+// Watch for changes in pulls and pity counter, and save to localStorage
 watch(() => pulls.pulls, (newPulls) => {
     localStorage.setItem('gachaPulls', JSON.stringify(newPulls))
 }, { deep: true })
 
-
+watch(() => pulls.count, (newCount) => {
+    localStorage.setItem('gachaPityCounter', JSON.stringify(newCount))
+})
 
 // Methods
 /**
@@ -227,11 +233,12 @@ function showVideo(type: number) {
 }
 
 /**
- * Resets the saved pulls.
+ * Resets the saved pulls and pity counter.
  */
 function resetPulls() {
     pulls.$reset()
     localStorage.removeItem('gachaPulls')
+    localStorage.removeItem('gachaPityCounter')
 }
 
 // Event handlers
