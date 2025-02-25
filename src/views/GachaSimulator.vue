@@ -297,8 +297,8 @@ const pieData = computed(() => {
         datasets: [
             {
                 data: [pulls.elites, pulls.standards, pulls.total - pulls.elites - pulls.standards],
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                backgroundColor: ['#ffb348', '#7028e4', '#36A2EB'],
+                hoverBackgroundColor: ['#ffb348', '#7028e4', '#36A2EB']
             }
         ]
     }
