@@ -83,6 +83,9 @@ const showElites = ref(true)
 const showStandards = ref(true)
 const showRetired = ref(true)
 
+// Constants
+const MAX_PULLS = 1000
+
 // Load pulls and pity counter from localStorage
 onMounted(() => {
     const savedPulls = localStorage.getItem('gachaPulls')
@@ -111,6 +114,16 @@ watch(() => pulls.count, (newCount) => {
 })
 
 // Methods
+/**
+ * Shifts the saved pulls if the limit is reached.
+ */
+function shiftPullsIfNeeded() {
+    if (pulls.pulls.length > MAX_PULLS) {
+        pulls.pulls = pulls.pulls.slice(pulls.pulls.length - MAX_PULLS)
+        localStorage.setItem('gachaPulls', JSON.stringify(pulls.pulls))
+    }
+}
+
 /**
  * Determines whether it's the first time any of the given results have been pulled. If so, get the
  * rarity and play the corresponding movie file in an overlay.
@@ -265,6 +278,7 @@ function handleSingle() {
 
     checkFirstTime([result])
     pulls.addPulls({ name: result, pity: pity })
+    shiftPullsIfNeeded() // Shift pulls if needed
     localStorage.setItem('gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
 }
 
@@ -295,6 +309,7 @@ function handleMulti() {
 
     checkFirstTime(results.map(r => r.name))
     pulls.addPulls(results)
+    shiftPullsIfNeeded() // Shift pulls if needed
     localStorage.setItem('gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
 }
 
