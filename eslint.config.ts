@@ -1,5 +1,8 @@
 import pluginVue from "eslint-plugin-vue"
-import { defineConfigWithVueTs, vueTsConfigs } from "@vue/eslint-config-typescript"
+import {
+    defineConfigWithVueTs,
+    vueTsConfigs,
+} from "@vue/eslint-config-typescript"
 import pluginVitest from "@vitest/eslint-plugin"
 import skipFormatting from "@vue/eslint-config-prettier/skip-formatting"
 import stylistic from "@stylistic/eslint-plugin"
@@ -37,5 +40,5 @@ export default defineConfigWithVueTs(
             "@stylistic/array-bracket-spacing": ["error", "always"],
             "@stylistic/space-in-parens": ["error", "always"],
         },
-    },
+    }
 )

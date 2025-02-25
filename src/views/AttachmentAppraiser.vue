@@ -2,17 +2,31 @@
 import { Modal, Toast } from 'bootstrap';
 import { createWorker } from 'tesseract.js';
 
-import type { Attachment, Doll, Stat, Weapon } from '@/types/attachments';
+import _weapons from '@/assets/data/weapon-db.json'
+import helix1 from '@/assets/images/helix1.png'
+import helix2 from '@/assets/images/helix2.png'
+import helix3 from '@/assets/images/helix3.png'
+import helix4 from '@/assets/images/helix4.png'
+import helix5 from '@/assets/images/helix5.png'
+import helix6 from '@/assets/images/helix6.png'
+
+import type { Stat, Weapon } from '@/types/attachments';
 
 import { useAttachmentsStore } from '@/stores/attachments';
-import { AVAILABLE_STATS, calculateCombatEffectiveness, getAttachmentTypeFromText, getAttachmentTypes, getWeaponsByType } from '@/utils/stats';
-import _dolls from '@/assets/data/doll-db.json'
-import _weapons from '@/assets/data/weapon-db.json'
+import { useDollsStore } from '@/stores/active-dolls';
+import {
+    ATTACHMENT_SETS,
+    ATTACHMENT_TYPES,
+    AVAILABLE_STATS,
+    calculateCombatEffectiveness,
+    calculateTotalCrit,
+    calculateTotalStat,
+    getAttachmentTypeFromText,
+    getWeaponsByType
+} from '@/utils/stats';
 import DollSelectorModal from '@/components/DollSelectorModal.vue';
-import { reactive } from 'vue';
 
-const dolls: { [name: string]: Doll } = _dolls
-const weapons: { [name: string]: Weapon } = _weapons
+const helixImgs = ["", helix1, helix2, helix3, helix4, helix5, helix6]
 const weaponsByType = getWeaponsByType()
 
 const toasts: {
@@ -33,32 +47,23 @@ const toasts: {
         }
     ]
 
-const attachmentTypes = getAttachmentTypes()
 const attachments = useAttachmentsStore()
-
-const addedDolls: {
-    name: string
-    neuralHelix: number
-    fortifications: number
-    type: number
-    attachments: Attachment[]
-}[] = reactive([])
+const addedDolls = useDollsStore()
 
 /**
  * Adds the given doll.
  * @param name The name of the doll to add.
  */
 function addDoll(name: string) {
-    const doll = dolls[name]
-
-    addedDolls.push({
-        name,
-        neuralHelix: 6,
-        fortifications: 0,
-        type: doll.type,
-        attachments: [] as Attachment[]
-    })
+    addedDolls.addDoll(name)
     Modal.getOrCreateInstance("#doll-selector-modal").hide()
+}
+
+/**
+ * Goes through each doll and calculates which set of attachments gives her the best average damage.
+ */
+function optimizeAttachments() {
+
 }
 
 /**
@@ -69,6 +74,7 @@ function addDoll(name: string) {
  */
 function processOCROutput(text: string) {
     const attachmentType = getAttachmentTypeFromText(text)
+    console.log(text)
 
     if (attachmentType === -1) return showToast("image-processing-failed")
 
@@ -85,20 +91,14 @@ function processOCROutput(text: string) {
         }
     })
 
-    if ((attachmentType.slot === 0 && stats.length < 4) || stats.length < 3) {
+    const attachmentSet = ATTACHMENT_SETS.find(set => text.includes(set))
+
+    if ((attachmentType.slot === 0 && stats.length < 4) || stats.length < 3 || (stats.length < 3 && !attachmentSet)) {
         return showToast("image-processing-failed")
     }
 
-    attachments.addAttachment(attachmentType, stats)
+    attachments.addAttachment(attachmentType, attachmentSet, stats)
     showToast("image-processing-success")
-}
-
-/**
- * Removes the given doll.
- * @param name The doll to remove.
- */
-function removeDoll(name: string) {
-    addedDolls.splice(addedDolls.findIndex(doll => doll.name === name), 1)
 }
 
 /**
@@ -149,7 +149,7 @@ document.onpaste = function (event) {
 </script>
 
 <template>
-    <DollSelectorModal :addedDolls="addedDolls.map(d => d.name)" @selectDoll="addDoll"></DollSelectorModal>
+    <DollSelectorModal :addedDolls="addedDolls.data.map(d => d.name)" @selectDoll="addDoll"></DollSelectorModal>
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true"
             v-for="toast in toasts" :id="toast.id">
@@ -164,8 +164,13 @@ document.onpaste = function (event) {
             <div class="col-12 col-md-3 d-flex flex-column my-3">
                 <div>
                     <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-center align-items-center">
+                            <button class="btn btn-primary" @click="optimizeAttachments">
+                                Optimize Attachments
+                            </button>
+                        </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center"
-                            v-for="(attachmentType, i) in attachmentTypes">
+                            v-for="(attachmentType, i) in ATTACHMENT_TYPES">
                             {{ attachmentType }}
                             <span class="badge text-bg-primary rounded-pill">
                                 {{ attachments.data[Math.floor(i / 4)][i % 4].length }}
@@ -175,44 +180,96 @@ document.onpaste = function (event) {
                 </div>
             </div>
             <div class="col-12 col-md-9 py-3 doll-boxes">
-                <template v-for="addedDoll in addedDolls">
+                <template v-for="addedDoll in addedDolls.ordered">
                     <div class="border border-3 border-secondary-subtle text-secondary-emphasis d-flex flex-row mb-3">
-                        <div class="d-flex flex-column justify-content-center align-items-center m-3">
-                            <img :src="`/src/assets/images/dolls/${addedDoll.name}.png`" :alt="addedDoll.name"
-                                class="rounded-top bg-elite">
-                            <div
-                                class="container-fluid text-bg-light rounded-bottom text-align-center d-flex justify-content-center">
-                                {{ calculateCombatEffectiveness(dolls[addedDoll.name], addedDoll.neuralHelix,
-                                    addedDoll.fortifications, addedDoll.attachments.flat()) }}
+                        <div
+                            class="d-flex justify-content-center justify-content-md-around flex-column flex-md-row ms-md-3">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <input class="text-center" type="text" :value="(addedDoll as any).order"
+                                    @input="addedDolls.swapOrder(addedDoll, $event)" min="1" :max="addedDoll.order">
                             </div>
-                            <button class="w-100 btn btn-danger mt-1"
-                                @click="removeDoll(addedDoll.name)">Remove</button>
+                            <div class="d-flex flex-column justify-content-center align-items-center m-3">
+                                <img :src="`/src/assets/images/dolls/${addedDoll.name}.png`" :alt="addedDoll.name"
+                                    :class="['rounded-top', !!addedDoll.baseStats.rarity ? 'bg-elite' : 'bg-standard']">
+                                <div
+                                    class="container-fluid text-bg-light rounded-bottom text-align-center d-flex justify-content-center">
+                                    {{ calculateCombatEffectiveness(addedDoll) }}
+                                </div>
+                                <button class="w-100 btn btn-danger mt-1"
+                                    @click="addedDolls.removeDoll(addedDoll.name)">Remove</button>
+                            </div>
                         </div>
                         <div class="container-fluid my-3">
-                            <div class="row">
-                                <div class="h-100 col-12 col-md-6 d-flex flex-column justify-content-around"
-                                    v-for="attachment in addedDoll.attachments">
-                                    <div class="border-bottom my-1">
-                                        {{ attachment.type }}
+                            <div class="h-100 d-grid gap-2">
+                                <div class="w-100 d-flex flex-column justify-content-around" v-for="i in 4">
+                                    <div class="border-bottom my-1" v-if="!!addedDoll.weapon.attachments[i - 1]">
+                                        {{ addedDoll.weapon.attachments[i - 1].type }}
                                     </div>
-                                    <div class="d-flex justify-content-between" v-for="stat in attachment.stats">
+                                    <div class="d-flex justify-content-between"
+                                        v-if="!!addedDoll.weapon.attachments[i - 1]"
+                                        v-for="stat in addedDoll.weapon.attachments[i - 1].stats">
                                         <span>{{ stat.stat }}</span>
-                                        <span class="text-white">{{ stat.value.toFixed(1) }}</span>
+                                        <span class="d-flex align-items-center text-white">
+                                            {{ stat.value.toFixed(1) }}
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-center align-items-center"
+                                        v-if="!addedDoll.weapon.attachments[i - 1]">
+                                        No attachment
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="container-fluid my-3 me-3">
                             <div class="h-100 d-flex flex-column justify-content-around">
-                                <div class="d-flex justify-content-between">
-                                    <span>Attack</span>
-                                    <span class="text-white">1000</span>
+                                <!-- Desktop setters -->
+                                <div class="d-none d-md-flex flex-row">
+                                    <div class="me-1" style="width: 25px;">
+                                        <img class="img-fluid" :src="helixImgs[addedDoll.neuralHelix]">
+                                    </div>
+                                    <input type="range" class="form-range" min="0" max="6"
+                                        v-model.number="addedDoll.neuralHelix">
                                 </div>
-                                <div class="d-flex justify-content-between">
-                                    Defense <span class="ms-auto text-white">1000</span>
+                                <div class="container-fluid d-none d-md-flex flex-row">
+                                    <label for="fortifications-range" class="me-2 text-nowrap">
+                                        Fortifications ({{ addedDoll.fortifications }})
+                                    </label>
+                                    <input id="fortifications-range" type="range" class="form-range" min="0" max="6"
+                                        v-model.number="addedDoll.fortifications">
                                 </div>
-                                <div class="d-flex justify-content-between">
-                                    Health <span class="ms-auto text-white">1000</span>
+                                <!-- Mobile setters -->
+                                <div class="d-flex d-md-none form-floating">
+                                    <input type="number" class="form-control" id="mobile-helix-input"
+                                        v-model.number="addedDoll.neuralHelix" min="0" max="6">
+                                    <label for="mobile-helix-input">Neural Helix</label>
+                                </div>
+                                <div class="d-flex d-md-none form-floating">
+                                    <input type="number" class="form-control" id="mobile-fortification-input"
+                                        v-model.number="addedDoll.fortifications" min="0" max="6">
+                                    <label for="mobile-helix-input">Fortifications</label>
+                                </div>
+                                <!-- End screen-based setters -->
+                                <div class="d-flex justify-content-center my-1">
+                                    <select class="form-select" :value="addedDoll.weapon.name"
+                                        @change="addedDolls.changeWeapon(addedDoll, ($event.target as HTMLSelectElement).value)">
+                                        <option v-for="weapon in weaponsByType[addedDoll.weapon.baseStats.type]">
+                                            {{ (weapon as unknown as Weapon).name }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="d-flex justify-content-between"
+                                    v-for="stat in ['Attack', 'Defense', 'Health']">
+                                    <span>{{ stat }}</span>
+                                    <span class="text-white">
+                                        {{ Math.floor(calculateTotalStat(addedDoll, stat as "Attack" | "Defense" |
+                                            "Health")) }}
+                                    </span>
+                                </div>
+                                <div class="d-flex justify-content-between" v-for="stat in ['Rate', 'DMG']">
+                                    <span>Crit {{ stat }}</span>
+                                    <span class="text-white">
+                                        {{ Math.floor(calculateTotalCrit(addedDoll, stat as "Rate" | "DMG")) }}%
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -233,6 +290,10 @@ document.onpaste = function (event) {
     src: url('@/src/fonts/NotoSans_Condensed-Regular.ttf') format('ttf');
 }
 
+input[type="text"] {
+    width: 2rem;
+}
+
 .attachment-list {
     max-height: calc(100vh - 3.5rem);
 }
@@ -249,8 +310,26 @@ document.onpaste = function (event) {
     height: 7rem;
 }
 
-.doll-boxes img {
+.doll-boxes .bg-elite,
+.doll-boxes .bg-standard {
     aspect-ratio: 1/1;
     width: 150px;
+}
+
+.d-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+@media (max-width: 767.98px) {
+    .d-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+    }
+
+    .doll-boxes .bg-elite,
+    .doll-boxes .bg-standard {
+        width: 80px;
+    }
 }
 </style>
