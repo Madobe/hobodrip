@@ -7,18 +7,21 @@ const props = withDefaults(
     defineProps<{
         doll: string
         dollsToPaths: { [x: string]: string },
+        dupe?:number
         index?: number
         isSupport?: boolean
         select?: boolean
         selectedTeam?: number
         supportTeams?: number[]
         teams?: number[]
+        displayText?: boolean
     }>(),
     {
         select: false,
         selectedTeam: 0,
         supportTeams: () => [],
         teams: () => [],
+        displayText: true,
     },
 )
 
@@ -49,8 +52,11 @@ const supportBadgeClasses = computed(() => {
         <span v-if="isSupport" :class="['badge rounded-pill position-absolute top-0 end-0', supportBadgeClasses]">
             S
         </span>
-        <figcaption class="d-none d-md-block figure-caption text-center user-select-none">
-            {{ doll || "&nbsp;" }}
+        <span v-if="dupe" :class="['badge rounded-pill position-absolute top-0 end-0 text-bg-primary']">
+            V{{ dupe }}
+        </span>
+        <figcaption v-if="displayText" class="figure-caption text-center user-select-none text-wrap w-100">
+            {{ doll || "\u00A0" }}
         </figcaption>
     </figure>
 </template>
@@ -66,6 +72,7 @@ figure>img {
 
 figure>figcaption {
     cursor: pointer;
+    font-size: clamp(0.7em, 2vw, 1em);
 }
 
 .badge.rounded-circle {

@@ -12,6 +12,7 @@ import supply from "@/assets/data/gacha-db.json"
 import { getRandomElement } from "@/utils/array"
 import { usePullsStore } from "@/stores/pulls"
 import FullScreenVideoModal from "@/components/FullScreenVideoModal.vue"
+import RollsModal from "@/components/RollsModal.vue"
 
 interface GachaCategory {
     elites: string[],
@@ -86,22 +87,11 @@ const showRetired = ref(true)
 // Constants
 const MAX_PULLS = 1000
 
+const rollsModal = ref<InstanceType<typeof Modal> | null>(null)
+
 // Load pulls and pity counter from localStorage
 onMounted(() => {
-    const savedPulls = localStorage.getItem('hobodrip.gachaPulls')
-    const savedPityCounter = localStorage.getItem('hobodrip.gachaPityCounter')
-    if (savedPulls) {
-        pulls.addPulls(JSON.parse(savedPulls))
-        // Update the chart and text
-        pulls.total = pulls.pulls.length
-        pulls.elites = pulls.pulls.filter(pull => isElite(pull.name)).length
-        pulls.standards = pulls.pulls.filter(pull => isStandard(pull.name)).length
-        pulls.count = pulls.pulls.length ? pulls.pulls[pulls.pulls.length - 1].pity : 0
-        pulls.pity = pulls.pulls.length ? isElite(pulls.pulls[pulls.pulls.length - 1].name) : false
-    }
-    if (savedPityCounter) {
-        pulls.count = JSON.parse(savedPityCounter)
-    }
+    rollsModal.value = new Modal(document.getElementById('rolls-modal')!)
 })
 
 // Watch for changes in pulls and pity counter, and save to localStorage
@@ -252,6 +242,18 @@ function resetPulls() {
     pulls.$reset()
     localStorage.removeItem('hobodrip.gachaPulls')
     localStorage.removeItem('hobodrip.gachaPityCounter')
+    pulls.pulls = []
+    pulls.count = 0
+    pulls.elites = 0
+    pulls.standards = 0
+    pulls.total = 0
+    pulls.pity = false
+    pulls.standardPity = 0
+    pulls.firstTimes = {}
+}
+
+function showRollsModal() {
+    rollsModal.value?.show()
 }
 
 // Event handlers
@@ -343,6 +345,7 @@ const pieOptions = {
 
 <template>
     <FullScreenVideoModal :type="modalVideoType" @hideVideo="hideVideo(0)"></FullScreenVideoModal>
+    <RollsModal></RollsModal>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4 p-0 border border-secondary overflow-y-scroll pull-log order-1 order-md-0">
@@ -379,8 +382,11 @@ const pieOptions = {
             <div class="col-md-8 p-0 border border-secondary order-0 order-md-1">
                 <div class="position-relative">
                     <img class="img-fluid" :src="banner" alt="Current banner">
-                    <button class="btn btn-danger m-2 position-absolute bottom-0 start-0" @click="resetPulls"
-                        style="width: 80px;">Reset</button>
+                    <div class="position-absolute bottom-0 start-0">
+                      <button class="btn btn-secondary ms-2" @click="showRollsModal" style="width: 120px;">Show Rolls</button>
+                      <button class="btn btn-danger m-2" @click="resetPulls"
+                      style="width: 80px;">Reset</button>
+                    </div>
                 </div>
                 <div class="container-fluid d-flex flex-column flex-md-row">
                     <div class="container-fluid d-flex justify-content-around justify-content-md-end py-2">
