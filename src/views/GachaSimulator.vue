@@ -92,20 +92,6 @@ const rollsModal = ref<InstanceType<typeof Modal> | null>(null)
 // Load pulls and pity counter from localStorage
 onMounted(() => {
     rollsModal.value = new Modal(document.getElementById('rolls-modal')!)
-    const savedPulls = localStorage.getItem('hobodrip.gachaPulls')
-    const savedPityCounter = localStorage.getItem('hobodrip.gachaPityCounter')
-    if (savedPulls) {
-        pulls.addPulls(JSON.parse(savedPulls))
-        // Update the chart and text
-        pulls.total = pulls.pulls.length
-        pulls.elites = pulls.pulls.filter(pull => isElite(pull.name)).length
-        pulls.standards = pulls.pulls.filter(pull => isStandard(pull.name)).length
-        pulls.count = pulls.pulls.length ? pulls.pulls[pulls.pulls.length - 1].pity : 0
-        pulls.pity = pulls.pulls.length ? isElite(pulls.pulls[pulls.pulls.length - 1].name) : false
-    }
-    if (savedPityCounter) {
-        pulls.count = JSON.parse(savedPityCounter)
-    }
 })
 
 // Watch for changes in pulls and pity counter, and save to localStorage
@@ -256,6 +242,14 @@ function resetPulls() {
     pulls.$reset()
     localStorage.removeItem('hobodrip.gachaPulls')
     localStorage.removeItem('hobodrip.gachaPityCounter')
+    pulls.pulls = []
+    pulls.count = 0
+    pulls.elites = 0
+    pulls.standards = 0
+    pulls.total = 0
+    pulls.pity = false
+    pulls.standardPity = 0
+    pulls.firstTimes = {}
 }
 
 function showRollsModal() {

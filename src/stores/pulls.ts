@@ -6,16 +6,21 @@ export interface Pull {
 }
 
 export const usePullsStore = defineStore("pulls", {
-    state: () => ({
-        count: 0,
-        elites: 0,
-        firstTimes: {} as { [name: string]: boolean },
-        pity: false,
-        pulls: [] as Pull[],
-        standardPity: 0,
-        standards: 0,
-        total: 0,
-    }),
+    state: () => {
+        const savedPulls = localStorage.getItem('hobodrip.gachaPulls')
+        const savedPityCounter = localStorage.getItem('hobodrip.gachaPityCounter')
+
+        return {
+            count: savedPityCounter ? JSON.parse(savedPityCounter) : 0,
+            elites: 0,
+            firstTimes: {} as { [name: string]: boolean },
+            pity: false,
+            pulls: savedPulls ? JSON.parse(savedPulls) : [] as Pull[],
+            standardPity: 0,
+            standards: 0,
+            total: savedPulls ? JSON.parse(savedPulls).length : 0,
+        }
+    },
     actions: {
         addPulls(newPulls: Pull | Pull[]) {
             const intermediary: Pull[] = ([] as Pull[]).concat(newPulls)

@@ -8,7 +8,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
-              <div v-for="(count, item) in rolledItems" :key="item" class="col-4 text-center">
+              <div v-for="(item, count) in rolledItems" :key="item" class="col-4 text-center">
                 <DollFigure :doll="item" :dollsToPaths="dollsToPaths" :dupe="count - 1"></DollFigure>
               </div>
             </div>
@@ -55,9 +55,17 @@ const dollsToPaths = dolls.reduce((accumulator, doll, i) => {
 const pulls = usePullsStore()
 
 const rolledItems = computed(() => {
-  return pulls.pulls.reduce((acc, pull) => {
-    if (!pull.name.includes("Retired")) {
-      acc[pull.name] = (acc[pull.name] || 0) + 1
+  return pulls.pulls.reduce((acc: { [x: string]: any }, pull: { name: string | string[] }) => {
+    if (Array.isArray(pull.name)) {
+      pull.name.forEach(name => {
+        if (!name.includes("Retired")) {
+          acc[name] = (acc[name] || 0) + 1
+        }
+      })
+    } else {
+      if (!pull.name.includes("Retired")) {
+        acc[pull.name] = (acc[pull.name] || 0) + 1
+      }
     }
     return acc
   }, {} as Record<string, number>)
