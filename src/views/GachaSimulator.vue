@@ -12,6 +12,7 @@ import supply from "@/assets/data/gacha-db.json"
 import { getRandomElement } from "@/utils/array"
 import { usePullsStore } from "@/stores/pulls"
 import FullScreenVideoModal from "@/components/FullScreenVideoModal.vue"
+import RollsModal from "@/components/RollsModal.vue"
 
 interface GachaCategory {
     elites: string[],
@@ -86,8 +87,11 @@ const showRetired = ref(true)
 // Constants
 const MAX_PULLS = 1000
 
+const rollsModal = ref<InstanceType<typeof Modal> | null>(null)
+
 // Load pulls and pity counter from localStorage
 onMounted(() => {
+    rollsModal.value = new Modal(document.getElementById('rolls-modal')!)
     const savedPulls = localStorage.getItem('gachaPulls')
     const savedPityCounter = localStorage.getItem('gachaPityCounter')
     if (savedPulls) {
@@ -254,6 +258,10 @@ function resetPulls() {
     localStorage.removeItem('gachaPityCounter')
 }
 
+function showRollsModal() {
+    rollsModal.value?.show()
+}
+
 // Event handlers
 /**
  * Handles a single pull.
@@ -343,6 +351,7 @@ const pieOptions = {
 
 <template>
     <FullScreenVideoModal :type="modalVideoType" @hideVideo="hideVideo(0)"></FullScreenVideoModal>
+    <RollsModal></RollsModal>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4 p-0 border border-secondary overflow-y-scroll pull-log order-1 order-md-0">
@@ -379,8 +388,11 @@ const pieOptions = {
             <div class="col-md-8 p-0 border border-secondary order-0 order-md-1">
                 <div class="position-relative">
                     <img class="img-fluid" :src="banner" alt="Current banner">
-                    <button class="btn btn-danger m-2 position-absolute bottom-0 start-0" @click="resetPulls"
-                        style="width: 80px;">Reset</button>
+                    <div class="position-absolute bottom-0 start-0">
+                      <button class="btn btn-secondary ms-2" @click="showRollsModal" style="width: 120px;">Show Rolls</button>
+                      <button class="btn btn-danger m-2" @click="resetPulls"
+                      style="width: 80px;">Reset</button>
+                    </div>
                 </div>
                 <div class="container-fluid d-flex flex-column flex-md-row">
                     <div class="container-fluid d-flex justify-content-around justify-content-md-end py-2">
