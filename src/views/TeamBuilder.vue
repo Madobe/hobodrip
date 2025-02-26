@@ -240,20 +240,6 @@ function isSupport(doll: string) {
     min-height: 100%;
 }
 
-@media (max-width: 767.98px) {
-    figure>figcaption {
-        display: none;
-    }
-
-    .team-roster button {
-        width: 100%;
-    }
-
-    .team-roster button:not(:first-child) {
-        margin-top: 0.5rem;
-    }
-}
-
 .doll-grid {
   display: grid;
   grid-auto-flow: column;
