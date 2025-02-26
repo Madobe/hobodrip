@@ -161,12 +161,6 @@ const members = [
         username: "shizuocha"
     },
     {
-        ign: "Zacharias",
-        uid: "2257806",
-        username: "",
-        notes: "Random"
-    },
-    {
         ign: "Makoto",
         uid: "2247726",
         username: "jwuihuissusshsushwhw"
@@ -176,6 +170,11 @@ const members = [
         uid: "2266040",
         username: "",
         notes: "Random"
+    },
+    {
+        ign: "Lapsniffer",
+        uid: "399006",
+        username: "abeiros."
     }
 ]
 </script>
