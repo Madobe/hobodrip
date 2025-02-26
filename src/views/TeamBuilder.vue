@@ -210,7 +210,7 @@ function isSupport(doll: string) {
 
           <div class="container-fluid justify-content-end my-2">
               <button class="btn btn-danger me-md-auto w-100" @click="teams.resetSelections">Reset</button>
-              <button class="btn btn-light w-100" data-bs-target="#set-change-modal" data-bs-toggle="modal">Change Set</button>
+              <button class="btn btn-light w-100 my-1" data-bs-target="#set-change-modal" data-bs-toggle="modal">Change Set</button>
               <button class="btn btn-light ms-md-2 w-100" data-bs-target="#import-export-modal" data-bs-toggle="modal">Import/Export</button>
           </div>
       </div>
