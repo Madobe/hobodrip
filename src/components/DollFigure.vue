@@ -14,12 +14,14 @@ const props = withDefaults(
         selectedTeam?: number
         supportTeams?: number[]
         teams?: number[]
+        displayText?: boolean
     }>(),
     {
         select: false,
         selectedTeam: 0,
         supportTeams: () => [],
         teams: () => [],
+        displayText: true,
     },
 )
 
@@ -53,8 +55,8 @@ const supportBadgeClasses = computed(() => {
         <span v-if="dupe" :class="['badge rounded-pill position-absolute top-0 end-0', supportBadgeClasses]">
             V {{ dupe }}
         </span>
-        <figcaption class="figure-caption text-center user-select-none text-wrap w-100">
-            {{ doll || "&nbsp;" }}
+        <figcaption v-if="displayText" class="figure-caption text-center user-select-none text-wrap w-100">
+            {{ doll || "\u00A0" }}
         </figcaption>
     </figure>
 </template>

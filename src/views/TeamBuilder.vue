@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from "vue";
 import { Validator } from "jsonschema"
 
 import { useTeamsStore } from "@/stores/teams"
@@ -11,6 +12,21 @@ const hyphenatedDollNames = [
     "Mosin-Nagant"
 ]
 const teams = useTeamsStore()
+
+// Screen size detection
+const isMobile = ref(window.innerWidth <= 768);
+
+const updateScreenSize = () => {
+    isMobile.value = window.innerWidth <= 768;
+};
+
+onMounted(() => {
+    window.addEventListener("resize", updateScreenSize);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("resize", updateScreenSize);
+});
 
 const files: Record<string, string> = import.meta.glob(
     "@/assets/images/dolls/*.png",
@@ -117,12 +133,15 @@ function isSupport(doll: string) {
 </script>
 
 <template>
-    <SetChangeModal :selectedAccount="teams.selectedAccount" :sets="teams.teams" @addSet="teams.addSet"
-        @removeSet="teams.removeSet" @renameAccount="teams.renameAccount" @selectAccount="teams.selectAccount">
-    </SetChangeModal>
-    <JSONModal :sets="teams.teams" @loadSets="teams.loadSets"></JSONModal>
+  <SetChangeModal :selectedAccount="teams.selectedAccount" :sets="teams.teams"
+      @addSet="teams.addSet" @removeSet="teams.removeSet"
+      @renameAccount="teams.renameAccount" @selectAccount="teams.selectAccount">
+  </SetChangeModal>
 
-    <div class="container-fluid d-flex flex-column team-roster">
+  <JSONModal :sets="teams.teams" @loadSets="teams.loadSets"></JSONModal>
+
+  <!-- PC View -->
+  <div v-if="!isMobile" class="container-fluid d-flex flex-column team-roster">
         <div class="row py-3" style="min-height: 0">
             <div class="col-3 col-md-4 mh-100 overflow-x-hidden overflow-y-scroll">
                 <div class="row" v-for="dolls in dollsByFours">
@@ -168,6 +187,47 @@ function isSupport(doll: string) {
             </div>
         </div>
     </div>
+
+  <!-- Mobile View -->
+  <div v-else class="container-fluid">
+    <div class="d-flex flex-column team-roster justify-content-center">
+      <div class="d-flex flex-column justify-content-center">
+          <template v-for="(team, a) in 3">
+            <div class="justify-content-center align-items-center">
+              <span class="text-center fw-bold pb-3 user-select-none">Team {{ team }}</span>
+            </div>
+              <div :class="[
+                  'container-fluid col-md-10 d-flex justify-content-evenly rounded mt-2 pt-4 pe-md-4',
+                  a === teams.selectedTeam ? 'bg-primary' : 'bg-secondary',
+              ]" @click="teams.selectTeam(a)">
+                <div v-for="(slot, b) in 5">
+                  <DollFigure :doll="teams.selectedDolls[a * 5 + b]" :dollsToPaths="dollsToPaths"
+                      :index="a * 5 + b" @dollDeselect="teams.deselectDoll" :displayText="false">
+                  </DollFigure>
+              </div>
+            </div>
+          </template>
+
+          <div class="container-fluid justify-content-end my-2">
+              <button class="btn btn-danger me-md-auto w-100" @click="teams.resetSelections">Reset</button>
+              <button class="btn btn-light w-100" data-bs-target="#set-change-modal" data-bs-toggle="modal">Change Set</button>
+              <button class="btn btn-light ms-md-2 w-100" data-bs-target="#import-export-modal" data-bs-toggle="modal">Import/Export</button>
+          </div>
+      </div>
+    </div>
+
+      <div class="mh-100 d-flex overflow-x-scroll container fixed-bottom">
+        <div class="doll-grid">
+          <div class="doll-item" v-for="doll in dolls" :key="doll">
+            <DollFigure :doll="doll" :dollsToPaths="dollsToPaths" :isSupport="isSupport(doll)" select
+            :selectedTeam="teams.selectedTeam" :supportTeams="getSupportTeams(doll)"
+            :teams="getMainTeams(doll)" @dollSelect="teams.selectDoll(doll)">
+            </DollFigure>
+          </div>
+        </div>
+      </div>
+
+  </div>
 </template>
 
 <style scoped>
@@ -192,5 +252,17 @@ function isSupport(doll: string) {
     .team-roster button:not(:first-child) {
         margin-top: 0.5rem;
     }
+}
+
+.doll-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(100px, 1fr);
+  gap: 0rem;
+}
+
+.doll-item {
+  display: flex;
+  justify-content: center;
 }
 </style>
