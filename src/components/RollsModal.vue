@@ -8,8 +8,8 @@
         </div>
         <div class="modal-body">
             <div class="row">
-              <div v-for="(item, count) in rolledItems" :key="item" class="col-4 text-center">
-                <DollFigure :doll="item" :dollsToPaths="dollsToPaths" :dupe="count - 1"></DollFigure>
+              <div v-for="(count, item) in rolledItems" :key="item" class="col-4 text-center">
+                <DollFigure :doll="item.toString()" :dollsToPaths="dollsToPaths" :dupe="count - 1"></DollFigure>
               </div>
             </div>
         </div>

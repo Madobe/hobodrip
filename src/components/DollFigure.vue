@@ -52,8 +52,8 @@ const supportBadgeClasses = computed(() => {
         <span v-if="isSupport" :class="['badge rounded-pill position-absolute top-0 end-0', supportBadgeClasses]">
             S
         </span>
-        <span v-if="dupe" :class="['badge rounded-pill position-absolute top-0 end-0', supportBadgeClasses]">
-            V {{ dupe }}
+        <span v-if="dupe" :class="['badge rounded-pill position-absolute top-0 end-0 text-bg-primary']">
+            V{{ dupe }}
         </span>
         <figcaption v-if="displayText" class="figure-caption text-center user-select-none text-wrap w-100">
             {{ doll || "\u00A0" }}
