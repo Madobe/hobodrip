@@ -9,17 +9,17 @@ const props = defineProps<{
     type: number
 }>()
 
-const src = computed(() => {
-    switch (props.type) {
+const src = computed( () => {
+    switch ( props.type ) {
         case 1: return eliteVideo
         case 2: return standardVideo
         default: return ""
     }
-})
+} )
 
-onMounted(() => {
-    new Modal("#full-screen-video-modal")
-})
+onMounted( () => {
+    new Modal( "#full-screen-video-modal" )
+} )
 </script>
 
 <template>

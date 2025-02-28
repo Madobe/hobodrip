@@ -16,28 +16,28 @@ const files: Record<string, string> = import.meta.glob(
     "@/assets/images/dolls/*.png",
     { eager: true, import: "default" },
 )
-const paths = Object.values(files)
-const dolls = paths.map((path: string) => {
-    let doll = path.replace(/^.*[\\/](.+).png$/, "$1")
+const paths = Object.values( files )
+const dolls = paths.map( ( path: string ) => {
+    let doll = path.replace( /^.*[\\/](.+).png$/, "$1" )
 
-    for (let i = 0; i < hyphenatedDollNames.length; i++) {
-        if (doll.includes(hyphenatedDollNames[i])) return hyphenatedDollNames[i]
+    for ( let i = 0; i < hyphenatedDollNames.length; i++ ) {
+        if ( doll.includes( hyphenatedDollNames[ i ] ) ) return hyphenatedDollNames[ i ]
     }
 
-    doll = doll.replace(/-.*/, "")
+    doll = doll.replace( /-.*/, "" )
 
     return doll
-})
-const dollsToPaths = dolls.reduce((accumulator, doll, i) => {
-    return Object.assign(accumulator, {
-        [doll]: paths[i]
-    })
-}, {})
+} )
+const dollsToPaths = dolls.reduce( ( accumulator, doll, i ) => {
+    return Object.assign( accumulator, {
+        [ doll ]: paths[ i ]
+    } )
+}, {} )
 
 const dollsPerRow = 4
-let dollsByFours: string[][] = []
-for (let i = 0; i < dolls.length; i += dollsPerRow) {
-    dollsByFours.push(dolls.slice(i, i + dollsPerRow))
+const dollsByFours: string[][] = []
+for ( let i = 0; i < dolls.length; i += dollsPerRow ) {
+    dollsByFours.push( dolls.slice( i, i + dollsPerRow ) )
 }
 
 // Initialize the store's saved teams from the local storage
@@ -58,13 +58,13 @@ const schema = {
         }
     }
 }
-const data = localStorage.getItem("hobodrip.teambuilder")
+const data = localStorage.getItem( "hobodrip.teambuilder" )
 
-if (data) {
-    const parsedData = JSON.parse(data)
+if ( data ) {
+    const parsedData = JSON.parse( data )
 
-    if (validator.validate(parsedData, schema).valid) {
-        teams.loadSets(parsedData)
+    if ( validator.validate( parsedData, schema ).valid ) {
+        teams.loadSets( parsedData )
     } else {
         teams.addSet()
     }
@@ -79,21 +79,21 @@ if (data) {
  * @param doll The doll name being checked.
  * @return The indices that the doll occupies in the teams array.
  */
-function getDollIndices(doll: string) {
-    return teams.selectedDolls.reduce((arr, val, i) => {
-        if (val === doll) arr.push(i)
+function getDollIndices ( doll: string ) {
+    return teams.selectedDolls.reduce( ( arr, val, i ) => {
+        if ( val === doll ) arr.push( i )
         return arr
-    }, [] as number[])
+    }, [] as number[] )
 }
 /**
  * Determines what teams a doll that is not a support is on.
  * @param doll The doll name being checked.
  * @return The teams that the doll is on.
  */
-function getMainTeams(doll: string) {
-    return getDollIndices(doll)
-        .filter(i => i % 5 !== 4)
-        .map(i => Math.floor(i / 5) + 1)
+function getMainTeams ( doll: string ) {
+    return getDollIndices( doll )
+        .filter( i => i % 5 !== 4 )
+        .map( i => Math.floor( i / 5 ) + 1 )
 }
 
 /**
@@ -101,18 +101,18 @@ function getMainTeams(doll: string) {
  * @param doll The doll name being checked.
  * @return The teams that the doll is supporting.
  */
-function getSupportTeams(doll: string) {
-    return getDollIndices(doll)
-        .filter(i => i % 5 === 4)
-        .map(i => Math.floor(i / 5))
+function getSupportTeams ( doll: string ) {
+    return getDollIndices( doll )
+        .filter( i => i % 5 === 4 )
+        .map( i => Math.floor( i / 5 ) )
 }
 
 /**
  * Determines whether the given doll is in a support slot.
  * @param doll The doll name being checked.
  */
-function isSupport(doll: string) {
-    return !!getDollIndices(doll).filter(i => i % 5 === 4).length
+function isSupport ( doll: string ) {
+    return !!getDollIndices( doll ).filter( i => i % 5 === 4 ).length
 }
 </script>
 
@@ -125,28 +125,28 @@ function isSupport(doll: string) {
     <div class="container-fluid d-flex flex-column team-roster">
         <div class="row py-3" style="min-height: 0">
             <div class="col-3 col-md-4 mh-100 overflow-x-hidden overflow-y-scroll">
-                <div class="row" v-for="dolls in dollsByFours">
-                    <div class="col-12 col-md-3" v-for="doll in dolls">
-                        <DollFigure :doll="doll" :dollsToPaths="dollsToPaths" :isSupport="isSupport(doll)" select
-                            :selectedTeam="teams.selectedTeam" :supportTeams="getSupportTeams(doll)"
-                            :teams="getMainTeams(doll)" @dollSelect="teams.selectDoll(doll)"></DollFigure>
+                <div class="row" v-for=" ( dolls, i ) in dollsByFours " v-bind:key="`team-${i}`">
+                    <div class="col-12 col-md-3" v-for=" doll in dolls " v-bind:key="`team-${i}-${doll}`">
+                        <DollFigure :doll="doll" :dollsToPaths="dollsToPaths" :isSupport="isSupport( doll )" select
+                            :selectedTeam="teams.selectedTeam" :supportTeams="getSupportTeams( doll )"
+                            :teams="getMainTeams( doll )" @dollSelect="teams.selectDoll( doll )"></DollFigure>
                     </div>
                 </div>
             </div>
 
             <div class="col-9 col-md-8 row d-flex flex-column justify-content-center">
-                <template v-for="(team, a) in 3">
+                <template v-for=" ( team, a ) in 3 " v-bind:key="`team-${a}`">
                     <div :class="[
                         'container-fluid col-md-10 d-flex justify-content-evenly rounded mt-2 pt-4 pe-md-4',
                         a === teams.selectedTeam
                             ? 'bg-primary'
                             : 'bg-secondary',
-                    ]" @click="teams.selectTeam(a)">
+                    ]" @click="teams.selectTeam( a )">
                         <div class="d-none d-md-flex justify-content-center align-items-center">
                             <span class="text-center fw-bold pb-3 user-select-none">Team {{ team }}</span>
                         </div>
-                        <div v-for="(slot, b) in 5">
-                            <DollFigure :doll="teams.selectedDolls[a * 5 + b]" :dollsToPaths="dollsToPaths"
+                        <div v-for=" ( slot, b ) in 5 " v-bind:key="`slot-${b}`">
+                            <DollFigure :doll="teams.selectedDolls[ a * 5 + b ]" :dollsToPaths="dollsToPaths"
                                 :index="a * 5 + b" @dollDeselect="teams.deselectDoll">
                             </DollFigure>
                         </div>

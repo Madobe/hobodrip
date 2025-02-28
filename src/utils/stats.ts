@@ -1,7 +1,7 @@
-import type { ActiveDoll, AttachmentType, Weapon } from "@/types/attachments"
+import type { ActiveDoll, Attachment, AttachmentType, Weapon } from "@/types/attachments"
 import _weapons from "@/assets/data/weapon-db.json"
 
-const weapons: { [key: string]: Weapon } = _weapons
+const weapons: { [ key: string ]: Weapon } = _weapons
 
 // =================================================================================================
 // = Internal only
@@ -11,10 +11,10 @@ const weapons: { [key: string]: Weapon } = _weapons
  * Determines what bracket of ATK/DEF/HP multiplier the doll is in based on its neural helix count.
  * @param doll The doll the calculation is for.
  */
-function getHelixActivationMultiplier(doll: ActiveDoll) {
-    if (doll.neuralHelix >= 2 && doll.neuralHelix < 4) return 0.03
-    else if (doll.neuralHelix >= 4 && doll.neuralHelix < 6) return 0.06
-    else if (doll.neuralHelix === 6) return 0.12
+function getHelixActivationMultiplier ( doll: ActiveDoll ) {
+    if ( doll.neuralHelix >= 2 && doll.neuralHelix < 4 ) return 0.03
+    else if ( doll.neuralHelix >= 4 && doll.neuralHelix < 6 ) return 0.06
+    else if ( doll.neuralHelix === 6 ) return 0.12
     else return 0
 }
 
@@ -23,12 +23,12 @@ function getHelixActivationMultiplier(doll: ActiveDoll) {
  * @param doll The doll the calculation is for.
  * @param type The stat type to add up.
  */
-function getTotalAttachmentStat(doll: ActiveDoll, type: string) {
-    return Object.values(doll.weapon.attachments).reduce(
-        (totalBoost, attachment) =>
+function getTotalAttachmentStat ( doll: ActiveDoll, type: string ) {
+    return Object.values( doll.weapon.attachments ).reduce(
+        ( totalBoost, attachment ) =>
             totalBoost +
             attachment.stats.reduce(
-                (accumulator, stat) =>
+                ( accumulator, stat ) =>
                     stat.stat === type ? accumulator + stat.value : accumulator,
                 0
             ),
@@ -120,6 +120,23 @@ export const WEAPON_TYPES = {
 }
 
 /**
+ * Evaluates how good an attachment is for the given doll. A lower return value indicates a better
+ * compatibility with the doll.
+ * @param doll The doll that will be using the attachment.
+ * @param attachment The attachment being evaluated.
+ */
+export function calculateAttachmentValue ( doll: ActiveDoll, attachment: Attachment ) {
+    return attachment.stats.reduce( ( accumulator, stat ) => {
+        const index = doll.info.stat_order.indexOf( stat.stat )
+
+        if ( index === -1 ) accumulator += 4
+        else accumulator += index
+
+        return accumulator
+    }, 0 )
+}
+
+/**
  * Calculate the CE value for the doll, given their equips.
  * @param doll The data for the doll.
  * @param neuralHelix The amount of neural helix nodes that have been unlocked.
@@ -127,10 +144,10 @@ export const WEAPON_TYPES = {
  * @param attachments The attachments on the doll's weapon.
  * @returns The doll's combat effectiveness value.
  */
-export function calculateCombatEffectiveness(doll: ActiveDoll) {
+export function calculateCombatEffectiveness ( doll: ActiveDoll ) {
     // Because neural helix boosts are consistent for ATK/HP/DEF, we can just multiple the final
     // value from them by the correct multiplier
-    const helixMultiplier = 1 + getHelixActivationMultiplier(doll)
+    const helixMultiplier = 1 + getHelixActivationMultiplier( doll )
     const atk = doll.info.attack
     const hp = doll.info.health
     const def = doll.info.defense
@@ -138,30 +155,30 @@ export function calculateCombatEffectiveness(doll: ActiveDoll) {
     const cd = doll.info.crit_dmg / 100
 
     // The number of fixed keys is assumed to be neuralHelix down to the nearest multiple of 2
-    const fixedKeys = doll.neuralHelix - (doll.neuralHelix % 2)
+    const fixedKeys = doll.neuralHelix - ( doll.neuralHelix % 2 )
 
     // Assume it's calibrated if any of the stats on the attachment are over 5 but below 20 (to not
     // false positive on a flat stat)
-    const calibrations = Object.values(doll.weapon.attachments).filter(a =>
-        a.stats.some(s => s.value > 5 && s.value < 20)
+    const calibrations = Object.values( doll.weapon.attachments ).filter( a =>
+        a.stats.some( s => s.value > 5 && s.value < 20 )
     ).length
 
     return (
-        (5 * atk + 4 * hp + 3 * def) *
+        ( 5 * atk + 4 * hp + 3 * def ) *
         helixMultiplier *
-        (0.1 * cr +
+        ( 0.1 * cr +
             0.2 * cd +
             0.01 * fixedKeys +
             0.01 * doll.fortifications +
-            0.008 * calibrations)
-    ).toFixed(0)
+            0.008 * calibrations )
+    ).toFixed( 0 )
 }
 
 /**
  * Calculates the average damage the attack would do on a unit with the given defense. This foregoes
  * individual attack damage for the average.
  */
-export function calculateDamage(
+export function calculateDamage (
     attack: number,
     defense: number,
     buffs: number = 0,
@@ -171,13 +188,13 @@ export function calculateDamage(
     elemental_advantages: number = 0
 ) {
     const min_dmg =
-        (attack / (1 + defense / attack)) *
-        (1 + buffs) *
-        (1 + 0.1 * elemental_advantages) *
+        ( attack / ( 1 + defense / attack ) ) *
+        ( 1 + buffs ) *
+        ( 1 + 0.1 * elemental_advantages ) *
         skill_modifier
     const max_dmg = min_dmg * crit_dmg
 
-    return min_dmg + (max_dmg / min_dmg) * crit_rate
+    return min_dmg + ( max_dmg / min_dmg ) * crit_rate
 }
 
 /**
@@ -185,7 +202,7 @@ export function calculateDamage(
  * @param doll The doll the calculation is for.
  * @returns Total attack after all multipliers.
  */
-export function calculateTotalStat(
+export function calculateTotalStat (
     doll: ActiveDoll,
     stat: "Attack" | "Defense" | "Health"
 ) {
@@ -193,16 +210,16 @@ export function calculateTotalStat(
         stat.toLowerCase() as keyof typeof doll.info
     ] as number
 
-    if (stat === "Attack") baseStat += doll.weapon.info.attack
+    if ( stat === "Attack" ) baseStat += doll.weapon.info.attack
 
-    const attachmentFlatBoosts = getTotalAttachmentStat(doll, stat)
-    const attachmentBoosts = getTotalAttachmentStat(doll, `${stat} Boost`)
+    const attachmentFlatBoosts = getTotalAttachmentStat( doll, stat )
+    const attachmentBoosts = getTotalAttachmentStat( doll, `${stat} Boost` )
     const weaponBoost = doll.weapon.info.attack_boost || 0
-    const helixMultiplier = getHelixActivationMultiplier(doll)
+    const helixMultiplier = getHelixActivationMultiplier( doll )
 
     return (
-        (baseStat + attachmentFlatBoosts) *
-        (1 + helixMultiplier + (weaponBoost + attachmentBoosts) / 100)
+        ( baseStat + attachmentFlatBoosts ) *
+        ( 1 + helixMultiplier + ( weaponBoost + attachmentBoosts ) / 100 )
     )
 }
 
@@ -212,13 +229,13 @@ export function calculateTotalStat(
  * @param stat
  * @returns
  */
-export function calculateTotalCrit(doll: ActiveDoll, stat: "Rate" | "DMG") {
-    let baseStat = doll.info.crit_rate + (doll.weapon.info.crit_rate || 0)
+export function calculateTotalCrit ( doll: ActiveDoll, stat: "Rate" | "DMG" ) {
+    let baseStat = doll.info.crit_rate + ( doll.weapon.info.crit_rate || 0 )
 
-    if (stat === "DMG")
-        baseStat = doll.info.crit_dmg + (doll.weapon.info.crit_dmg || 0)
+    if ( stat === "DMG" )
+        baseStat = doll.info.crit_dmg + ( doll.weapon.info.crit_dmg || 0 )
 
-    const attachmentBoosts = getTotalAttachmentStat(doll, `Crit ${stat}`)
+    const attachmentBoosts = getTotalAttachmentStat( doll, `Crit ${stat}` )
 
     return baseStat + attachmentBoosts
 }
@@ -228,9 +245,9 @@ export function calculateTotalCrit(doll: ActiveDoll, stat: "Rate" | "DMG") {
  * type number.
  * @returns The attachment type number, or -1 if no matches could be made.
  */
-export function getAttachmentTypeFromText(text: string) {
+export function getAttachmentTypeFromText ( text: string ) {
     const attachmentTypes: {
-        [type: string]: AttachmentType
+        [ type: string ]: AttachmentType
     } = {
         "AR Muzzle": { slot: 0, type: 0 },
         "AR Sight": { slot: 1, type: 0 },
@@ -262,8 +279,12 @@ export function getAttachmentTypeFromText(text: string) {
         "RF Underbarrel": { slot: 3, type: 6 },
     }
 
-    for (const type in attachmentTypes) {
-        if (text.includes(type)) return attachmentTypes[type]
+    for ( const type in attachmentTypes ) {
+        if ( text.includes( type ) ) {
+            return Object.assign( attachmentTypes[ type ], {
+                name: type
+            } )
+        }
     }
 
     return -1
@@ -275,19 +296,19 @@ export function getAttachmentTypeFromText(text: string) {
  * function instead processes every weapon available.
  * @returns
  */
-export function getWeaponsByType(_cache?: { [key: string]: Weapon }) {
+export function getWeaponsByType ( _cache?: { [ key: string ]: Weapon } ) {
     const cache = _cache || weapons
 
-    return Object.keys(cache).reduce(
-        (accumulator, weapon) => {
-            return Object.assign(accumulator, {
-                [weapons[weapon].type]: (
-                    accumulator[weapons[weapon].type] || []
-                ).concat(weapons[weapon]),
-            })
+    return Object.keys( cache ).reduce(
+        ( accumulator, weapon ) => {
+            return Object.assign( accumulator, {
+                [ weapons[ weapon ].type ]: (
+                    accumulator[ weapons[ weapon ].type ] || []
+                ).concat( weapons[ weapon ] ),
+            } )
         },
         {} as {
-            [key: number]: Weapon[]
+            [ key: number ]: Weapon[]
         }
     )
 }

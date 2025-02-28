@@ -9,12 +9,14 @@ export interface ActiveDoll {
 }
 
 export interface Attachment {
+    equipped: boolean
     set: string
     stats: Stat[]
     type: string
 }
 
 export interface AttachmentType {
+    name?: string
     slot: number
     type: number
 }
@@ -33,8 +35,12 @@ export interface Doll {
     type: number
 }
 
+export interface Enemy {
+    defense: number
+}
+
 export interface EquippedWeapon {
-    attachments: { [key: number]: Attachment }
+    attachments: { [ key: number ]: Attachment }
     info: Weapon
     name: string
 }

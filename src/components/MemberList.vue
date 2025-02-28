@@ -192,7 +192,7 @@ const members = [
             </tr>
         </thead>
         <tbody id="member-list-table" class="table-group-divider">
-            <tr v-for="(member, i) in members">
+            <tr v-for=" ( member, i ) in members " v-bind:key="member.username">
                 <td>{{ i + 1 }}</td>
                 <td>{{ member.ign }}</td>
                 <td>{{ member.uid }}</td>

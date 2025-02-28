@@ -1,10 +1,9 @@
 import { defineStore } from "pinia"
 
 import type { Attachment, AttachmentType, Stat } from "@/types/attachments"
-import { ATTACHMENT_TYPES } from "@/utils/stats"
 
-export const useAttachmentsStore = defineStore("attachments", {
-    state: () => ({
+export const useAttachmentsStore = defineStore( "attachments", {
+    state: () => ( {
         data: {
             0: {
                 // AR
@@ -56,22 +55,32 @@ export const useAttachmentsStore = defineStore("attachments", {
                 3: [] as Attachment[],
             },
         } as {
-            [weaponType: number]: {
-                [slot: number]: Attachment[]
+            [ weaponType: number ]: {
+                [ slot: number ]: Attachment[]
             }
         },
-    }),
+    } ),
     actions: {
-        addAttachment(
+        addAttachment (
             attachmentType: AttachmentType,
             attachmentSet: string | undefined,
             stats: Stat[]
         ) {
-            this.$state.data[attachmentType.type][attachmentType.slot].push({
+            this.$state.data[ attachmentType.type ][ attachmentType.slot ].push( {
+                equipped: false,
                 set: attachmentSet || "",
                 stats,
-                type: ATTACHMENT_TYPES[attachmentType.type],
-            })
+                type: attachmentType.name || "",
+            } )
         },
+        resetEquipped () {
+            for ( let weaponType = 0; weaponType < 7; weaponType++ ) {
+                for ( let slot = 0; slot < 4; slot++ ) {
+                    for ( let i = 0; i < this.data[ weaponType ][ slot ].length; i++ ) {
+                        this.data[ weaponType ][ slot ][ i ].equipped = false
+                    }
+                }
+            }
+        }
     },
-})
+} )

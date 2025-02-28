@@ -6,7 +6,7 @@ import placeholderImg from "@/assets/images/placeholder.png"
 const props = withDefaults(
     defineProps<{
         doll: string
-        dollsToPaths: { [x: string]: string },
+        dollsToPaths: { [ x: string ]: string },
         index?: number
         isSupport?: boolean
         select?: boolean
@@ -22,31 +22,33 @@ const props = withDefaults(
     },
 )
 
-const src = computed(() => {
+const src = computed( () => {
     const key = props.doll as keyof typeof props.dollsToPaths
-    const path = props.dollsToPaths[key]
+    const path = props.dollsToPaths[ key ]
 
     return path || placeholderImg
-})
+} )
 
-const supportBadgeClasses = computed(() => {
-    if (props.supportTeams.includes(props.selectedTeam)) {
+const supportBadgeClasses = computed( () => {
+    if ( props.supportTeams.includes( props.selectedTeam ) ) {
         return "text-bg-primary"
     }
 
     return ""
-})
+} )
 </script>
 
 <template>
-    <figure class="figure position-relative" @click="select ? $emit('dollSelect', doll) : $emit('dollDeselect', index)">
-        <img :class="['img-fluid rounded mx-auto d-block user-select-none',
-            select ? 'bg-secondary' : '', !!teams.length ? 'opacity-25' : '']" :src="src" :alt="doll" />
-        <span v-if="!!teams.length" v-for="(team, i) in teams" :class="[`badge rounded-pill position-absolute top-0`,
-            selectedTeam === team - 1 ? 'text-bg-primary' : '']">
-            {{ team }}
-        </span>
-        <span v-if="isSupport" :class="['badge rounded-pill position-absolute top-0 end-0', supportBadgeClasses]">
+    <figure class="figure position-relative" @click="select ? $emit( 'dollSelect', doll ) : $emit( 'dollDeselect', index )">
+        <img :class="[ 'img-fluid rounded mx-auto d-block user-select-none',
+            select ? 'bg-secondary' : '', !!teams.length ? 'opacity-25' : '' ]" :src="src" :alt="doll" />
+        <template v-for=" ( team, i ) in teams " v-bind:key="i">
+            <span v-if=" !!teams.length " :class="[ `badge rounded-pill position-absolute top-0`,
+                selectedTeam === team - 1 ? 'text-bg-primary' : '' ]">
+                {{ team }}
+            </span>
+        </template>
+        <span v-if=" isSupport " :class="[ 'badge rounded-pill position-absolute top-0 end-0', supportBadgeClasses ]">
             S
         </span>
         <figcaption class="d-none d-md-block figure-caption text-center user-select-none">

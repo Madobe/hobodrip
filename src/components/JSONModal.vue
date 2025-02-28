@@ -10,12 +10,12 @@ const props = defineProps<{
  * with the import from the Bootstrap library complains about the modal returning null.
  */
 function closeModal() {
-    const modalEl = document.getElementById("import-export-modal")
+    const modalEl = document.getElementById( "import-export-modal" )
 
-    if (modalEl) {
-        const buttonEl = modalEl.querySelector(".btn-close")
+    if ( modalEl ) {
+        const buttonEl = modalEl.querySelector( ".btn-close" )
 
-        if (buttonEl) buttonEl.dispatchEvent(new Event("click"))
+        if ( buttonEl ) buttonEl.dispatchEvent( new Event( "click" ) )
     }
 }
 
@@ -23,19 +23,19 @@ function closeModal() {
  * Copies the current value of the textarea input to the clipboard.
  */
 function copyToClipboard() {
-    navigator.clipboard.writeText(JSON.stringify(props.sets))
+    navigator.clipboard.writeText( JSON.stringify( props.sets ) )
 }
 
 /**
  * Gets the value of the textarea input.
  */
 function getTextareaValue() {
-    const modalEl = document.getElementById("import-export-modal")
+    const modalEl = document.getElementById( "import-export-modal" )
 
-    if (modalEl) {
-        const textareaEl = modalEl.querySelector("textarea")
+    if ( modalEl ) {
+        const textareaEl = modalEl.querySelector( "textarea" )
 
-        if (textareaEl) return textareaEl.value
+        if ( textareaEl ) return textareaEl.value
     }
 
     return ""
