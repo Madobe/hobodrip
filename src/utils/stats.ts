@@ -137,44 +137,6 @@ export function calculateAttachmentValue ( doll: ActiveDoll, attachment: Attachm
 }
 
 /**
- * Calculate the CE value for the doll, given their equips.
- * @param doll The data for the doll.
- * @param neuralHelix The amount of neural helix nodes that have been unlocked.
- * @param fortifications The amount of dupes the doll has.
- * @param attachments The attachments on the doll's weapon.
- * @returns The doll's combat effectiveness value.
- */
-export function calculateCombatEffectiveness ( doll: ActiveDoll ) {
-    // Because neural helix boosts are consistent for ATK/HP/DEF, we can just multiple the final
-    // value from them by the correct multiplier
-    const helixMultiplier = 1 + getHelixActivationMultiplier( doll )
-    const atk = doll.info.attack
-    const hp = doll.info.health
-    const def = doll.info.defense
-    const cr = doll.info.crit_rate / 100
-    const cd = doll.info.crit_dmg / 100
-
-    // The number of fixed keys is assumed to be neuralHelix down to the nearest multiple of 2
-    const fixedKeys = doll.neuralHelix - ( doll.neuralHelix % 2 )
-
-    // Assume it's calibrated if any of the stats on the attachment are over 5 but below 20 (to not
-    // false positive on a flat stat)
-    const calibrations = Object.values( doll.weapon.attachments ).filter( a =>
-        a.stats.some( s => s.value > 5 && s.value < 20 )
-    ).length
-
-    return (
-        ( 5 * atk + 4 * hp + 3 * def ) *
-        helixMultiplier *
-        ( 0.1 * cr +
-            0.2 * cd +
-            0.01 * fixedKeys +
-            0.01 * doll.fortifications +
-            0.008 * calibrations )
-    ).toFixed( 0 )
-}
-
-/**
  * Calculates the average damage the attack would do on a unit with the given defense. This foregoes
  * individual attack damage for the average.
  */

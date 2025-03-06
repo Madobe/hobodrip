@@ -1,26 +1,15 @@
 <script setup lang="ts">
-import type { Doll } from "@/types/attachments";
+import type { Doll } from "@/models/doll";
 
-import _dolls from "@/assets/data/doll-db.json"
 import { computed } from "vue";
 
 const props = defineProps<{
-    addedDolls: string[]
+    addedDolls: string[],
+    allDolls: Doll[],
+    limitToGlobal?: boolean
 }>()
 
-const dolls = computed( () => {
-    let _
-    let tmp: { [ key: string ]: Doll } = Object.assign( {}, _dolls )
-
-    for ( const key in tmp ) {
-        if ( props.addedDolls.includes( key ) ) {
-            /* eslint-disable @typescript-eslint/no-unused-vars */
-            ( { [ key ]: _, ...tmp } = tmp )
-        }
-    }
-
-    return tmp
-} )
+const dolls = computed( () => props.allDolls.filter( d => !props.addedDolls.includes( d.name ) ) )
 
 /**
  * Processes the given path into a valid src path.
@@ -38,12 +27,12 @@ function toSrc ( path: string ) {
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-4 col-md-2" v-for=" ( doll, key ) in dolls " v-bind:key="key">
-                                <figure class="figure w-100 p-2" @click="$emit( 'selectDoll', key )">
+                            <div class="col-4 col-md-2" v-for=" doll in dolls " v-bind:key="doll.name">
+                                <figure class="figure w-100 p-2" @click="$emit( 'selectDoll', doll )">
                                     <img :class="[ 'w-100 rounded', doll.rarity === 0 ? 'bg-standard' : 'bg-elite' ]"
-                                        :alt="key.toString()" :src="toSrc( doll.img_path )">
+                                        :alt="doll.name" :src="toSrc( doll.img_path )">
                                     <figcaption class="d-none d-md-block figure-caption text-center user-select-none">
-                                        {{ key }}
+                                        {{ doll.name }}
                                     </figcaption>
                                 </figure>
                             </div>

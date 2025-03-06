@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed, reactive } from "vue"
 
 import placeholderImg from "@/assets/images/placeholder.png"
 
+const emit = defineEmits( [ "dollDeselect", "dollSelect" ] )
 const props = withDefaults(
     defineProps<{
         doll: string
@@ -22,6 +23,15 @@ const props = withDefaults(
     },
 )
 
+const greyedOut = reactive( new Set<string> )
+
+const selectDoll = () => {
+    if ( !greyedOut.has( props.doll ) ) {
+        if ( props.select ) emit( "dollSelect", props.doll )
+        else emit( "dollDeselect", props.index )
+    }
+}
+
 const src = computed( () => {
     const key = props.doll as keyof typeof props.dollsToPaths
     const path = props.dollsToPaths[ key ]
@@ -36,12 +46,21 @@ const supportBadgeClasses = computed( () => {
 
     return ""
 } )
+
+const toggleGreyedOut = ( doll: string ) => {
+    if ( props.select ) {
+        if ( greyedOut.has( doll ) ) greyedOut.delete( doll )
+        else greyedOut.add( doll )
+    }
+    debugger
+}
 </script>
 
 <template>
-    <figure class="figure position-relative" @click="select ? $emit( 'dollSelect', doll ) : $emit( 'dollDeselect', index )">
+    <figure class="figure position-relative" @click.exact="selectDoll()" @click.shift="toggleGreyedOut( doll )">
         <img :class="[ 'img-fluid rounded mx-auto d-block user-select-none',
-            select ? 'bg-secondary' : '', !!teams.length ? 'opacity-25' : '' ]" :src="src" :alt="doll" />
+            select ? 'bg-secondary' : '', !!teams.length ? 'opacity-25' : '', greyedOut.has( doll ) ? 'opacity-25' : '' ]"
+            :src="src" :alt="doll" />
         <template v-for=" ( team, i ) in teams " v-bind:key="i">
             <span v-if=" !!teams.length " :class="[ `badge rounded-pill position-absolute top-0`,
                 selectedTeam === team - 1 ? 'text-bg-primary' : '' ]">

@@ -10,25 +10,23 @@ import helix4 from '@/assets/images/helix4.png'
 import helix5 from '@/assets/images/helix5.png'
 import helix6 from '@/assets/images/helix6.png'
 
+import type { Doll } from "@/models/doll";
 import type { Attachment, Stat, Weapon } from '@/types/attachments';
 
 import { useAttachmentsStore } from '@/stores/attachments';
+import { Andoris, Tololo } from "@/models/dolls/dolls-list"
+import { Weapons } from '@/models/weapon';
 import { useDollsStore } from '@/stores/active-dolls';
 import {
     ATTACHMENT_SETS,
     ATTACHMENT_TYPES,
     AVAILABLE_STATS,
-    calculateAttachmentValue,
-    calculateCombatEffectiveness,
-    calculateTotalCrit,
-    calculateTotalStat,
-    getAttachmentTypeFromText,
-    getWeaponsByType
+    getAttachmentTypeFromText
 } from '@/utils/stats';
 import DollSelectorModal from '@/components/DollSelectorModal.vue';
 
 const helixImgs = [ "", helix1, helix2, helix3, helix4, helix5, helix6 ]
-const weaponsByType = getWeaponsByType()
+const weaponsByType = Object.groupBy( Weapons, weapon => weapon.type )
 
 const toasts: {
     id: string,
@@ -51,13 +49,18 @@ const toasts: {
 const attachments = useAttachmentsStore()
 const attachmentsByRefs = storeToRefs( attachments ).data
 const addedDolls = useDollsStore()
+const dolls: Doll[] = [
+    Andoris,
+    Tololo
+]
+
 
 /**
  * Adds the given doll.
- * @param name The name of the doll to add.
+ * @param doll The doll to add.
  */
-function addDoll ( name: string ) {
-    addedDolls.addDoll( name )
+function addDoll ( doll: Doll ) {
+    addedDolls.addDoll( doll )
     Modal.getOrCreateInstance( "#doll-selector-modal" ).hide()
 }
 
@@ -72,7 +75,7 @@ function optimizeAttachments () {
     // them by incidence in the array. This needs to be done for both the best set (in the doll's
     // info) and the Phase Strike set, because that's the second best set for everything.
     addedDolls.data.forEach( doll => {
-        const attachmentsMatchingWeaponType = attachmentsByRefs.value[ doll.weapon.info.type ]
+        const attachmentsMatchingWeaponType = attachmentsByRefs.value[ doll.weapon.type ]
         const attachmentsBestSet = [ [], [], [], [] ] as Attachment[][]
         const attachmentsPhaseStrike = [ [], [], [], [] ] as Attachment[][]
 
@@ -84,7 +87,7 @@ function optimizeAttachments () {
                     attachmentsPhaseStrike[ slot ].push( attachment )
                     return
                 }
-                if ( attachment.set === doll.info.best_set ) attachmentsBestSet[ slot ].push( attachment )
+                if ( attachment.set === doll.best_set ) attachmentsBestSet[ slot ].push( attachment )
                 if ( attachment.set === "Phase Strike" ) attachmentsPhaseStrike[ slot ].push( attachment )
             } )
         }
@@ -97,24 +100,26 @@ function optimizeAttachments () {
             attachmentsBestSet :
             attachmentsPhaseStrike
 
+        console.log( attachmentList )
+
         // Sort every single attachment type by how suitable it is for the current doll, then pick
         // the highest compatibility
-        const bestAttachments = attachmentList.map( attachmentType => {
-            return attachmentType.sort( ( a, b ) => {
-                return calculateAttachmentValue( doll, a ) - calculateAttachmentValue( doll, b )
-            } ).at( 0 )
-        } )
+        // const bestAttachments = attachmentList.map( attachmentType => {
+        //     return attachmentType.sort( ( a, b ) => {
+        //         return calculateAttachmentValue( doll, a ) - calculateAttachmentValue( doll, b )
+        //     } ).at( 0 )
+        // } )
 
-        for ( let slot = 0; slot < 4; slot++ ) {
-            const attachment = bestAttachments.at( slot )
+        // for ( let slot = 0; slot < 4; slot++ ) {
+        //     const attachment = bestAttachments.at( slot )
 
-            if ( attachment ) {
-                attachment.equipped = true
-                doll.weapon.attachments[ slot ] = attachment
-            } else {
-                delete doll.weapon.attachments[ slot ]
-            }
-        }
+        //     if ( attachment ) {
+        //         attachment.equipped = true
+        //         doll.weapon.attachments[ slot ] = attachment
+        //     } else {
+        //         delete doll.weapon.attachments[ slot ]
+        //     }
+        // }
     } )
 }
 
@@ -171,6 +176,20 @@ function showToast ( id: string ) {
     } ).show()
 }
 
+/**
+ * Retrieves all stats to be displayed for the given doll.
+ * @param doll The doll to generate stats for.
+ */
+function statsToShow ( doll: Doll ) {
+    return [
+        [ "Attack", doll.totalAttack ],
+        [ "Defense", doll.totalDefense ],
+        [ "Health", doll.totalHealth ],
+        [ "Crit Rate", doll.totalCritRate ],
+        [ "Crit DMG", doll.totalCritDmg ]
+    ]
+}
+
 // Events
 document.onpaste = function ( event ) {
     if ( event.clipboardData ) {
@@ -201,7 +220,8 @@ document.onpaste = function ( event ) {
 </script>
 
 <template>
-    <DollSelectorModal :addedDolls="addedDolls.data.map( d => d.name )" @selectDoll="addDoll"></DollSelectorModal>
+    <DollSelectorModal :allDolls="dolls" :addedDolls="addedDolls.data.map( d => d.name )" @selectDoll="addDoll">
+    </DollSelectorModal>
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true"
             v-for=" toast in toasts " :id="toast.id" v-bind:key="toast.id">
@@ -241,11 +261,11 @@ document.onpaste = function ( event ) {
                                     @input="addedDolls.swapOrder( addedDoll, $event )" min="1" :max="addedDoll.order">
                             </div>
                             <div class="d-flex flex-column justify-content-center align-items-center m-3">
-                                <img :src="`/src/assets/images/dolls/${addedDoll.name}.png`" :alt="addedDoll.name"
-                                    :class="[ 'rounded-top', !!addedDoll.info.rarity ? 'bg-elite' : 'bg-standard' ]">
+                                <img :src="addedDoll.img_path" :alt="addedDoll.name"
+                                    :class="[ 'rounded-top', !!addedDoll.rarity ? 'bg-elite' : 'bg-standard' ]">
                                 <div
                                     class="container-fluid text-bg-light rounded-bottom text-align-center d-flex justify-content-center">
-                                    {{ calculateCombatEffectiveness( addedDoll ) }}
+                                    {{ addedDoll.combatEffectiveness }}
                                 </div>
                                 <button class="w-100 btn btn-danger mt-1"
                                     @click="addedDolls.removeDoll( addedDoll.name )">Remove</button>
@@ -279,10 +299,10 @@ document.onpaste = function ( event ) {
                                 <!-- Desktop setters -->
                                 <div class="d-none d-md-flex flex-row">
                                     <div class="me-1" style="width: 25px;">
-                                        <img class="img-fluid" :src="helixImgs[ addedDoll.neuralHelix ]">
+                                        <img class="img-fluid" :src="helixImgs[ addedDoll.neural_helix ]">
                                     </div>
                                     <input type="range" class="form-range" min="0" max="6"
-                                        v-model.number="addedDoll.neuralHelix">
+                                        v-model.number="addedDoll.neural_helix">
                                 </div>
                                 <div class="container-fluid d-none d-md-flex flex-row">
                                     <label for="fortifications-range" class="me-2 text-nowrap">
@@ -294,7 +314,7 @@ document.onpaste = function ( event ) {
                                 <!-- Mobile setters -->
                                 <div class="d-flex d-md-none form-floating">
                                     <input type="number" class="form-control" id="mobile-helix-input"
-                                        v-model.number="addedDoll.neuralHelix" min="0" max="6">
+                                        v-model.number="addedDoll.neural_helix" min="0" max="6">
                                     <label for="mobile-helix-input">Neural Helix</label>
                                 </div>
                                 <div class="d-flex d-md-none form-floating">
@@ -305,27 +325,18 @@ document.onpaste = function ( event ) {
                                 <!-- End screen-based setters -->
                                 <div class="d-flex justify-content-center my-1">
                                     <select class="form-select" :value="addedDoll.weapon.name"
-                                        @change="addedDolls.changeWeapon( addedDoll, ( $event.target as HTMLSelectElement ).value )">
-                                        <option v-for=" weapon in weaponsByType[ addedDoll.weapon.info.type ] "
+                                        @change="addedDoll.changeWeapon( ( $event.target as HTMLSelectElement ).value )">
+                                        <option v-for=" weapon in weaponsByType[ addedDoll.weapon.type ] "
                                             v-bind:key="`${addedDoll.name}-${weapon.name}`">
                                             {{ ( weapon as unknown as Weapon ).name }}
                                         </option>
                                     </select>
                                 </div>
-                                <div class="d-flex justify-content-between"
-                                    v-for=" stat in [ 'Attack', 'Defense', 'Health' ] "
-                                    v-bind:key="`${addedDoll.name}-${stat}`">
-                                    <span>{{ stat }}</span>
+                                <div class="d-flex justify-content-between" v-for=" stat in statsToShow( addedDoll ) "
+                                    v-bind:key="`${addedDoll.name}-${stat[ 0 ]}`">
+                                    <span>{{ stat[ 0 ] }}</span>
                                     <span class="text-white">
-                                        {{ Math.floor( calculateTotalStat( addedDoll, stat as "Attack" | "Defense" |
-                                            "Health" ) ) }}
-                                    </span>
-                                </div>
-                                <div class="d-flex justify-content-between" v-for=" stat in [ 'Rate', 'DMG' ] "
-                                    v-bind:key="`${addedDoll.name}-${stat}`">
-                                    <span>Crit {{ stat }}</span>
-                                    <span class="text-white">
-                                        {{ Math.floor( calculateTotalCrit( addedDoll, stat as "Rate" | "DMG" ) ) }}%
+                                        {{ Math.floor( stat[ 1 ] as number ) }}
                                     </span>
                                 </div>
                             </div>
