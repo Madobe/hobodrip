@@ -123,11 +123,6 @@ const members = [
     username: "aorinji",
   },
   {
-    ign: "Neip",
-    uid: "13003",
-    username: "neepa",
-  },
-  {
     ign: "Chin Chin",
     uid: "51138",
     username: "chievic2030",
