@@ -128,11 +128,6 @@ const members = [
     username: "chievic2030",
   },
   {
-    ign: "Cris",
-    uid: "124428",
-    username: "stickwalker",
-  },
-  {
     ign: "John Frontline",
     uid: "2231453",
     username: "",
@@ -180,7 +175,7 @@ const members = [
       </tr>
     </thead>
     <tbody id="member-list-table" class="table-group-divider">
-      <tr v-for=" ( member, i ) in members ">
+      <tr v-for=" ( member, i ) in members " v-bind:key="member.uid">
         <td>{{ i + 1 }}</td>
         <td>{{ member.ign }}</td>
         <td>{{ member.uid }}</td>
