@@ -125,6 +125,11 @@ function isSupport ( doll: string ) {
     <div class="container-fluid d-flex flex-column team-roster">
         <div class="row py-3" style="min-height: 0">
             <div class="col-3 col-md-4 mh-100 overflow-x-hidden overflow-y-scroll">
+                <div class="d-none d-md-block row">
+                    <div class="col-12 bg-warning text-dark text-center rounded mb-3">
+                        Hint: Hold Shift while clicking a doll to mark her as not available
+                    </div>
+                </div>
                 <div class="row" v-for=" ( dolls, i ) in dollsByFours " v-bind:key="`team-${i}`">
                     <div class="col-12 col-md-3" v-for=" doll in dolls " v-bind:key="`team-${i}-${doll}`">
                         <DollFigure :doll="doll" :dollsToPaths="dollsToPaths" :isSupport="isSupport( doll )" select

@@ -4,7 +4,7 @@ import type { MapField } from "./map-field"
 import Weapon, { Weapons } from "./weapon"
 
 import DispatchRoomStats from '@/assets/data/dispatch-room-stats.json'
-import { DollType } from "@/utils/defs"
+import { DollRarity, DollType, MapEvent, Weakness, WeaponTypes, type MapEventArgs } from "@/utils/defs"
 
 import { Unit } from "./unit"
 
@@ -33,25 +33,25 @@ export class Doll extends Unit {
     dispatch_room = 1 // The level of the dispatch room
     fixed_keys = 0 // The number of fixed keys currently unlocked on the doll
     fortifications = 0 // The number of fortifications (dupes) on the doll
+    neural_helix = 0 // Number of neural helix slots unlocked
+    universal_keys = [] // The universal (right side) keys on the doll
+    weapon = weapons[ "Planeta" ]// The weapon currently equipped by the doll
 
     // Doll values that can't be changed via UI
-    attack = 0 // Base attack
+    ammo_type: Weakness = Weakness.AMMO_MEDIUM
     best_set = "" // The best attachment set for this doll
-    cooldowns = [] // The cooldowns for each skill
-    crit_dmg = 120 // Base crit damage
-    crit_rate = 20 // Base crit rate
-    defense = 0 // Base defense
-    health = 0 // Base health
+    cooldowns: number[] = [] // The cooldowns for each skill
     img_path = "" // The path for the doll's selection portrait
-    name = "" // Doll name
-    neural_helix = 0 // Number of neural helix slots unlocked
-    rarity = 0 // The rarity of the doll (0 = Standard, 1 = Elite)
-    type = 0 // The type of doll
-    universal_keys = [] // The universal (right side) keys on the doll
-    weapon: Weapon // The weapon currently equipped by the doll
+    rarity = DollRarity.STANDARD // The rarity of the doll (0 = Standard, 1 = Elite)
+    type: DollType = DollType.BULWARK // The type of doll
+    weaponType: WeaponTypes = WeaponTypes.AR
 
-    // Values that are specific to the web app
+    // Values that are specific to the web app (note that these may not be used on every page)
+    confectance = 0
     order = 0
+
+    // Values that are only used when in a combat simulator
+    currentHealth = this.totalHealth
 
     constructor( data: DollArgs ) {
         super()
@@ -205,49 +205,83 @@ export class Doll extends Unit {
     }
 
     /**
-     * Changes the doll's active weapon.
+     * Changes the doll's active weapon. The old weapon will be up for garbage collection because
+     * nothing has a reference to it, so there's no need to worry about deletion.
      * @param name The name of the weapon to change to.
      */
     changeWeapon ( name: string ) {
-        this.weapon = weapons[ name ] ?? new Weapon( { attack: 0, name: "Placeholder", type: 0 } )
+        const attachments = this.weapon.attachments
+        this.weapon = Object.keys( weapons ).includes( name ) ?
+            weapons[ name ].clone() :
+            new Weapon( { attack: 0, name: "Placeholder", type: 0 } )
+        this.weapon.attachments = attachments
     }
 
     /**
-     * The base normal attack function. This may change for a doll if they have a different
-     * multiplier for their default attack. In this case, this parent function can just be called
-     * with a different multiplier from the descendant. For example:
-     *
-     * super( field, target, 0.9 )
-     *
+     * The base attack function. Every attack will use call this, but will provide its own
+     * multipliers. Note that there's not a need to differentiate what kind of multipliers are
+     * accounted for because they all end up in the same part of the formula.
      * @param field The map state.
      * @param target The enemy being targeted.
-     * @param skillModifier The modifier on the attack (generally, this is 80% of attack).
+     * @param skillModifier The modifier on the attack (default is 80% of attack).
      * @returns The average damage to be expected (damage is set to the average expected when crit
      * is accounted for).)
      */
-    normalAttack ( field: MapField, target: Enemy, skillModifier = 0.8 ) {
+    doAttack ( field: MapField, target: Enemy, skillModifier = 0.8, coverIgnore = 0 ) {
         const attack = this.totalAttack
         const scaledAttack = attack / ( 1 + target.defense / attack )
         const critValue = ( this.totalCritDmg - 100 ) / ( 100 / this.crit_rate )
 
-        // TODO: Add damage% buffs
         let multipliers = 1
-        if ( target.weaknesses.includes( this.weapon.type ) ) multipliers += 0.1
+        if ( ( target.weaknesses & this.ammo_type ) === this.ammo_type ) multipliers += 0.1
 
-        return scaledAttack * multipliers * critValue * skillModifier
+        const rawDamage = scaledAttack * multipliers * critValue * skillModifier
+
+        // TODO: Calculate increases from passives on dolls/weapons
+
+        // TODO: Check cover and stability damage reduction
+        const coverReduction = !!target.stability ? target.stability_damage_reduction : 0
+        const reducedDamage = rawDamage * ( 1 - ( coverReduction - coverIgnore ) )
+
+        return reducedDamage
     }
 
     /**
-     * The doll's passive ability. Needs to be overridden by any descendants.
+     * The doll's passive ability. Needs to be overridden by any descendants. Note that any passives
+     * that are based on actions should be instead dealt with in the "handleEvent" function.
+     * @param event The type of event.
+     * @param args Information about the event that occurred.
      */
-    passive () { }
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+    handleEvent ( map: MapField, event: MapEvent, args: MapEventArgs ) { }
+
+    /**
+     * Calculates the amount of damage taken.
+     * @param damage The amount of damage received.
+     */
+    receiveDamage ( damage: number ) {
+        this.currentHealth -= damage
+    }
 
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    skill1 ( target: Enemy ) { }
+    skill1 ( field: MapField, target: Enemy ): number { return 0 }
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    skill2 ( target: Enemy ) { }
+    skill2 ( field: MapField, target: Enemy ): number { return 0 }
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    skill3 ( target: Enemy ) { }
+    skill3 ( field: MapField, target: Enemy ): number { return 0 }
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    skill4 ( target: Enemy ) { }
+    skill4 ( field: MapField, target: Enemy ): number { return 0 }
+
+    toJSON () {
+        return {
+            affinity: this.affinity,
+            covenant: this.covenant,
+            dispatch_room: this.dispatch_room,
+            fixed_keys: this.fixed_keys,
+            fortifications: this.fortifications,
+            neural_helix: this.neural_helix,
+            universal_keys: this.universal_keys,
+            weapon: this.weapon.toJSON()
+        }
+    }
 }

@@ -1,2 +1,7 @@
-export * from "./andoris"
-export * from "./tololo"
+import Andoris from "./andoris"
+import Tololo from "./tololo"
+
+export default [
+    Andoris,
+    Tololo
+]

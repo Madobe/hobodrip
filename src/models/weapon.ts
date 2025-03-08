@@ -1,10 +1,14 @@
 import type { Attachment } from "@/types/attachments"
+import type { MapField } from "./map-field"
+import type { MapEvent, MapEventArgs } from "@/utils/defs"
+import type { Doll } from "./doll"
 
 interface WeaponParams {
     attack: number
     attack_boost?: number
     crit_dmg?: number
     crit_rate?: number
+    handleEvent?: ( map: MapField, event: MapEvent, args: MapEventArgs ) => void
     imprint?: string
     name: string
     type: number
@@ -25,6 +29,7 @@ export default class Weapon {
     constructor( params: WeaponParams ) {
         this.attack = params.attack
         this.crit_dmg = params.crit_dmg ?? 0
+        this.handleEvent = params.handleEvent ?? this.handleEvent
         this.name = params.name
         this.type = params.type
     }
@@ -35,6 +40,24 @@ export default class Weapon {
     get critRate () { return this.crit_rate + this.getStatTotal( "Crit Rate" ) }
     get critDmg () { return this.crit_dmg + this.getStatTotal( "Crit DMG" ) }
 
+    /**
+     * Creates a clone of the calling weapon.
+     */
+    clone () {
+        return new Weapon( {
+            attack: this.attack,
+            crit_dmg: this.crit_dmg,
+            handleEvent: this.handleEvent,
+            name: this.name,
+            type: this.type
+        } )
+    }
+
+    /**
+     * Adds up the value of the given stat.
+     * @param stat The stat to sum.
+     * @returns Summed value.
+     */
     getStatTotal ( stat: string ) {
         return this.attachments
             .flatMap( attachment => attachment.stats )
@@ -42,14 +65,17 @@ export default class Weapon {
             .reduce( ( accumulator, attachment ) => accumulator += attachment.value, 0 )
     }
 
-    /**
-     * The passive ability of the weapon.
-     */
-    passive () {
-    }
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+    handleEvent ( map: MapField, event: MapEvent, args: MapEventArgs ) { }
 
     resetAttachments () {
         this.attachments = []
+    }
+
+    toJSON () {
+        return {
+            attachments: this.attachments
+        }
     }
 }
 
@@ -390,6 +416,13 @@ export const PechenegSP = new Weapon( {
 export const Planeta = new Weapon( {
     attack: 376,
     crit_dmg: 25,
+    handleEvent: ( map: MapField, event: MapEvent, args: MapEventArgs ) => {
+        const doll = args.actor as Doll
+
+        if ( doll.currentHealth === doll.totalHealth ) {
+            // map.
+        }
+    },
     name: "Planeta",
     type: 0
 } )

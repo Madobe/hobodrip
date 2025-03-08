@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import type { Doll } from "@/models/doll";
-
 import { computed } from "vue";
+
+import Dolls from "@/models/dolls/dolls-list"
 
 const props = defineProps<{
     addedDolls: string[],
-    allDolls: Doll[],
     limitToGlobal?: boolean
 }>()
 
-const dolls = computed( () => props.allDolls.filter( d => !props.addedDolls.includes( d.name ) ) )
+const dolls = computed( () => Dolls.filter( d => !props.addedDolls.includes( d.name ) ) )
 
 /**
  * Processes the given path into a valid src path.

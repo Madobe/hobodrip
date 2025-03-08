@@ -14,17 +14,15 @@ import type { Doll } from "@/models/doll";
 import type { Attachment, Stat, Weapon } from '@/types/attachments';
 
 import { useAttachmentsStore } from '@/stores/attachments';
-import { Andoris, Tololo } from "@/models/dolls/dolls-list"
+import { MapField } from '@/models/map-field';
 import { Weapons } from '@/models/weapon';
 import { useDollsStore } from '@/stores/active-dolls';
-import {
-    ATTACHMENT_SETS,
-    ATTACHMENT_TYPES,
-    AVAILABLE_STATS,
-    getAttachmentTypeFromText
-} from '@/utils/stats';
+import { getAttachmentTypeFromText } from '@/utils/stats';
 import DollSelectorModal from '@/components/DollSelectorModal.vue';
+import { ATTACHMENT_SETS, ATTACHMENT_TYPES, AVAILABLE_STATS } from '@/utils/defs';
+import GSFortressTitanRampart from '@/models/enemies/gs-fortress-titan-rampart';
 
+const mapField = new MapField()
 const helixImgs = [ "", helix1, helix2, helix3, helix4, helix5, helix6 ]
 const weaponsByType = Object.groupBy( Weapons, weapon => weapon.type )
 
@@ -49,10 +47,6 @@ const toasts: {
 const attachments = useAttachmentsStore()
 const attachmentsByRefs = storeToRefs( attachments ).data
 const addedDolls = useDollsStore()
-const dolls: Doll[] = [
-    Andoris,
-    Tololo
-]
 
 
 /**
@@ -182,11 +176,11 @@ function showToast ( id: string ) {
  */
 function statsToShow ( doll: Doll ) {
     return [
-        [ "Attack", doll.totalAttack ],
-        [ "Defense", doll.totalDefense ],
-        [ "Health", doll.totalHealth ],
-        [ "Crit Rate", doll.totalCritRate ],
-        [ "Crit DMG", doll.totalCritDmg ]
+        [ "S1 DMG", doll.skill1( mapField, GSFortressTitanRampart ) ],
+        [ "S1 Points", Math.floor( Math.pow( doll.skill1( mapField, GSFortressTitanRampart ), 0.6 ) ) ],
+        [ "S2 Points", Math.floor( Math.pow( doll.skill2( mapField, GSFortressTitanRampart ), 0.6 ) ) ],
+        [ "S3 Points", Math.floor( Math.pow( doll.skill3( mapField, GSFortressTitanRampart ), 0.6 ) ) ],
+        [ "S4 Points", Math.floor( Math.pow( doll.skill4( mapField, GSFortressTitanRampart ), 0.6 ) ) ]
     ]
 }
 
@@ -220,7 +214,7 @@ document.onpaste = function ( event ) {
 </script>
 
 <template>
-    <DollSelectorModal :allDolls="dolls" :addedDolls="addedDolls.data.map( d => d.name )" @selectDoll="addDoll">
+    <DollSelectorModal :addedDolls="addedDolls.data.map( d => d.name )" @selectDoll="addDoll">
     </DollSelectorModal>
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true"

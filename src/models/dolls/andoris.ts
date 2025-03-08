@@ -4,7 +4,6 @@ import { Aglaea } from "../weapon";
 class DollAndoris extends Doll {
     attack = 591
     best_set = "Allay Support"
-    default_weapon = "Aglaea"
     defense = 642
     health = 2288
     img_path = "/src/assets/images/dolls/Andoris.png"
@@ -14,10 +13,8 @@ class DollAndoris extends Doll {
     type = 0
 
     constructor() {
-        super( {
-            weapon: Aglaea
-        } )
+        super( { weapon: Aglaea } )
     }
 }
 
-export const Andoris = new DollAndoris
+export default new DollAndoris
