@@ -2,6 +2,7 @@
 import { Modal, Toast } from 'bootstrap';
 import { storeToRefs } from 'pinia';
 import { createWorker } from 'tesseract.js';
+import { reactive } from 'vue';
 
 import helix1 from '@/assets/images/helix1.png'
 import helix2 from '@/assets/images/helix2.png'
@@ -13,16 +14,14 @@ import helix6 from '@/assets/images/helix6.png'
 import type { Doll } from "@/models/doll";
 import type { Attachment, Stat, Weapon } from '@/types/attachments';
 
-import { useAttachmentsStore } from '@/stores/attachments';
-import { MapField } from '@/models/map-field';
+import AttachmentViewerModal from '@/components/AttachmentViewerModal.vue';
+import DollSelectorModal from '@/components/DollSelectorModal.vue';
 import { Weapons } from '@/models/weapon';
 import { useDollsStore } from '@/stores/active-dolls';
-import { getAttachmentTypeFromText } from '@/utils/stats';
-import DollSelectorModal from '@/components/DollSelectorModal.vue';
-import { ATTACHMENT_SETS, ATTACHMENT_TYPES, AVAILABLE_STATS } from '@/utils/defs';
-import GSFortressTitanRampart from '@/models/enemies/gs-fortress-titan-rampart';
+import { useAttachmentsStore } from '@/stores/attachments';
+import { ATTACHMENT_SETS, ATTACHMENT_TYPES, AVAILABLE_STATS, WeaponTypes } from '@/utils/defs';
+import AttachmentCreatorModal from '@/components/AttachmentCreatorModal.vue';
 
-const mapField = new MapField()
 const helixImgs = [ "", helix1, helix2, helix3, helix4, helix5, helix6 ]
 const weaponsByType = Object.groupBy( Weapons, weapon => weapon.type )
 
@@ -31,8 +30,20 @@ const toasts: {
     message: string
 }[] = [
         {
-            id: "image-processing-failed",
-            message: "Failed to process image."
+            id: "image-attachment-cannot-determine-type",
+            message: "Cannot determine attachment type (eg. AR Muzzle). Try shrinking the screenshot area."
+        },
+        {
+            id: "image-muzzle-not-enough-stats",
+            message: "Could not determine 4 stats for muzzle attachment. Try shrinking the screenshot area."
+        },
+        {
+            id: "image-attachment-not-enough-stats",
+            message: "Could not determine 3 stats for the attachment. Try shrinking the screenshot area."
+        },
+        {
+            id: "image-attachment-no-set",
+            message: "Could not determine a set for the attachment. Is the set name in the screenshot?"
         },
         {
             id: "file-paste-detected",
@@ -41,13 +52,22 @@ const toasts: {
         {
             id: "image-processing-success",
             message: "Image successfully processed. New attachment available."
+        },
+        {
+            id: "attachment-deleted",
+            message: "Attachment removed."
         }
     ]
 
 const attachments = useAttachmentsStore()
 const attachmentsByRefs = storeToRefs( attachments ).data
 const addedDolls = useDollsStore()
-
+const dollsByRefs = storeToRefs( addedDolls ).data
+const attachmentViewer = reactive( {
+    name: "",
+    slot: 0 as 0 | 1 | 2 | 3,
+    weaponType: WeaponTypes.AR
+} )
 
 /**
  * Adds the given doll.
@@ -56,6 +76,49 @@ const addedDolls = useDollsStore()
 function addDoll ( doll: Doll ) {
     addedDolls.addDoll( doll )
     Modal.getOrCreateInstance( "#doll-selector-modal" ).hide()
+}
+
+/**
+ * Creates the attachment specified by data from the modal.
+ * @param data The data for the attachment.
+ */
+function createAttachment ( data: { set: string, stats: { stat: string, value: number }[], type: string } ) {
+    attachments.addAttachment( ATTACHMENT_TYPES[ data.type ], data.set, data.stats )
+}
+
+/**
+ * Deletes the given attachment from the store.
+ * @param attachment The attachment to delete.
+ */
+function deleteAttachment ( weaponType: WeaponTypes, slot: number, attachment: Attachment ) {
+    const index = attachmentsByRefs.value[ weaponType ][ slot ].findIndex( a => a === attachment )
+    attachmentsByRefs.value[ weaponType ][ slot ].splice( index, 1 )
+    attachments.saveStore()
+    showToast( "attachment-deleted" )
+}
+
+/**
+ * Processes the given text (could be random output from OCR) and returns the matching attachment
+ * type number.
+ * @returns The attachment type number, or -1 if no matches could be made.
+ */
+function getAttachmentTypeFromText ( text: string ) {
+    for ( const type in ATTACHMENT_TYPES ) {
+        if ( RegExp( `\\b${type}\\b` ).test( text ) ) {
+            return Object.assign( ATTACHMENT_TYPES[ type ], {
+                name: type
+            } )
+        }
+    }
+
+    return -1
+}
+
+/**
+ * Opens a modal to manually create an attachment.
+ */
+function manuallyAddAttachment () {
+    Modal.getOrCreateInstance( "#attachment-creator-modal" ).show()
 }
 
 /**
@@ -68,7 +131,7 @@ function optimizeAttachments () {
     // We'll calculate attachment value off the recommended stats for the each doll by weighting
     // them by incidence in the array. This needs to be done for both the best set (in the doll's
     // info) and the Phase Strike set, because that's the second best set for everything.
-    addedDolls.data.forEach( doll => {
+    dollsByRefs.value.forEach( doll => {
         const attachmentsMatchingWeaponType = attachmentsByRefs.value[ doll.weapon.type ]
         const attachmentsBestSet = [ [], [], [], [] ] as Attachment[][]
         const attachmentsPhaseStrike = [ [], [], [], [] ] as Attachment[][]
@@ -90,30 +153,13 @@ function optimizeAttachments () {
         // have a full set but Phase Strike does, then that's automatically the best set. If neither
         // does, then we'll just pick Phase Strike because it's likely to get the most additions in
         // the future.
-        const attachmentList = attachmentsBestSet.filter( attachment => !!attachment.length ).length === 4 ?
+        const attachmentList = attachmentsBestSet.filter( slot => !!slot.length ).length === 4 ?
             attachmentsBestSet :
-            attachmentsPhaseStrike
+            attachmentsPhaseStrike.filter( slot => slot.length )
+        const bestAttachments = doll.calculateBestAttachments( [], attachmentList )
 
-        console.log( attachmentList )
-
-        // Sort every single attachment type by how suitable it is for the current doll, then pick
-        // the highest compatibility
-        // const bestAttachments = attachmentList.map( attachmentType => {
-        //     return attachmentType.sort( ( a, b ) => {
-        //         return calculateAttachmentValue( doll, a ) - calculateAttachmentValue( doll, b )
-        //     } ).at( 0 )
-        // } )
-
-        // for ( let slot = 0; slot < 4; slot++ ) {
-        //     const attachment = bestAttachments.at( slot )
-
-        //     if ( attachment ) {
-        //         attachment.equipped = true
-        //         doll.weapon.attachments[ slot ] = attachment
-        //     } else {
-        //         delete doll.weapon.attachments[ slot ]
-        //     }
-        // }
+        bestAttachments.forEach( attachment => attachment.equipped = true )
+        Object.assign( doll.weapon.attachments, bestAttachments )
     } )
 }
 
@@ -127,12 +173,12 @@ function processOCROutput ( text: string ) {
     const attachmentType = getAttachmentTypeFromText( text )
     console.log( text )
 
-    if ( attachmentType === -1 ) return showToast( "image-processing-failed" )
+    if ( attachmentType === -1 ) return showToast( "image-attachment-cannot-determine-type" )
 
-    const stats = [] as Stat[]
+    let stats = [] as Stat[]
 
     AVAILABLE_STATS.forEach( stat => {
-        const match = RegExp( `${stat}.+?([0-9.]+)` ).exec( text )
+        const match = RegExp( `${stat}[^a-zA-Z0-9]+([0-9]+[0-9.]+)` ).exec( text )
 
         if ( match ) {
             stats.push( {
@@ -142,14 +188,35 @@ function processOCROutput ( text: string ) {
         }
     } )
 
+    stats = stats.filter( stat => !isNaN( stat.value ) )
+
     const attachmentSet = ATTACHMENT_SETS.find( set => text.includes( set ) )
 
-    if ( ( attachmentType.slot === 0 && stats.length < 4 ) || stats.length < 3 || ( stats.length < 3 && !attachmentSet ) ) {
-        return showToast( "image-processing-failed" )
-    }
+    if ( attachmentType.slot === 0 && stats.length < 4 ) return showToast( "image-muzzle-not-enough-stats" )
+    if ( stats.length < 3 ) return showToast( "image-attachment-not-enough-stats" )
+    if ( attachmentType.slot !== 0 && !attachmentSet ) return showToast( "image-attachment-no-set" )
 
     attachments.addAttachment( attachmentType, attachmentSet, stats )
     showToast( "image-processing-success" )
+}
+
+/**
+ * Reveals the attachment viewer modal after updating which types of attachments should be visible
+ * in it.
+ * @param text The type of attachments that will be displayed in the modal.
+ */
+function showAttachmentViewer ( text: string ) {
+    const attachmentType = getAttachmentTypeFromText( text )
+
+    if ( attachmentType !== -1 ) {
+        Object.assign( attachmentViewer, {
+            name: text,
+            slot: attachmentType.slot as 0 | 1 | 2 | 3,
+            weaponType: attachmentType.type
+        } )
+
+        Modal.getOrCreateInstance( "#attachment-viewer-modal" ).show()
+    }
 }
 
 /**
@@ -176,11 +243,11 @@ function showToast ( id: string ) {
  */
 function statsToShow ( doll: Doll ) {
     return [
-        [ "S1 DMG", doll.skill1( mapField, GSFortressTitanRampart ) ],
-        [ "S1 Points", Math.floor( Math.pow( doll.skill1( mapField, GSFortressTitanRampart ), 0.6 ) ) ],
-        [ "S2 Points", Math.floor( Math.pow( doll.skill2( mapField, GSFortressTitanRampart ), 0.6 ) ) ],
-        [ "S3 Points", Math.floor( Math.pow( doll.skill3( mapField, GSFortressTitanRampart ), 0.6 ) ) ],
-        [ "S4 Points", Math.floor( Math.pow( doll.skill4( mapField, GSFortressTitanRampart ), 0.6 ) ) ]
+        [ "Attack", doll.totalAttack ],
+        [ "Defense", doll.totalDefense ],
+        [ "Health", doll.totalHealth ],
+        [ "Crit Rate", doll.totalCritRate ],
+        [ "Crit DMG", doll.totalCritDmg ]
     ]
 }
 
@@ -214,6 +281,10 @@ document.onpaste = function ( event ) {
 </script>
 
 <template>
+    <AttachmentViewerModal :attachments="attachmentsByRefs" :attachmentSlot="attachmentViewer.slot"
+        :name="attachmentViewer.name" :weapon-type="attachmentViewer.weaponType" @deleteAttachment="deleteAttachment">
+    </AttachmentViewerModal>
+    <AttachmentCreatorModal @createAttachment="createAttachment"></AttachmentCreatorModal>
     <DollSelectorModal :addedDolls="addedDolls.data.map( d => d.name )" @selectDoll="addDoll">
     </DollSelectorModal>
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
@@ -231,12 +302,15 @@ document.onpaste = function ( event ) {
                 <div>
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-center align-items-center">
-                            <button class="btn btn-primary" @click="optimizeAttachments">
-                                Optimize Attachments
-                            </button>
+                            <div class="btn-group" role="group" aria-label="Attachment buttons">
+                                <button class="btn btn-primary" @click="optimizeAttachments">Optimize
+                                    Attachment</button>
+                                <button class="btn btn-secondary" @click="manuallyAddAttachment">Manual Add</button>
+                            </div>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center"
-                            v-for=" ( attachmentType, i ) in ATTACHMENT_TYPES " v-bind:key="`${attachmentType}-${i}`">
+                        <li class="list-group-item d-flex justify-content-between align-items-center attachment-category"
+                            v-for=" ( attachmentType, i ) in Object.keys( ATTACHMENT_TYPES ) "
+                            v-bind:key="`${attachmentType}-${i}`" @click="showAttachmentViewer( attachmentType )">
                             {{ attachmentType }}
                             <span class="badge text-bg-primary rounded-pill">
                                 {{ attachments.data[ Math.floor( i / 4 ) ][ i % 4 ].length }}
@@ -251,8 +325,9 @@ document.onpaste = function ( event ) {
                         <div
                             class="d-flex justify-content-center justify-content-md-around flex-column flex-md-row ms-md-3">
                             <div class="d-flex justify-content-center align-items-center">
-                                <input class="text-center" type="text" :value="( addedDoll as any ).order"
-                                    @input="addedDolls.swapOrder( addedDoll, $event )" min="1" :max="addedDoll.order">
+                                <input class="text-center" type="text" :value="addedDoll.order"
+                                    @input="addedDolls.swapOrder( addedDoll, $event )" min="1"
+                                    :max="addedDolls.data.length">
                             </div>
                             <div class="d-flex flex-column justify-content-center align-items-center m-3">
                                 <img :src="addedDoll.img_path" :alt="addedDoll.name"
@@ -270,7 +345,7 @@ document.onpaste = function ( event ) {
                                 <div class="w-100 d-flex flex-column justify-content-around" v-for=" i in 4 "
                                     v-bind:key="`${addedDoll.name}-${i}`">
                                     <div class="border-bottom my-1" v-if=" !!addedDoll.weapon.attachments[ i - 1 ] ">
-                                        {{ addedDoll.weapon.attachments[ i - 1 ].type }}
+                                        {{ addedDoll.weapon.attachments[ i - 1 ].name }}
                                     </div>
                                     <template v-if=" !!addedDoll.weapon.attachments[ i - 1 ] ">
                                         <div class="d-flex justify-content-between"
@@ -349,7 +424,7 @@ document.onpaste = function ( event ) {
 <style lang="css" scoped>
 @font-face {
     font-family: 'Noto Sans';
-    src: url('@/src/fonts/NotoSans_Condensed-Regular.ttf') format('ttf');
+    src: url('/fonts/NotoSans_Condensed-Regular.ttf') format('truetype');
 }
 
 input[type="text"] {
@@ -358,6 +433,14 @@ input[type="text"] {
 
 .attachment-list {
     max-height: calc(100vh - 3.5rem);
+}
+
+.attachment-category {
+    cursor: pointer;
+}
+
+.attachment-category:hover {
+    filter: brightness(1.5);
 }
 
 .doll-boxes>div {

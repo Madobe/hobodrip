@@ -1,12 +1,13 @@
-import type { Enemy } from "./enemy"
-import type { MapField } from "./map-field"
+import type { Attachment } from "@/types/attachments"
 
+import { DefaultEnemy, Enemy } from "./enemy"
+import { EmptyMapField, MapField } from "./map-field"
+import MapUnit, { DefaultMapUnit } from "./map-unit"
+import { Unit } from "./unit"
 import Weapon, { Weapons } from "./weapon"
 
 import DispatchRoomStats from '@/assets/data/dispatch-room-stats.json'
 import { DollRarity, DollType, MapEvent, Weakness, WeaponTypes, type MapEventArgs } from "@/utils/defs"
-
-import { Unit } from "./unit"
 
 interface DollArgs {
     fixedKeys?: number
@@ -33,7 +34,9 @@ export class Doll extends Unit {
     dispatch_room = 1 // The level of the dispatch room
     fixed_keys = 0 // The number of fixed keys currently unlocked on the doll
     fortifications = 0 // The number of fortifications (dupes) on the doll
+    movement = 5 // Base movement
     neural_helix = 0 // Number of neural helix slots unlocked
+    stability = 10 // Base stability
     universal_keys = [] // The universal (right side) keys on the doll
     weapon = weapons[ "Planeta" ]// The weapon currently equipped by the doll
 
@@ -43,15 +46,12 @@ export class Doll extends Unit {
     cooldowns: number[] = [] // The cooldowns for each skill
     img_path = "" // The path for the doll's selection portrait
     rarity = DollRarity.STANDARD // The rarity of the doll (0 = Standard, 1 = Elite)
+    stat_order: string[] = []
     type: DollType = DollType.BULWARK // The type of doll
     weaponType: WeaponTypes = WeaponTypes.AR
 
     // Values that are specific to the web app (note that these may not be used on every page)
-    confectance = 0
     order = 0
-
-    // Values that are only used when in a combat simulator
-    currentHealth = this.totalHealth
 
     constructor( data: DollArgs ) {
         super()
@@ -84,6 +84,16 @@ export class Doll extends Unit {
      */
     get affinityStats () {
         return this.defaultStatsObject
+    }
+
+    /**
+     * Method meant to be overridden by each doll which determines the scaling of the attachments.
+     * The default is just checking the regular attack damage. This does not work properly for any
+     * dolls that scale off things other than attack, or do not scale with the same stats on their
+     * different skills.
+     */
+    get attachmentValue () {
+        return this.skill1( EmptyMapField, DefaultEnemy, DefaultMapUnit )
     }
 
     /**
@@ -126,6 +136,7 @@ export class Doll extends Unit {
             crit_rate: 0,
             defense: 0,
             health: 0,
+            health_boost: 0
         } )
     }
 
@@ -205,6 +216,51 @@ export class Doll extends Unit {
     }
 
     /**
+     * Calculates what combination of attachments is the best.
+     * @param best The currently equipped attachments.
+     * @param leftovers The attachments that have yet to be tested in this recursion.
+     */
+    calculateBestAttachments ( equipped: Attachment[], leftovers: Attachment[][] ): Attachment[] {
+        if ( !leftovers.length ) return equipped
+
+        const attachments = leftovers.pop() ?? []
+        let bestValue = 0
+        let bestIndex = -1
+
+        for ( let i = 0; i < attachments.length; i++ ) {
+            this.weapon.attachments.push( attachments[ i ] )
+            const currentValue = this.attachmentValue
+
+            if ( currentValue > bestValue ) {
+                bestValue = currentValue
+                bestIndex = i
+            }
+
+            this.weapon.attachments.pop()
+        }
+
+        if ( bestIndex > -1 ) {
+            equipped.push( attachments[ bestIndex ] )
+        }
+
+        return this.calculateBestAttachments( equipped, leftovers )
+    }
+
+    /**
+     * Adds the given confectance index. This is handled by MapUnit.
+     * @param amount The amount to change the confectance index by. This can be negative.
+     */
+    changeConfectance ( amount: number ) {
+        dispatchEvent( new CustomEvent( "doll_gainConfectance", {
+            bubbles: true,
+            detail: {
+                actor: this,
+                amount
+            }
+        } ) )
+    }
+
+    /**
      * Changes the doll's active weapon. The old weapon will be up for garbage collection because
      * nothing has a reference to it, so there's no need to worry about deletion.
      * @param name The name of the weapon to change to.
@@ -233,7 +289,7 @@ export class Doll extends Unit {
         const critValue = ( this.totalCritDmg - 100 ) / ( 100 / this.crit_rate )
 
         let multipliers = 1
-        if ( ( target.weaknesses & this.ammo_type ) === this.ammo_type ) multipliers += 0.1
+        if ( target.weaknesses & this.ammo_type ) multipliers += 0.1
 
         const rawDamage = scaledAttack * multipliers * critValue * skillModifier
 
@@ -247,6 +303,18 @@ export class Doll extends Unit {
     }
 
     /**
+     * Provides this doll with an extra action. This is handled in MapUnit.
+     */
+    doExtraAction () {
+        dispatchEvent( new CustomEvent( "doll_extraAction", {
+            bubbles: true,
+            detail: {
+                actor: this
+            }
+        } ) )
+    }
+
+    /**
      * The doll's passive ability. Needs to be overridden by any descendants. Note that any passives
      * that are based on actions should be instead dealt with in the "handleEvent" function.
      * @param event The type of event.
@@ -255,22 +323,14 @@ export class Doll extends Unit {
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     handleEvent ( map: MapField, event: MapEvent, args: MapEventArgs ) { }
 
-    /**
-     * Calculates the amount of damage taken.
-     * @param damage The amount of damage received.
-     */
-    receiveDamage ( damage: number ) {
-        this.currentHealth -= damage
-    }
-
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    skill1 ( field: MapField, target: Enemy ): number { return 0 }
+    skill1 ( field: MapField, target: Enemy, actor: MapUnit ): number { return 0 }
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    skill2 ( field: MapField, target: Enemy ): number { return 0 }
+    skill2 ( field: MapField, target: Enemy, actor: MapUnit ): number { return 0 }
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    skill3 ( field: MapField, target: Enemy ): number { return 0 }
+    skill3 ( field: MapField, target: Enemy, actor: MapUnit ): number { return 0 }
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    skill4 ( field: MapField, target: Enemy ): number { return 0 }
+    skill4 ( field: MapField, target: Enemy, actor: MapUnit ): number { return 0 }
 
     toJSON () {
         return {
@@ -280,6 +340,7 @@ export class Doll extends Unit {
             fixed_keys: this.fixed_keys,
             fortifications: this.fortifications,
             neural_helix: this.neural_helix,
+            name: this.name,
             universal_keys: this.universal_keys,
             weapon: this.weapon.toJSON()
         }

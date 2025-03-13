@@ -1,7 +1,6 @@
 import type { Attachment } from "@/types/attachments"
 import type { MapField } from "./map-field"
 import type { MapEvent, MapEventArgs } from "@/utils/defs"
-import type { Doll } from "./doll"
 
 interface WeaponParams {
     attack: number
@@ -416,13 +415,6 @@ export const PechenegSP = new Weapon( {
 export const Planeta = new Weapon( {
     attack: 376,
     crit_dmg: 25,
-    handleEvent: ( map: MapField, event: MapEvent, args: MapEventArgs ) => {
-        const doll = args.actor as Doll
-
-        if ( doll.currentHealth === doll.totalHealth ) {
-            // map.
-        }
-    },
     name: "Planeta",
     type: 0
 } )
@@ -478,6 +470,14 @@ export const Scylla = new Weapon( {
     attack_boost: 15,
     name: "Scylla",
     type: 0,
+    unconfirmed: true
+} )
+
+export const SilverwingDreamwarden = new Weapon( {
+    attack: 390,
+    attack_boost: 15,
+    name: "Silverwing Dreamwarden",
+    type: 6,
     unconfirmed: true
 } )
 
@@ -613,6 +613,7 @@ export const Weapons = [
     RobinsonModularRifle,
     Samosek,
     Scylla,
+    SilverwingDreamwarden,
     SportivoCalibro12,
     StarfallSpark,
     Stechkin,

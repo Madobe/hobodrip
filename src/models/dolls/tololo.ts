@@ -1,8 +1,10 @@
+import { MapField } from "../map-field";
+import MapUnit from "../map-unit";
+
 import { Doll } from "../doll";
 import { Enemy } from "../enemy";
 import { Planeta } from "../weapon";
 import { DollType, MapEvent, Weakness, WeaponTypes, type MapEventArgs } from "@/utils/defs";
-import type { MapField } from "../map-field";
 
 class DollTololo extends Doll {
     readonly attack = 836
@@ -18,8 +20,6 @@ class DollTololo extends Doll {
     readonly weaponType = WeaponTypes.AR
 
     private lightspike = 0
-
-    confectance = 6
 
     constructor() {
         super( { weapon: Planeta } )
@@ -68,6 +68,22 @@ class DollTololo extends Doll {
     }
 
     /**
+     * V5: The effects of Lightspike is enhanced, increasing critical rate and critical damage by 2%.
+     */
+    get totalCritRate () {
+        const lightspikeBoost = ( this.fortifications >= 5 ? 0.7 : 0.5 ) * this.lightspike
+        return super.totalCritRate + lightspikeBoost
+    }
+
+    /**
+     * V5: The effects of Lightspike is enhanced, increasing critical rate and critical damage by 2%.
+     */
+    get totalCritDmg () {
+        const lightspikeBoost = ( this.fortifications >= 5 ? 0.7 : 0.5 ) * this.lightspike
+        return super.totalCritDmg + lightspikeBoost
+    }
+
+    /**
      * Fills Confectance Index to maximum at the start of the battle. After attacking, if
      * Confectance Index is at max, consumes all of it and gains 1 instance of Extra Action. At the
      * start of each action, for every 2 points of Confectance Index, gains 1 random buff until the
@@ -88,33 +104,17 @@ class DollTololo extends Doll {
         }
 
         if ( args.actor === this && ( event & MapEvent.KILLED_TARGET ) === MapEvent.KILLED_TARGET ) {
-            this.confectance += 1
+            this.changeConfectance( 1 )
         }
 
         if (
             args.actor === this &&
             ( event & MapEvent.DOLL_ATTACK ) === MapEvent.DOLL_ATTACK &&
-            this.confectance >= 6
+            args.confectance >= 6
         ) {
-            this.confectance = 0
+            this.changeConfectance( -args.confectance )
             // Grant extra action
         }
-    }
-
-    /**
-     * V5: The effects of Lightspike is enhanced, increasing critical rate and critical damage by 2%.
-     */
-    get totalCritRate () {
-        const lightspikeBoost = ( this.fortifications >= 5 ? 0.7 : 0.5 ) * this.lightspike
-        return super.totalCritRate + lightspikeBoost
-    }
-
-    /**
-     * V5: The effects of Lightspike is enhanced, increasing critical rate and critical damage by 2%.
-     */
-    get totalCritDmg () {
-        const lightspikeBoost = ( this.fortifications >= 5 ? 0.7 : 0.5 ) * this.lightspike
-        return super.totalCritDmg + lightspikeBoost
     }
 
     /**
@@ -133,8 +133,16 @@ class DollTololo extends Doll {
      * Fixed Key: Apply Congestion for 2 turns.
      */
     skill2 ( field: MapField, target: Enemy ) {
-        if ( target.weaknesses & ( this.ammo_type | Weakness.HYDRO ) ) this.confectance += 2
-        return this.doAttack( field, target, 1.3 )
+        let multiplier = 1.3
+
+        if ( target.weaknesses & ( this.ammo_type | Weakness.HYDRO ) ) {
+            // Need to raise Confectance externally because otherwise it causes a recursion
+            // this.confectance += 2
+        }
+
+        if ( target.weaknesses & Weakness.HYDRO ) multiplier += 0.1
+
+        return this.doAttack( field, target, multiplier )
     }
 
     /**
@@ -145,9 +153,21 @@ class DollTololo extends Doll {
      * V2: If the user has 3 or more buffs, this attack deal Hydro damage, and the user gains an
      * additional 1 point of Confectance Index.
      */
-    skill3 ( field: MapField, target: Enemy ) {
-        if ( field && target ) return 0
-        return 0
+    skill3 ( field: MapField, target: Enemy, actor: MapUnit ) {
+        let multiplier = 1.3
+
+        if ( actor && actor.buffs.length >= 3 && ( target.weaknesses & Weakness.HYDRO ) ) {
+            // this.confectance++
+        }
+
+        if ( actor && actor.buffs.length >= 2 ) {
+            // this.confectance += 2
+            multiplier += 0.2
+
+            if ( this.fortifications >= 2 && target.weaknesses & Weakness.HYDRO ) multiplier += 0.1
+        }
+
+        return this.doAttack( field, target, multiplier )
     }
 
     /**
@@ -159,9 +179,16 @@ class DollTololo extends Doll {
      * V6: If this kills the target, gain 1 point of Confectance Index. (Note: This is handled
      * in handleEvent.)
      */
-    skill4 ( field: MapField, target: Enemy ) {
-        if ( field && target ) return 0
-        return 0
+    skill4 ( field: MapField, target: Enemy, actor: MapUnit ) {
+        let multiplier = 1.8
+
+        if ( this.fortifications >= 3 && actor && actor.buffs.length >= 3 ) {
+            multiplier += 0.15
+        }
+
+        if ( target.weaknesses & Weakness.HYDRO ) multiplier += 0.1
+
+        return this.doAttack( field, target, multiplier )
     }
 }
 

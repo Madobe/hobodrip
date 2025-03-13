@@ -1,27 +1,25 @@
-import { DefaultEnemy, type Enemy } from "../enemy";
-import { EmptyMapField, type MapField } from "../map-field";
+import type { Enemy } from "../enemy";
+import type { MapField } from "../map-field";
 
 import { Doll } from "../doll";
-import { Aglaea } from "../weapon";
-import { DollRarity, DollType, Weakness, WeaponTypes } from "@/utils/defs";
+import { Unstoppable } from "../weapon";
+import { DollType, Weakness, WeaponTypes } from "@/utils/defs";
 
-class DollAndoris extends Doll {
+class DollZhaohui extends Doll {
     readonly attack = 591
     readonly best_set = "Allay Support"
     readonly defense = 642
     readonly health = 2288
-    readonly img_path = "/src/assets/images/dolls/Andoris.png"
-    readonly movement = 6
-    readonly name = "Andoris"
-    readonly rarity = DollRarity.ELITE
-    readonly stability = 12
+    readonly img_path = "/src/assets/images/dolls/Zhaohui.png"
+    readonly name = "Zhaohui"
+    readonly rarity = 1
     readonly stat_order = [ "Health Boost", "Defense Boost", "Health", "Defense" ]
     readonly type = DollType.BULWARK
     readonly weaknesses = Weakness.AMMO_HEAVY & Weakness.CORROSION
     readonly weaponType = WeaponTypes.AR
 
     constructor() {
-        super( { weapon: Aglaea } )
+        super( { weapon: Unstoppable } )
     }
 
     get affinityStats () {
@@ -41,21 +39,17 @@ class DollAndoris extends Doll {
         return stats
     }
 
-    get attachmentValue () {
-        return this.skill1( EmptyMapField, DefaultEnemy )
-    }
-
     get neuralHelixStats () {
         const stats = this.defaultStatsObject
 
         switch ( this.neural_helix ) {
             default:
-            case 6: stats.attack += 45; stats.health += 173
-            case 5: stats.attack += 39; stats.defense += 49
-            case 4: stats.health += 133; stats.health_boost += 5
-            case 3: stats.attack += 33; stats.defense += 37
-            case 2: stats.health += 96; stats.health_boost += 5
-            case 1: stats.attack += 28; stats.defense += 27
+            case 6: stats.attack += 58; stats.health += 127
+            case 5: stats.attack += 50; stats.defense += 38
+            case 4: stats.health += 97; stats.crit_dmg += 10
+            case 3: stats.attack += 43; stats.defense += 29
+            case 2: stats.health += 71; stats.attack_boost += 5
+            case 1: stats.attack += 35; stats.defense += 21
             case 0: break
         }
 
@@ -72,8 +66,8 @@ class DollAndoris extends Doll {
     /**
      *
      */
-    skill2 () {
-        return 0
+    skill2 ( field: MapField, target: Enemy ) {
+        return this.doAttack( field, target )
     }
 
     /**
@@ -91,4 +85,4 @@ class DollAndoris extends Doll {
     }
 }
 
-export default new DollAndoris
+export default new DollZhaohui

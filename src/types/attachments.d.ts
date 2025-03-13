@@ -10,9 +10,10 @@ export interface ActiveDoll {
 
 export interface Attachment {
     equipped: boolean
+    name: string
     set: string
     stats: Stat[]
-    type: string
+    type: number
 }
 
 export interface AttachmentType {

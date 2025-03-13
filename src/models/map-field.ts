@@ -1,3 +1,5 @@
+import type { Debuff } from "@/utils/defs"
+
 interface CellOptions {
     coverBottom?: boolean
     coverLeft?: boolean
@@ -24,4 +26,11 @@ export class Cell {
 
 export class MapField {
     cells = [] as Cell[]
+
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+    getUnitsWithDebuff ( debuff: Debuff ) {
+        return 0
+    }
 }
+
+export const EmptyMapField = new MapField

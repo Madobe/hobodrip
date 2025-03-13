@@ -14,6 +14,10 @@ export enum Buff {
     BURNING_ASSAULT_I
 }
 
+export enum Debuff {
+    NEGATIVE_CHARGE
+}
+
 export enum DollRarity {
     STANDARD,
     ELITE
@@ -78,36 +82,42 @@ export const ATTACHMENT_SETS = [
 /**
  * The types of attachments that are possible.
  */
-export const ATTACHMENT_TYPES = [
-    "AR Muzzle",
-    "AR Sight",
-    "AR Foregrip",
-    "AR Underbarrel",
-    "Blade Edge",
-    "Blade Adjuster",
-    "Special Link",
-    "Special Latch",
-    "HG Muzzle",
-    "HG Sight",
-    "HG Link",
-    "HG Latch",
-    "SMG Muzzle",
-    "SMG Sight",
-    "SMG Foregrip",
-    "SMG Underbarrel",
-    "SG Muzzle",
-    "SG Sight",
-    "SG Link",
-    "SG Latch",
-    "MG Muzzle",
-    "MG Sight",
-    "MG Bipod",
-    "MG Underbarrel",
-    "RF Muzzle",
-    "RF Sight",
-    "RF Bipod",
-    "RF Underbarrel",
-]
+export const ATTACHMENT_TYPES: {
+    [ key: string ]: {
+        slot: number,
+        type: WeaponTypes
+    }
+} = {
+    "AR Muzzle": { slot: 0, type: WeaponTypes.AR },
+    "AR Sight": { slot: 1, type: WeaponTypes.AR },
+    "AR Foregrip": { slot: 2, type: WeaponTypes.AR },
+    "AR Underbarrel": { slot: 3, type: WeaponTypes.AR },
+    "Blade Edge": { slot: 0, type: WeaponTypes.BLD },
+    "Blade Adjuster": { slot: 1, type: WeaponTypes.BLD },
+    "Special Link": { slot: 2, type: WeaponTypes.BLD },
+    "Special Latch": { slot: 3, type: WeaponTypes.BLD },
+    "HG Muzzle": { slot: 0, type: WeaponTypes.HG },
+    "HG Sight": { slot: 1, type: WeaponTypes.HG },
+    "HG Link": { slot: 2, type: WeaponTypes.HG },
+    "HG Latch": { slot: 3, type: WeaponTypes.HG },
+    "MG Muzzle": { slot: 0, type: WeaponTypes.MG },
+    "MG Sight": { slot: 1, type: WeaponTypes.MG },
+    "MG Bipod": { slot: 2, type: WeaponTypes.MG },
+    "MG Underbarrel": { slot: 3, type: WeaponTypes.MG },
+    "SG Muzzle": { slot: 0, type: WeaponTypes.SG },
+    "SG Sight": { slot: 1, type: WeaponTypes.SG },
+    "SG Link": { slot: 2, type: WeaponTypes.SG },
+    "SG Latch": { slot: 3, type: WeaponTypes.SG },
+    "SMG Muzzle": { slot: 0, type: WeaponTypes.SMG },
+    "SMG Sight": { slot: 1, type: WeaponTypes.SMG },
+    "SMG Foregrip": { slot: 2, type: WeaponTypes.SMG },
+    "SMG Underbarrel": { slot: 3, type: WeaponTypes.SMG },
+    "RF Muzzle": { slot: 0, type: WeaponTypes.RF },
+    "RF Sight": { slot: 1, type: WeaponTypes.RF },
+    "RF Bipod": { slot: 2, type: WeaponTypes.RF },
+    "RF Underbarrel": { slot: 3, type: WeaponTypes.RF },
+}
+
 
 /**
  * The stats that an attachment can have.
@@ -128,5 +138,6 @@ export const AVAILABLE_STATS = [
  */
 export interface MapEventArgs {
     actor: Unit,
+    confectance: number,
     element?: Weakness
 }
