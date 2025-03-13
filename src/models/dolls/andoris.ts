@@ -10,7 +10,7 @@ class DollAndoris extends Doll {
     readonly best_set = "Allay Support"
     readonly defense = 642
     readonly health = 2288
-    readonly img_path = "@/src/assets/images/dolls/Andoris.png"
+    readonly img_path = "/images/dolls/Andoris.png"
     readonly movement = 6
     readonly name = "Andoris"
     readonly rarity = DollRarity.ELITE

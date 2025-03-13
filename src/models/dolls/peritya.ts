@@ -10,7 +10,7 @@ class DollPeritya extends Doll {
     readonly best_set = "Corrosion Boost"
     readonly defense = 536
     readonly health = 1948
-    readonly img_path = "/src/assets/images/dolls/Peritya.png"
+    readonly img_path = "/images/dolls/Peritya.png"
     readonly name = "Peritya"
     readonly rarity = DollRarity.ELITE
     readonly stability = 9

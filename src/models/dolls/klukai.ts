@@ -10,7 +10,7 @@ class DollKlukai extends Doll {
     readonly best_set = "Corrosion Boost"
     readonly defense = 504
     readonly health = 1893
-    readonly img_path = "/src/assets/images/dolls/Klukai.png"
+    readonly img_path = "/images/dolls/Klukai.png"
     readonly movement = 6
     readonly name = "Klukai"
     readonly rarity = DollRarity.ELITE

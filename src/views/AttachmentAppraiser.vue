@@ -4,13 +4,6 @@ import { storeToRefs } from 'pinia';
 import { createWorker } from 'tesseract.js';
 import { reactive } from 'vue';
 
-import helix1 from '@/assets/images/helix1.png'
-import helix2 from '@/assets/images/helix2.png'
-import helix3 from '@/assets/images/helix3.png'
-import helix4 from '@/assets/images/helix4.png'
-import helix5 from '@/assets/images/helix5.png'
-import helix6 from '@/assets/images/helix6.png'
-
 import type { Doll } from "@/models/doll";
 import type { Attachment, Stat, Weapon } from '@/types/attachments';
 
@@ -22,7 +15,6 @@ import { useAttachmentsStore } from '@/stores/attachments';
 import { ATTACHMENT_SETS, ATTACHMENT_TYPES, AVAILABLE_STATS, WeaponTypes } from '@/utils/defs';
 import AttachmentCreatorModal from '@/components/AttachmentCreatorModal.vue';
 
-const helixImgs = [ "", helix1, helix2, helix3, helix4, helix5, helix6 ]
 const weaponsByType = Object.groupBy( Weapons, weapon => weapon.type )
 
 const toasts: {
@@ -368,7 +360,7 @@ document.onpaste = function ( event ) {
                                 <!-- Desktop setters -->
                                 <div class="d-none d-md-flex flex-row">
                                     <div class="me-1" style="width: 25px;">
-                                        <img class="img-fluid" :src="helixImgs[ addedDoll.neural_helix ]">
+                                        <img class="img-fluid" :src="`helix${addedDoll.neural_helix}.png`">
                                     </div>
                                     <input type="range" class="form-range" min="0" max="6"
                                         v-model.number="addedDoll.neural_helix">

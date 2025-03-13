@@ -10,7 +10,7 @@ class DollCentaureissi extends Doll {
     readonly best_set = "Emergency Repair"
     readonly defense = 585
     readonly health = 1893
-    readonly img_path = "/src/assets/images/dolls/Centaureissi.png"
+    readonly img_path = "/images/dolls/Centaureissi.png"
     readonly movement = 6
     readonly name = "Centaureissi"
     readonly rarity = DollRarity.ELITE

@@ -12,7 +12,7 @@ class DollUllrid extends Doll {
     readonly crit_rate = 40
     readonly defense = 528
     readonly health = 1519
-    readonly img_path = "/src/assets/images/dolls/Ullrid.png"
+    readonly img_path = "/images/dolls/Ullrid.png"
     readonly movement = 9
     readonly name = "Ullrid"
     readonly rarity = DollRarity.ELITE

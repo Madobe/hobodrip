@@ -10,7 +10,7 @@ class DollDushevnaya extends Doll {
     readonly best_set = "Phase Strike"
     readonly defense = 585
     readonly health = 1851
-    readonly img_path = "/src/assets/images/dolls/Dushevnaya.png"
+    readonly img_path = "/images/dolls/Dushevnaya.png"
     readonly movement = 6
     readonly name = "Dushevnaya"
     readonly rarity = DollRarity.ELITE

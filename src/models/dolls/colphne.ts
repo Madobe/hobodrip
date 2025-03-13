@@ -10,7 +10,7 @@ class DollColphne extends Doll {
     readonly best_set = "Emergency Repair"
     readonly defense = 503
     readonly health = 1787
-    readonly img_path = "/src/assets/images/dolls/Colphne.png"
+    readonly img_path = "/images/dolls/Colphne.png"
     readonly movement = 7
     readonly name = "Colphne"
     readonly rarity = DollRarity.STANDARD

@@ -6,39 +6,12 @@ import { useTeamsStore } from "@/stores/teams"
 import DollFigure from "@/components/DollFigure.vue"
 import SetChangeModal from "@/components/SetChangeModal.vue"
 import JSONModal from "@/components/JSONModal.vue"
+import Dolls from "@/models/dolls/dolls-list"
+import { Doll } from "@/models/doll"
+import { Weapons } from "@/models/weapon"
 
-const hyphenatedDollNames = [
-    "Mosin-Nagant"
-]
+const PlaceholderDoll = new Doll( { weapon: Weapons[ 0 ] } )
 const teams = useTeamsStore()
-
-const files: Record<string, string> = import.meta.glob(
-    "@/assets/images/dolls/*.png",
-    { eager: true, import: "default" },
-)
-const paths = Object.values( files )
-const dolls = paths.map( ( path: string ) => {
-    let doll = path.replace( /^.*[\\/](.+).png$/, "$1" )
-
-    for ( let i = 0; i < hyphenatedDollNames.length; i++ ) {
-        if ( doll.includes( hyphenatedDollNames[ i ] ) ) return hyphenatedDollNames[ i ]
-    }
-
-    doll = doll.replace( /-.*/, "" )
-
-    return doll
-} )
-const dollsToPaths = dolls.reduce( ( accumulator, doll, i ) => {
-    return Object.assign( accumulator, {
-        [ doll ]: paths[ i ]
-    } )
-}, {} )
-
-const dollsPerRow = 4
-const dollsByFours: string[][] = []
-for ( let i = 0; i < dolls.length; i += dollsPerRow ) {
-    dollsByFours.push( dolls.slice( i, i + dollsPerRow ) )
-}
 
 // Initialize the store's saved teams from the local storage
 const validator = new Validator()
@@ -130,11 +103,11 @@ function isSupport ( doll: string ) {
                         Hint: Hold Shift while clicking a doll to mark her as not available
                     </div>
                 </div>
-                <div class="row" v-for=" ( dolls, i ) in dollsByFours " v-bind:key="`team-${i}`">
-                    <div class="col-12 col-md-3" v-for=" doll in dolls " v-bind:key="`team-${i}-${doll}`">
-                        <DollFigure :doll="doll" :dollsToPaths="dollsToPaths" :isSupport="isSupport( doll )" select
-                            :selectedTeam="teams.selectedTeam" :supportTeams="getSupportTeams( doll )"
-                            :teams="getMainTeams( doll )" @dollSelect="teams.selectDoll( doll )"></DollFigure>
+                <div class="row g-3">
+                    <div class="col-12 col-md-3" v-for=" doll in Dolls " v-bind:key="doll.name">
+                        <DollFigure :doll="doll" :isSupport="isSupport( doll.name )" select
+                            :selectedTeam="teams.selectedTeam" :supportTeams="getSupportTeams( doll.name )"
+                            :teams="getMainTeams( doll.name )" @dollSelect="teams.selectDoll( doll.name )"></DollFigure>
                     </div>
                 </div>
             </div>
@@ -151,7 +124,8 @@ function isSupport ( doll: string ) {
                             <span class="text-center fw-bold pb-3 user-select-none">Team {{ team }}</span>
                         </div>
                         <div v-for=" ( slot, b ) in 5 " v-bind:key="`slot-${b}`">
-                            <DollFigure :doll="teams.selectedDolls[ a * 5 + b ]" :dollsToPaths="dollsToPaths"
+                            <DollFigure
+                                :doll="Dolls.find( d => d.name === teams.selectedDolls[ a * 5 + b ] ) || PlaceholderDoll"
                                 :index="a * 5 + b" @dollDeselect="teams.deselectDoll">
                             </DollFigure>
                         </div>

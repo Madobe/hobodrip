@@ -10,7 +10,7 @@ class DollVepley extends Doll {
     readonly best_set = "Ballistic Boost"
     readonly defense = 528
     readonly health = 1851
-    readonly img_path = "/src/assets/images/dolls/Vepley.png"
+    readonly img_path = "/images/dolls/Vepley.png"
     readonly movement = 8
     readonly name = "Vepley"
     readonly rarity = DollRarity.ELITE

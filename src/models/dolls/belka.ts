@@ -10,7 +10,7 @@ class DollBelka extends Doll {
     readonly best_set = "Electric Boost"
     readonly defense = 528
     readonly health = 1770
-    readonly img_path = "/src/assets/images/dolls/Belka.png"
+    readonly img_path = "/images/dolls/Belka.png"
     readonly movement = 9
     readonly name = "Belka"
     readonly rarity = DollRarity.ELITE

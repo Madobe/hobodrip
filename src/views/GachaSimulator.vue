@@ -6,7 +6,6 @@ import { ref, computed, onMounted, watch } from "vue"
 import { Pie } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js'
 
-import banner from "@/assets/images/banner.jpg"
 import supply from "@/assets/data/gacha-db.json"
 
 import { getRandomElement } from "@/utils/array"
@@ -379,7 +378,7 @@ const pieOptions = {
             </div>
             <div class="col-md-8 p-0 border border-secondary order-0 order-md-1">
                 <div class="position-relative">
-                    <img class="img-fluid" :src="banner" alt="Current banner">
+                    <img class="img-fluid" src="/images/banner.jpg" alt="Current banner">
                     <button class="btn btn-danger m-2 position-absolute bottom-0 start-0" @click="resetPulls"
                         style="width: 80px;">Reset</button>
                 </div>
@@ -393,7 +392,7 @@ const pieOptions = {
                             <div class="container d-flex justify-content-between">
                                 <span>Elites: </span>
                                 <span>{{ pulls.elites }} ({{ ( pulls.elites / pulls.total * 100 || 0 ).toFixed( 2 )
-                                }}%)</span>
+                                    }}%)</span>
                             </div>
                             <div class="container d-flex justify-content-between">
                                 <span>Standards: </span>

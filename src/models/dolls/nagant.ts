@@ -10,7 +10,7 @@ class DollNagant extends Doll {
     readonly best_set = "Phase Strike"
     readonly defense = 512
     readonly health = 1656
-    readonly img_path = "/src/assets/images/dolls/Nagant.png"
+    readonly img_path = "/images/dolls/Nagant.png"
     readonly movement = 6
     readonly name = "Nagant"
     readonly rarity = DollRarity.STANDARD

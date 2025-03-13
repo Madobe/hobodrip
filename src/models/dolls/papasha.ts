@@ -10,7 +10,7 @@ class DollPapasha extends Doll {
     readonly best_set = "Ballistic Boost"
     readonly defense = 528
     readonly health = 1893
-    readonly img_path = "/src/assets/images/dolls/Papasha.png"
+    readonly img_path = "/images/dolls/Papasha.png"
     readonly name = "Papasha"
     readonly rarity = DollRarity.ELITE
     readonly stability = 9

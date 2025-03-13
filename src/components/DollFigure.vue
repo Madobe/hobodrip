@@ -1,13 +1,11 @@
 <script setup lang="ts">
+import type { Doll } from "@/models/doll";
 import { computed, reactive } from "vue"
-
-import placeholderImg from "@/assets/images/placeholder.png"
 
 const emit = defineEmits( [ "dollDeselect", "dollSelect" ] )
 const props = withDefaults(
     defineProps<{
-        doll: string
-        dollsToPaths: { [ x: string ]: string },
+        doll: Doll
         index?: number
         isSupport?: boolean
         select?: boolean
@@ -26,17 +24,14 @@ const props = withDefaults(
 const greyedOut = reactive( new Set<string> )
 
 const selectDoll = () => {
-    if ( !greyedOut.has( props.doll ) ) {
+    if ( !greyedOut.has( props.doll.name ) ) {
         if ( props.select ) emit( "dollSelect", props.doll )
         else emit( "dollDeselect", props.index )
     }
 }
 
 const src = computed( () => {
-    const key = props.doll as keyof typeof props.dollsToPaths
-    const path = props.dollsToPaths[ key ]
-
-    return path || placeholderImg
+    return props.doll.img_path || "/images/placeholder.png"
 } )
 
 const supportBadgeClasses = computed( () => {
@@ -57,10 +52,10 @@ const toggleGreyedOut = ( doll: string ) => {
 </script>
 
 <template>
-    <figure class="figure position-relative" @click.exact="selectDoll()" @click.shift="toggleGreyedOut( doll )">
+    <figure class="figure position-relative" @click.exact="selectDoll()" @click.shift="toggleGreyedOut( doll.name )">
         <img :class="[ 'img-fluid rounded mx-auto d-block user-select-none',
-            select ? 'bg-secondary' : '', !!teams.length ? 'opacity-25' : '', greyedOut.has( doll ) ? 'opacity-25' : '' ]"
-            :src="src" :alt="doll" />
+            select ? 'bg-secondary' : '', !!teams.length ? 'opacity-25' : '', greyedOut.has( doll.name ) ? 'opacity-25' : '' ]"
+            :src="src" :alt="doll.name" />
         <template v-for=" ( team, i ) in teams " v-bind:key="i">
             <span v-if=" !!teams.length " :class="[ `badge rounded-pill position-absolute top-0`,
                 selectedTeam === team - 1 ? 'text-bg-primary' : '' ]">
@@ -71,7 +66,7 @@ const toggleGreyedOut = ( doll: string ) => {
             S
         </span>
         <figcaption class="d-none d-md-block figure-caption text-center user-select-none">
-            {{ doll || "&nbsp;" }}
+            {{ doll.name || "&nbsp;" }}
         </figcaption>
     </figure>
 </template>

@@ -10,7 +10,7 @@ class DollSpringfield extends Doll {
     readonly best_set = "Hydro Boost"
     readonly defense = 585
     readonly health = 1909
-    readonly img_path = "/src/assets/images/dolls/Springfield.png"
+    readonly img_path = "/images/dolls/Springfield.png"
     readonly name = "Springfield"
     readonly rarity = DollRarity.ELITE
     readonly stat_order = [ "Health Boost", "Health", "Crit Rate", "Crit DMG" ]

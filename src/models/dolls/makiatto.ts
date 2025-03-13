@@ -10,7 +10,7 @@ class DollMakiatto extends Doll {
     readonly best_set = "Freeze Boost"
     readonly defense = 504
     readonly health = 1819
-    readonly img_path = "/src/assets/images/dolls/Makiatto.png"
+    readonly img_path = "/images/dolls/Makiatto.png"
     readonly movement = 4
     readonly name = "Makiatto"
     readonly rarity = DollRarity.ELITE
