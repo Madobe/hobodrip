@@ -23,9 +23,9 @@ interface GachaSupply {
     weapons: GachaCategory
 }
 
-ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
+ChartJS.register( Title, Tooltip, Legend, ArcElement, CategoryScale )
 
-let modalVideoType = ref(0)
+const modalVideoType = ref( 0 )
 let modalVideoTimeout = 0
 
 const currentRateUps = [
@@ -34,32 +34,32 @@ const currentRateUps = [
     "Krolik"
 ]
 
-const processedSupply = supply.data.reduce<GachaSupply>((accumulator, value) => {
-    switch (value.category) {
+const processedSupply = supply.data.reduce<GachaSupply>( ( accumulator, value ) => {
+    switch ( value.category ) {
         case 0:
             return {
-                dolls: { elites: [...accumulator.dolls.elites, value.name], standards: accumulator.dolls.standards },
+                dolls: { elites: [ ...accumulator.dolls.elites, value.name ], standards: accumulator.dolls.standards },
                 weapons: accumulator.weapons
             }
         case 1:
             return {
-                dolls: { elites: accumulator.dolls.elites, standards: [...accumulator.dolls.standards, value.name] },
+                dolls: { elites: accumulator.dolls.elites, standards: [ ...accumulator.dolls.standards, value.name ] },
                 weapons: accumulator.weapons
             }
         case 2:
             return {
                 dolls: accumulator.dolls,
-                weapons: { elites: [...accumulator.weapons.elites, value.name], standards: accumulator.weapons.standards }
+                weapons: { elites: [ ...accumulator.weapons.elites, value.name ], standards: accumulator.weapons.standards }
             }
         case 3:
             return {
                 dolls: accumulator.dolls,
-                weapons: { elites: accumulator.weapons.elites, standards: [...accumulator.weapons.standards, value.name] }
+                weapons: { elites: accumulator.weapons.elites, standards: [ ...accumulator.weapons.standards, value.name ] }
             }
         default:
             return {
                 dolls: accumulator.dolls,
-                weapons: { elites: accumulator.weapons.elites, standards: [...accumulator.weapons.standards, value.name] }
+                weapons: { elites: accumulator.weapons.elites, standards: [ ...accumulator.weapons.standards, value.name ] }
             }
     }
 }, {
@@ -71,56 +71,56 @@ const processedSupply = supply.data.reduce<GachaSupply>((accumulator, value) => 
         elites: [],
         standards: []
     }
-} as GachaSupply)
-const splashes = supply.data.reduce((accumulator, value) => {
-    return Object.assign(accumulator, { [value.name]: value.splash })
-}, {})
-const allElites = processedSupply.dolls.elites.concat(processedSupply.weapons.elites)
-const allStandards = processedSupply.dolls.standards.concat(processedSupply.weapons.standards)
+} as GachaSupply )
+// const splashes = supply.data.reduce( ( accumulator, value ) => {
+//     return Object.assign( accumulator, { [value.name]: value.splash } )
+// }, {} )
+const allElites = processedSupply.dolls.elites.concat( processedSupply.weapons.elites )
+const allStandards = processedSupply.dolls.standards.concat( processedSupply.weapons.standards )
 const pulls = usePullsStore()
 
-const showElites = ref(true)
-const showStandards = ref(true)
-const showRetired = ref(true)
+const showElites = ref( true )
+const showStandards = ref( true )
+const showRetired = ref( true )
 
 // Constants
 const MAX_PULLS = 1000
 
 // Load pulls and pity counter from localStorage
-onMounted(() => {
-    const savedPulls = localStorage.getItem('hobodrip.gachaPulls')
-    const savedPityCounter = localStorage.getItem('hobodrip.gachaPityCounter')
-    if (savedPulls) {
-        pulls.addPulls(JSON.parse(savedPulls))
+onMounted( () => {
+    const savedPulls = localStorage.getItem( 'hobodrip.gachaPulls' )
+    const savedPityCounter = localStorage.getItem( 'hobodrip.gachaPityCounter' )
+    if ( savedPulls ) {
+        pulls.addPulls( JSON.parse( savedPulls ) )
         // Update the chart and text
         pulls.total = pulls.pulls.length
-        pulls.elites = pulls.pulls.filter(pull => isElite(pull.name)).length
-        pulls.standards = pulls.pulls.filter(pull => isStandard(pull.name)).length
-        pulls.count = pulls.pulls.length ? pulls.pulls[pulls.pulls.length - 1].pity : 0
-        pulls.pity = pulls.pulls.length ? isElite(pulls.pulls[pulls.pulls.length - 1].name) : false
+        pulls.elites = pulls.pulls.filter( pull => isElite( pull.name ) ).length
+        pulls.standards = pulls.pulls.filter( pull => isStandard( pull.name ) ).length
+        pulls.count = pulls.pulls.length ? pulls.pulls[ pulls.pulls.length - 1 ].pity : 0
+        pulls.pity = pulls.pulls.length ? isElite( pulls.pulls[ pulls.pulls.length - 1 ].name ) : false
     }
-    if (savedPityCounter) {
-        pulls.count = JSON.parse(savedPityCounter)
+    if ( savedPityCounter ) {
+        pulls.count = JSON.parse( savedPityCounter )
     }
-})
+} )
 
 // Watch for changes in pulls and pity counter, and save to localStorage
-watch(() => pulls.pulls, (newPulls) => {
-    localStorage.setItem('hobodrip.gachaPulls', JSON.stringify(newPulls))
-}, { deep: true })
+watch( () => pulls.pulls, ( newPulls ) => {
+    localStorage.setItem( 'hobodrip.gachaPulls', JSON.stringify( newPulls ) )
+}, { deep: true } )
 
-watch(() => pulls.count, (newCount) => {
-    localStorage.setItem('hobodrip.gachaPityCounter', JSON.stringify(newCount))
-})
+watch( () => pulls.count, ( newCount ) => {
+    localStorage.setItem( 'hobodrip.gachaPityCounter', JSON.stringify( newCount ) )
+} )
 
 // Methods
 /**
  * Shifts the saved pulls if the limit is reached.
  */
-function shiftPullsIfNeeded() {
-    if (pulls.pulls.length > MAX_PULLS) {
-        pulls.pulls = pulls.pulls.slice(pulls.pulls.length - MAX_PULLS)
-        localStorage.setItem('hobodrip.gachaPulls', JSON.stringify(pulls.pulls))
+function shiftPullsIfNeeded () {
+    if ( pulls.pulls.length > MAX_PULLS ) {
+        pulls.pulls = pulls.pulls.slice( pulls.pulls.length - MAX_PULLS )
+        localStorage.setItem( 'hobodrip.gachaPulls', JSON.stringify( pulls.pulls ) )
     }
 }
 
@@ -128,18 +128,18 @@ function shiftPullsIfNeeded() {
  * Determines whether it's the first time any of the given results have been pulled. If so, get the
  * rarity and play the corresponding movie file in an overlay.
  */
-function checkFirstTime(results: string[]) {
-    results.forEach(item => {
-        if (!pulls.firstTimes[item]) {
-            if (allElites.includes(item)) {
-                showVideo(1)
-                hideVideo(13000)
-            } else if (allStandards.includes(item)) {
-                showVideo(2)
-                hideVideo(12000)
+function checkFirstTime ( results: string[] ) {
+    results.forEach( item => {
+        if ( !pulls.firstTimes[ item ] ) {
+            if ( allElites.includes( item ) ) {
+                showVideo( 1 )
+                hideVideo( 13000 )
+            } else if ( allStandards.includes( item ) ) {
+                showVideo( 2 )
+                hideVideo( 12000 )
             }
         }
-    })
+    } )
 }
 
 /**
@@ -158,45 +158,45 @@ function checkFirstTime(results: string[]) {
  *
  * - Rate for blue trash is 93.4% with the rate shared equally between all trash
  */
-function doSinglePull() {
-    let eliteRate = 0.6 + (5.788 * Math.max(0, pulls.count + 1 - 58))
+function doSinglePull () {
+    let eliteRate = 0.6 + ( 5.788 * Math.max( 0, pulls.count + 1 - 58 ) )
 
     // These rates are just arbitrary assumptions based on the 2 million pulls data on exilium.moe
-    if (pulls.count === 74) eliteRate = 99
-    else if (pulls.count === 75) eliteRate = 99.9
-    else if (pulls.count === 76) eliteRate = 99.99
-    else if (pulls.count === 77) eliteRate = 99.999
-    else if (pulls.count === 78) eliteRate = 99.9999
-    else if (pulls.count === 79) eliteRate = 99.99999
-    else if (pulls.count === 80) eliteRate = 100
+    if ( pulls.count === 74 ) eliteRate = 99
+    else if ( pulls.count === 75 ) eliteRate = 99.9
+    else if ( pulls.count === 76 ) eliteRate = 99.99
+    else if ( pulls.count === 77 ) eliteRate = 99.999
+    else if ( pulls.count === 78 ) eliteRate = 99.9999
+    else if ( pulls.count === 79 ) eliteRate = 99.99999
+    else if ( pulls.count === 80 ) eliteRate = 100
 
     const roll = Math.random() * 100
 
-    if (roll < eliteRate) {
+    if ( roll < eliteRate ) {
         // There's no elite weapon in the doll banner anyway
-        if (Math.random() * 100 < 50) {
+        if ( Math.random() * 100 < 50 ) {
             // Figure out which doll in the elite pool is in the rate up (it is assumed this exists
             // and only one exists)
-            return currentRateUps.filter(d => processedSupply.dolls.elites.includes(d))[0]
+            return currentRateUps.filter( d => processedSupply.dolls.elites.includes( d ) )[ 0 ]
         } else {
-            return getRandomElement(processedSupply.dolls.elites.filter(d => !currentRateUps.includes(d)))
+            return getRandomElement( processedSupply.dolls.elites.filter( d => !currentRateUps.includes( d ) ) )
         }
-    } else if (roll < 6 + eliteRate || pulls.standardPity + 1 >= 10) {
-        if (pulls.standardPity + 1 >= 10) pulls.setStandardPity(0)
-        else pulls.setStandardPity(pulls.standardPity + 1)
+    } else if ( roll < 6 + eliteRate || pulls.standardPity + 1 >= 10 ) {
+        if ( pulls.standardPity + 1 >= 10 ) pulls.setStandardPity( 0 )
+        else pulls.setStandardPity( pulls.standardPity + 1 )
 
-        if (Math.random() * 100 < 50) {
-            const rateUpStandards = currentRateUps.filter(d => processedSupply.dolls.standards.includes(d))
-            return getRandomElement(rateUpStandards)
+        if ( Math.random() * 100 < 50 ) {
+            const rateUpStandards = currentRateUps.filter( d => processedSupply.dolls.standards.includes( d ) )
+            return getRandomElement( rateUpStandards )
         } else {
-            const nonRateUpStandards = processedSupply.dolls.standards.filter(d => !currentRateUps.includes(d))
-            return getRandomElement(nonRateUpStandards)
+            const nonRateUpStandards = processedSupply.dolls.standards.filter( d => !currentRateUps.includes( d ) )
+            return getRandomElement( nonRateUpStandards )
         }
     } else {
-        pulls.setStandardPity(pulls.standardPity + 1)
+        pulls.setStandardPity( pulls.standardPity + 1 )
 
         // Blue trash is "Retired" + any random standard weapon
-        return "Retired " + getRandomElement(processedSupply.weapons.standards)
+        return "Retired " + getRandomElement( processedSupply.weapons.standards )
     }
 }
 
@@ -204,42 +204,42 @@ function doSinglePull() {
  * Hides the video modal.
  * @param time The time in milliseconds to wait before hiding the video.
  */
-function hideVideo(time: number) {
-    if (modalVideoTimeout) clearTimeout(modalVideoTimeout)
+function hideVideo ( time: number ) {
+    if ( modalVideoTimeout ) clearTimeout( modalVideoTimeout )
 
-    modalVideoTimeout = setTimeout(() => {
-        const videoModal = Modal.getInstance("#full-screen-video-modal")
+    modalVideoTimeout = setTimeout( () => {
+        const videoModal = Modal.getInstance( "#full-screen-video-modal" )
 
-        if (videoModal) videoModal.hide()
+        if ( videoModal ) videoModal.hide()
 
         modalVideoType.value = 0
-    }, time)
+    }, time )
 }
 
 /**
  * Determines whether the given pull is of elite quality.
  * @param name The name of the pull result to check.
  */
-function isElite(name: string) {
-    return processedSupply.dolls.elites.includes(name) || processedSupply.weapons.elites.includes(name)
+function isElite ( name: string ) {
+    return processedSupply.dolls.elites.includes( name ) || processedSupply.weapons.elites.includes( name )
 }
 
 /**
  * Determines whether the given pull is of standard quality.
  * @param name The name of the pull result to check.
  */
-function isStandard(name: string) {
-    return processedSupply.dolls.standards.includes(name) || processedSupply.weapons.standards.includes(name)
+function isStandard ( name: string ) {
+    return processedSupply.dolls.standards.includes( name ) || processedSupply.weapons.standards.includes( name )
 }
 
 /**
  * Displays the given video in the video modal.
  * @param type The type of video to show in the modal.
  */
-function showVideo(type: number) {
-    const videoModal = Modal.getInstance("#full-screen-video-modal")
+function showVideo ( type: number ) {
+    const videoModal = Modal.getInstance( "#full-screen-video-modal" )
 
-    if (videoModal) {
+    if ( videoModal ) {
         modalVideoType.value = type
         videoModal.show()
     }
@@ -248,83 +248,83 @@ function showVideo(type: number) {
 /**
  * Resets the saved pulls and pity counter.
  */
-function resetPulls() {
+function resetPulls () {
     pulls.$reset()
-    localStorage.removeItem('hobodrip.gachaPulls')
-    localStorage.removeItem('hobodrip.gachaPityCounter')
+    localStorage.removeItem( 'hobodrip.gachaPulls' )
+    localStorage.removeItem( 'hobodrip.gachaPityCounter' )
 }
 
 // Event handlers
 /**
  * Handles a single pull.
  */
-function handleSingle() {
+function handleSingle () {
     const result = doSinglePull()
     const pity = pulls.count + 1
 
     pulls.increaseCount()
 
-    if (currentRateUps.includes(result) && isElite(result)) {
-        pulls.setPity(false)
+    if ( currentRateUps.includes( result ) && isElite( result ) ) {
+        pulls.setPity( false )
         pulls.increaseElites()
         pulls.resetCount()
-    } else if (isElite(result)) {
-        pulls.setPity(true)
+    } else if ( isElite( result ) ) {
+        pulls.setPity( true )
         pulls.increaseElites()
         pulls.resetCount()
-    } else if (isStandard(result)) {
+    } else if ( isStandard( result ) ) {
         pulls.increaseStandards()
     }
 
-    checkFirstTime([result])
-    pulls.addPulls({ name: result, pity: pity })
+    checkFirstTime( [ result ] )
+    pulls.addPulls( { name: result, pity: pity } )
     shiftPullsIfNeeded() // Shift pulls if needed
-    localStorage.setItem('hobodrip.gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
+    localStorage.setItem( 'hobodrip.gachaPulls', JSON.stringify( pulls.pulls ) ) // Save to localStorage
 }
 
 /**
  * Handles a 10 pull.
  */
-function handleMulti() {
-    const results = Array(10).fill(0).map(() => {
+function handleMulti () {
+    const results = Array( 10 ).fill( 0 ).map( () => {
         const result = doSinglePull()
         const pity = pulls.count + 1
 
         pulls.increaseCount()
 
-        if (currentRateUps.includes(result) && isElite(result)) {
-            pulls.setPity(false)
+        if ( currentRateUps.includes( result ) && isElite( result ) ) {
+            pulls.setPity( false )
             pulls.increaseElites()
             pulls.resetCount()
-        } else if (isElite(result)) {
-            pulls.setPity(true)
+        } else if ( isElite( result ) ) {
+            pulls.setPity( true )
             pulls.increaseElites()
             pulls.resetCount()
-        } else if (isStandard(result)) {
+        } else if ( isStandard( result ) ) {
             pulls.increaseStandards()
         }
 
         return { name: result, pity: pity }
-    })
+    } )
 
-    checkFirstTime(results.map(r => r.name))
-    pulls.addPulls(results)
+    checkFirstTime( results.map( r => r.name ) )
+    pulls.addPulls( results )
     shiftPullsIfNeeded() // Shift pulls if needed
-    localStorage.setItem('hobodrip.gachaPulls', JSON.stringify(pulls.pulls)) // Save to localStorage
+    localStorage.setItem( 'hobodrip.gachaPulls', JSON.stringify( pulls.pulls ) ) // Save to localStorage
 }
 
-const pieData = computed(() => {
+const pieData = computed( () => {
     return {
-        labels: ['Elites', 'Standards', 'Retired'],
+        labels: [ 'Elites', 'Standards', 'Retired' ],
         datasets: [
             {
-                data: [pulls.elites, pulls.standards, pulls.total - pulls.elites - pulls.standards],
-                backgroundColor: ['#ffb348', '#7028e4', '#36A2EB'],
-                hoverBackgroundColor: ['#ffb348', '#7028e4', '#36A2EB']
+                data: [ pulls.elites, pulls.standards, pulls.total - pulls.elites - pulls.standards ],
+                backgroundColor: [ '#ffb348', '#7028e4', '#36A2EB' ],
+                hoverBackgroundColor: [ '#ffb348', '#7028e4', '#36A2EB' ]
             }
         ]
     }
-})
+} )
 
 const pieOptions = {
     plugins: {
@@ -342,7 +342,7 @@ const pieOptions = {
 </script>
 
 <template>
-    <FullScreenVideoModal :type="modalVideoType" @hideVideo="hideVideo(0)"></FullScreenVideoModal>
+    <FullScreenVideoModal :type="modalVideoType" @hideVideo="hideVideo( 0 )"></FullScreenVideoModal>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4 p-0 border border-secondary overflow-y-scroll pull-log order-1 order-md-0">
@@ -363,14 +363,15 @@ const pieOptions = {
                         </button>
                     </div>
                     <div class="container-fluid h-100 p-0">
-                        <div class="container-fluid" v-for="(pull, i) in [...pulls.pulls].reverse()">
-                            <div v-if="(isElite(pull.name) && showElites) || (isStandard(pull.name) && showStandards) || (pull.name.startsWith('Retired') && showRetired)"
-                                :class="['row border-bottom border-secondary py-1',
-                                    isElite(pull.name) ? 'bg-elite' : '',
-                                    isStandard(pull.name) ? 'bg-standard' : '']">
+                        <div class="container-fluid" v-for=" ( pull, i ) in [ ...pulls.pulls ].reverse() "
+                            v-bind:key="`pull-${i}`">
+                            <div v-if=" ( isElite( pull.name ) && showElites ) || ( isStandard( pull.name ) && showStandards ) || ( pull.name.startsWith( 'Retired' ) && showRetired ) "
+                                :class="[ 'row border-bottom border-secondary py-1',
+                                    isElite( pull.name ) ? 'bg-elite' : '',
+                                    isStandard( pull.name ) ? 'bg-standard' : '' ]">
                                 <div class="col-3">{{ pulls.pulls.length - i }}</div>
                                 <div class="col-6">{{ pull.name }}</div>
-                                <div class="col-3" v-if="isElite(pull.name)">Pity: {{ pull.pity }}</div>
+                                <div class="col-3" v-if=" isElite( pull.name ) ">Pity: {{ pull.pity }}</div>
                             </div>
                         </div>
                     </div>
@@ -391,13 +392,14 @@ const pieOptions = {
                             </div>
                             <div class="container d-flex justify-content-between">
                                 <span>Elites: </span>
-                                <span>{{ pulls.elites }} ({{ (pulls.elites / pulls.total * 100 || 0).toFixed(2)
+                                <span>{{ pulls.elites }} ({{ ( pulls.elites / pulls.total * 100 || 0 ).toFixed( 2 )
                                 }}%)</span>
                             </div>
                             <div class="container d-flex justify-content-between">
                                 <span>Standards: </span>
-                                <span>{{ pulls.standards }} ({{ (pulls.standards / pulls.total * 100 || 0).toFixed(2)
-                                }}%)</span>
+                                <span>{{ pulls.standards }} ({{ ( pulls.standards / pulls.total * 100 || 0 ).toFixed( 2
+                                )
+                                    }}%)</span>
                             </div>
                             <div class="container d-flex justify-content-between">
                                 <span>Current Pity: </span>

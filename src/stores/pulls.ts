@@ -5,8 +5,8 @@ export interface Pull {
     pity: number
 }
 
-export const usePullsStore = defineStore("pulls", {
-    state: () => ({
+export const usePullsStore = defineStore( "pulls", {
+    state: () => ( {
         count: 0,
         elites: 0,
         firstTimes: {} as { [name: string]: boolean },
@@ -15,12 +15,12 @@ export const usePullsStore = defineStore("pulls", {
         standardPity: 0,
         standards: 0,
         total: 0,
-    }),
+    } ),
     actions: {
-        addPulls(newPulls: Pull | Pull[]) {
-            const intermediary: Pull[] = ([] as Pull[]).concat(newPulls)
-            intermediary.forEach(doll => (this.firstTimes[doll.name] = true))
-            this.pulls = this.pulls.concat(newPulls)
+        addPulls( newPulls: Pull | Pull[] ) {
+            const intermediary: Pull[] = ( [] as Pull[] ).concat( newPulls )
+            intermediary.forEach( doll => ( this.firstTimes[doll.name] = true ) )
+            this.pulls = this.pulls.concat( newPulls )
         },
         increaseCount() {
             this.count++
@@ -35,11 +35,11 @@ export const usePullsStore = defineStore("pulls", {
         resetCount() {
             this.count = 0
         },
-        setPity(newPity: boolean) {
+        setPity( newPity: boolean ) {
             this.pity = newPity
         },
-        setStandardPity(newPity: number) {
+        setStandardPity( newPity: number ) {
             this.standardPity = newPity
         },
     },
-})
+} )

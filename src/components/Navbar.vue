@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router"
+import { RouterLink } from "vue-router"
 import NavLink from "./NavLink.vue"
 </script>
 
@@ -17,6 +17,7 @@ import NavLink from "./NavLink.vue"
                     <NavLink to="/">Member List</NavLink>
                     <NavLink to="daily-checklist">Daily Checklist</NavLink>
                     <NavLink to="team-builder">Team Builder</NavLink>
+                    <NavLink to="attachment-optimizer">Optimizer</NavLink>
                     <NavLink to="gacha-simulator">Simulator</NavLink>
                     <NavLink to="gift-boxes">Gift Boxes</NavLink>
                 </ul>
