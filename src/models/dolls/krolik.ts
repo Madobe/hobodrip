@@ -10,7 +10,7 @@ class DollKrolik extends Doll {
     readonly best_set = "Phase Strike"
     readonly defense = 463
     readonly health = 1397
-    readonly img_path = "/images/dolls/Krolik.png"
+    readonly img_path = "/hobodrip/images/dolls/Krolik.png"
     readonly movement = 9
     readonly name = "Krolik"
     readonly rarity = DollRarity.STANDARD

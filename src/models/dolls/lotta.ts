@@ -10,7 +10,7 @@ class DollLotta extends Doll {
     readonly best_set = "Freeze Boost"
     readonly defense = 487
     readonly health = 1599
-    readonly img_path = "/images/dolls/Lotta.png"
+    readonly img_path = "/hobodrip/images/dolls/Lotta.png"
     readonly name = "Lotta"
     readonly rarity = DollRarity.STANDARD
     readonly stability = 9

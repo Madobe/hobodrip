@@ -44,7 +44,7 @@ export class Doll extends Unit {
     ammo_type: Weakness = Weakness.AMMO_MEDIUM
     best_set = "" // The best attachment set for this doll
     cooldowns: number[] = [] // The cooldowns for each skill
-    img_path = "/images/placeholder.png" // The path for the doll's selection portrait
+    img_path = "/hobodrip/images/placeholder.png" // The path for the doll's selection portrait
     rarity = DollRarity.STANDARD // The rarity of the doll (0 = Standard, 1 = Elite)
     stat_order: string[] = []
     type: DollType = DollType.BULWARK // The type of doll

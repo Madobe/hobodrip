@@ -10,7 +10,7 @@ class DollMechty extends Doll {
     readonly best_set = "Corrosion Boost"
     readonly defense = 577
     readonly health = 1876
-    readonly img_path = "/images/dolls/Mechty.png"
+    readonly img_path = "/hobodrip/images/dolls/Mechty.png"
     readonly movement = 6
     readonly name = "Mechty"
     readonly rarity = DollRarity.ELITE

@@ -10,7 +10,7 @@ class DollGroza extends Doll {
     readonly best_set = "Allay Support"
     readonly defense = 553
     readonly health = 1981
-    readonly img_path = "/images/dolls/Groza.png"
+    readonly img_path = "/hobodrip/images/dolls/Groza.png"
     readonly movement = 6
     readonly name = "Groza"
     readonly rarity = DollRarity.STANDARD

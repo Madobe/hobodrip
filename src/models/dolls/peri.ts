@@ -10,7 +10,7 @@ class DollPeri extends Doll {
     readonly best_set = "Burn Boost"
     readonly defense = 560
     readonly health = 2191
-    readonly img_path = "/images/dolls/Peri.png"
+    readonly img_path = "/hobodrip/images/dolls/Peri.png"
     readonly movement = 6
     readonly name = "Peri"
     readonly rarity = DollRarity.ELITE

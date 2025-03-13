@@ -10,7 +10,7 @@ class DollQiongjiu extends Doll {
     readonly best_set = "Phase Strike"
     readonly defense = 528
     readonly health = 1893
-    readonly img_path = "/images/dolls/Qiongjiu.png"
+    readonly img_path = "/hobodrip/images/dolls/Qiongjiu.png"
     readonly name = "Qiongjiu"
     readonly rarity = DollRarity.ELITE
     readonly stability = 9

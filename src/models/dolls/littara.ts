@@ -10,7 +10,7 @@ class DollLittara extends Doll {
     readonly best_set = "Ballistic Boost"
     readonly defense = 487
     readonly health = 1656
-    readonly img_path = "/images/dolls/Littara.png"
+    readonly img_path = "/hobodrip/images/dolls/Littara.png"
     readonly name = "Littara"
     readonly rarity = DollRarity.STANDARD
     readonly stability = 9

@@ -10,7 +10,7 @@ class DollMosinNagant extends Doll {
     readonly best_set = "Electric Boost"
     readonly defense = 528
     readonly health = 1859
-    readonly img_path = "/images/dolls/Mosin-Nagant.png"
+    readonly img_path = "/hobodrip/images/dolls/Mosin-Nagant.png"
     readonly movement = 4
     readonly name = "Mosin-Nagant"
     readonly rarity = DollRarity.ELITE

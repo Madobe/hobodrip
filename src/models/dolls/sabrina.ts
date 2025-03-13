@@ -10,7 +10,7 @@ class DollSabrina extends Doll {
     readonly best_set = "Phase Strike"
     readonly defense = 642
     readonly health = 2249
-    readonly img_path = "/images/dolls/Sabrina.png"
+    readonly img_path = "/hobodrip/images/dolls/Sabrina.png"
     readonly movement = 6
     readonly name = "Sabrina"
     readonly rarity = DollRarity.ELITE

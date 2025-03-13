@@ -10,7 +10,7 @@ class DollLenna extends Doll {
     readonly best_set = "Electric Boost"
     readonly defense = 550
     readonly health = 2081
-    readonly img_path = "/images/dolls/Lenna.png"
+    readonly img_path = "/hobodrip/images/dolls/Lenna.png"
     readonly movement = 7
     readonly name = "Lenna"
     readonly rarity = DollRarity.ELITE

@@ -11,7 +11,7 @@ class DollTololo extends Doll {
     readonly best_set = "Hydro Boost"
     readonly defense = 528
     readonly health = 1819
-    readonly img_path = "/images/dolls/Tololo.png"
+    readonly img_path = "/hobodrip/images/dolls/Tololo.png"
     readonly name = "Tololo"
     readonly rarity = 1
     readonly stat_order = [ "Attack Boost", "Attack", "Crit Rate", "Crit DMG" ]

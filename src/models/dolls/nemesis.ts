@@ -10,7 +10,7 @@ class DollNemesis extends Doll {
     readonly best_set = "Phase Strike"
     readonly defense = 463
     readonly health = 1656
-    readonly img_path = "/images/dolls/Nemesis.png"
+    readonly img_path = "/hobodrip/images/dolls/Nemesis.png"
     readonly movement = 4
     readonly name = "Nemesis"
     readonly rarity = DollRarity.STANDARD

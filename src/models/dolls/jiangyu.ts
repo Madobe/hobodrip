@@ -10,7 +10,7 @@ class DollJiangyu extends Doll {
     readonly best_set = "Electric Boost"
     readonly defense = 519
     readonly health = 1932
-    readonly img_path = "/images/dolls/Jiangyu.png"
+    readonly img_path = "/hobodrip/images/dolls/Jiangyu.png"
     readonly name = "Jiangyu"
     readonly rarity = DollRarity.ELITE
     readonly stability = 9

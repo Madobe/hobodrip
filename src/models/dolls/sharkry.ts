@@ -10,7 +10,7 @@ class DollSharkry extends Doll {
     readonly best_set = "Phase Strike"
     readonly defense = 463
     readonly health = 1706
-    readonly img_path = "/images/dolls/Sharkry.png"
+    readonly img_path = "/hobodrip/images/dolls/Sharkry.png"
     readonly name = "Sharkry"
     readonly rarity = DollRarity.STANDARD
     readonly stability = 9

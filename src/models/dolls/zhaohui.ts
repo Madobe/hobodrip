@@ -10,7 +10,7 @@ class DollZhaohui extends Doll {
     readonly best_set = "Allay Support"
     readonly defense = 642
     readonly health = 2288
-    readonly img_path = "/images/dolls/Zhaohui.png"
+    readonly img_path = "/hobodrip/images/dolls/Zhaohui.png"
     readonly name = "Zhaohui"
     readonly rarity = 1
     readonly stat_order = [ "Health Boost", "Defense Boost", "Health", "Defense" ]

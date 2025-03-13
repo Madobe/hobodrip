@@ -10,7 +10,7 @@ class DollKsenia extends Doll {
     readonly best_set = "Emergency Repair"
     readonly defense = 463
     readonly health = 1842
-    readonly img_path = "/images/dolls/Ksenia.png"
+    readonly img_path = "/hobodrip/images/dolls/Ksenia.png"
     readonly movement = 6
     readonly name = "Ksenia"
     readonly rarity = DollRarity.STANDARD

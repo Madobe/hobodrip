@@ -31,7 +31,7 @@ const selectDoll = () => {
 }
 
 const src = computed( () => {
-    return props.doll.img_path || "/images/placeholder.png"
+    return props.doll.img_path || "/hobodrip/images/placeholder.png"
 } )
 
 const supportBadgeClasses = computed( () => {

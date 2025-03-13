@@ -12,7 +12,7 @@ class DollQiuhua extends Doll {
     readonly crit_rate = 30
     readonly defense = 536
     readonly health = 1713
-    readonly img_path = "/images/dolls/Qiuhua.png"
+    readonly img_path = "/hobodrip/images/dolls/Qiuhua.png"
     readonly movement = 9
     readonly name = "Qiuhua"
     readonly rarity = DollRarity.ELITE

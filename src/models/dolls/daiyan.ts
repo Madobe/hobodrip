@@ -11,7 +11,7 @@ class DollDaiyan extends Doll {
     readonly crit_rate = 30
     readonly defense = 504
     readonly health = 1616
-    readonly img_path = "/images/dolls/Daiyan.png"
+    readonly img_path = "/hobodrip/images/dolls/Daiyan.png"
     readonly movement = 9
     readonly name = "Daiyan"
     readonly rarity = DollRarity.ELITE

@@ -12,7 +12,7 @@ class DollFaye extends Doll {
     readonly crit_rate = 30
     readonly defense = 528
     readonly health = 1609
-    readonly img_path = "/images/dolls/Faye.png"
+    readonly img_path = "/hobodrip/images/dolls/Faye.png"
     readonly movement = 9
     readonly name = "Faye"
     readonly rarity = DollRarity.ELITE

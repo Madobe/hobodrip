@@ -10,7 +10,7 @@ class DollNikketa extends Doll {
     readonly best_set = ""
     readonly defense = 519
     readonly health = 1859
-    readonly img_path = "/images/dolls/Nikketa.png"
+    readonly img_path = "/hobodrip/images/dolls/Nikketa.png"
     readonly name = "Nikketa"
     readonly rarity = DollRarity.ELITE
     readonly stability = 9

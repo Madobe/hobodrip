@@ -10,7 +10,7 @@ class DollCheeta extends Doll {
     readonly best_set = "Emergency Support"
     readonly defense = 494
     readonly health = 1842
-    readonly img_path = "/images/dolls/Cheeta.png"
+    readonly img_path = "/hobodrip/images/dolls/Cheeta.png"
     readonly movement = 6
     readonly name = "Cheeta"
     readonly rarity = DollRarity.STANDARD

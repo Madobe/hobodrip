@@ -10,7 +10,7 @@ class DollYoohee extends Doll {
     readonly best_set = "Allay Support"
     readonly defense = 585
     readonly health = 1851
-    readonly img_path = "/images/dolls/Yoohee.png"
+    readonly img_path = "/hobodrip/images/dolls/Yoohee.png"
     readonly name = "Yoohee"
     readonly rarity = DollRarity.ELITE
     readonly stat_order = [ "Attack Boost", "Attack", "Crit Rate", "Crit DMG" ]
