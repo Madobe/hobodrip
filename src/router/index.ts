@@ -35,8 +35,8 @@ const router = createRouter( {
             component: GachaSimulator,
         },
         {
-            path: "/attachment-appraiser",
-            name: "attachment-appraiser",
+            path: "/attachment-optimizer",
+            name: "attachment-optimizer",
             component: AttachmentComparer,
         },
     ],
