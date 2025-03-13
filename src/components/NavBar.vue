@@ -20,6 +20,9 @@ import NavLink from "./NavLink.vue"
                     <NavLink to="attachment-optimizer">Optimizer</NavLink>
                     <NavLink to="gacha-simulator">Simulator</NavLink>
                     <NavLink to="gift-boxes">Gift Boxes</NavLink>
+                    <li class="nav-item">
+                        <a class="nav-link" target="_blank" href="https://ko-fi.com/sakatamakita">Donate</a>
+                    </li>
                 </ul>
             </div>
         </div>
