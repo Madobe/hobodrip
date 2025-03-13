@@ -378,7 +378,7 @@ const pieOptions = {
             </div>
             <div class="col-md-8 p-0 border border-secondary order-0 order-md-1">
                 <div class="position-relative">
-                    <img class="img-fluid" src="/hobodrip/images/banner.jpg" alt="Current banner">
+                    <img class="img-fluid" src="images/banner.jpg" alt="Current banner">
                     <button class="btn btn-danger m-2 position-absolute bottom-0 start-0" @click="resetPulls"
                         style="width: 80px;">Reset</button>
                 </div>
