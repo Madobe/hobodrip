@@ -465,12 +465,11 @@ export const Samosek = new Weapon( {
     type: 6
 } )
 
-export const Scylla = new Weapon( {
+export const Skyll = new Weapon( {
     attack: 390,
     attack_boost: 15,
-    name: "Scylla",
-    type: 0,
-    unconfirmed: true
+    name: "Skyll",
+    type: 0
 } )
 
 export const SilverwingDreamwarden = new Weapon( {
@@ -612,7 +611,7 @@ export const Weapons = [
     Rectrix,
     RobinsonModularRifle,
     Samosek,
-    Scylla,
+    Skyll,
     SilverwingDreamwarden,
     SportivoCalibro12,
     StarfallSpark,

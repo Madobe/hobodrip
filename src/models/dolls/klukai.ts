@@ -2,7 +2,7 @@ import type { Enemy } from "../enemy";
 import type { MapField } from "../map-field";
 
 import { Doll } from "../doll";
-import { Scylla } from "../weapon";
+import { Skyll } from "../weapon";
 import { DollRarity, DollType, Weakness, WeaponTypes } from "@/utils/defs";
 
 class DollKlukai extends Doll {
@@ -20,7 +20,7 @@ class DollKlukai extends Doll {
     readonly weaponType = WeaponTypes.AR
 
     constructor() {
-        super( { weapon: Scylla } )
+        super( { weapon: Skyll } )
     }
 
     get affinityStats () {
