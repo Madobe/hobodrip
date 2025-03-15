@@ -71,7 +71,7 @@ function updateValue ( event: Event, slot: number ) {
                             </select>
                         </div>
                         <template v-for=" n in statCount " v-bind:key="`stat-${n}`">
-                            <div class="col-12">
+                            <div class="col-6">
                                 <label class="form-label">Stat {{ n }}</label>
                                 <select class="form-select" @change="updateStat( $event, n - 1 )" required>
                                     <option v-for=" stat in [ '' ].concat( AVAILABLE_STATS ) " :value="stat"
