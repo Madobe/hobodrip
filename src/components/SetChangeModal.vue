@@ -22,7 +22,7 @@ defineProps<{
                             ? 'bg-primary'
                             : 'bg-secondary',
                         !!i ? 'mt-2' : '',
-                    ]" v-bind:key="`account-${i}`" @click="$emit( 'selectAccount', i )">
+                    ]" :key="`account-${i}`" @click="$emit( 'selectAccount', i )">
                         <div class="form-floating">
                             <input type=" text" class="form-control" :id="`account-name-input-${i}`"
                                 :placeholder="`Account ${i + 1}`" :value="account.name" @input="

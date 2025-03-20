@@ -21,6 +21,9 @@ import { useDollsStore } from '@/stores/active-dolls';
 import { useAttachmentsStore } from '@/stores/attachments';
 import { ATTACHMENT_SETS, ATTACHMENT_TYPES, AVAILABLE_STATS, WeaponTypes } from '@/utils/defs';
 import AttachmentCreatorModal from '@/components/AttachmentCreatorModal.vue';
+import AffinityDisplay from '@/components/AffinityDisplay.vue';
+import { EmptyMapField } from '@/models/map-field';
+import GSFortressTitanRampart from '@/models/enemies/gs-fortress-titan-rampart';
 
 const helixImgs = [ "", helix1, helix2, helix3, helix4, helix5, helix6 ]
 const weaponsByType = Object.groupBy( Weapons, weapon => weapon.type )
@@ -76,6 +79,17 @@ const attachmentViewer = reactive( {
 function addDoll ( doll: Doll ) {
     addedDolls.addDoll( doll )
     Modal.getOrCreateInstance( "#doll-selector-modal" ).hide()
+}
+
+/**
+ * Changes the affinity and covenant status of a doll.
+ * @param doll The doll being modified.
+ * @param affinity The affinity level.
+ * @param covenant Whether or not the doll has been given a covenant ring.
+ */
+function changeAffinity ( doll: Doll, affinity: number, covenant: boolean ) {
+    doll.affinity = affinity
+    doll.covenant = covenant
 }
 
 /**
@@ -289,7 +303,7 @@ document.onpaste = function ( event ) {
     </DollSelectorModal>
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true"
-            v-for=" toast in toasts " :id="toast.id" v-bind:key="toast.id">
+            v-for=" toast in toasts " :id="toast.id" :key="toast.id">
             <div class="d-flex">
                 <div class="toast-body">{{ toast.message }}</div>
                 <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -310,7 +324,7 @@ document.onpaste = function ( event ) {
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center attachment-category"
                             v-for=" ( attachmentType, i ) in Object.keys( ATTACHMENT_TYPES ) "
-                            v-bind:key="`${attachmentType}-${i}`" @click="showAttachmentViewer( attachmentType )">
+                            :key="`${attachmentType}-${i}`" @click="showAttachmentViewer( attachmentType )">
                             {{ attachmentType }}
                             <span class="badge text-bg-primary rounded-pill">
                                 {{ attachments.data[ Math.floor( i / 4 ) ][ i % 4 ].length }}
@@ -320,37 +334,40 @@ document.onpaste = function ( event ) {
                 </div>
             </div>
             <div class="col-12 col-md-9 py-3 doll-boxes">
-                <template v-for=" addedDoll in addedDolls.ordered " v-bind:key="addedDoll.name">
-                    <div class="border border-3 border-secondary-subtle text-secondary-emphasis d-flex flex-row mb-3">
+                <template v-for=" addedDoll in addedDolls.ordered " :key="addedDoll.name">
+                    <div
+                        class="border border-3 border-secondary-subtle text-secondary-emphasis d-flex flex-column flex-md-row mb-3">
                         <div
                             class="d-flex justify-content-center justify-content-md-around flex-column flex-md-row ms-md-3">
-                            <div class="d-flex justify-content-center align-items-center">
+                            <div class="d-flex justify-content-center align-items-center mt-3 mt-md-0">
                                 <input class="text-center" type="text" :value="addedDoll.order"
                                     @input="addedDolls.swapOrder( addedDoll, $event )" min="1"
                                     :max="addedDolls.data.length">
                             </div>
                             <div class="d-flex flex-column justify-content-center align-items-center m-3">
-                                <img :src="addedDoll.img_path" :alt="addedDoll.name"
-                                    :class="[ 'rounded-top', !!addedDoll.rarity ? 'bg-elite' : 'bg-standard' ]">
-                                <div
-                                    class="container-fluid text-bg-light rounded-bottom text-align-center d-flex justify-content-center">
-                                    {{ addedDoll.combatEffectiveness }}
-                                </div>
-                                <button class="w-100 btn btn-danger mt-1"
+                                <AffinityDisplay :doll="addedDoll" @changeAffinity="changeAffinity">
+                                    <img :src="addedDoll.img_path" :alt="addedDoll.name"
+                                        :class="[ 'rounded-top', !!addedDoll.rarity ? 'bg-elite' : 'bg-standard' ]">
+                                    <div
+                                        class="container-fluid text-bg-light rounded-bottom text-align-center d-flex justify-content-center">
+                                        {{ addedDoll.combatEffectiveness }}
+                                    </div>
+                                </AffinityDisplay>
+                                <button class="w-100 btn btn-danger mt-3 mt-md-1"
                                     @click="addedDolls.removeDoll( addedDoll.name )">Remove</button>
                             </div>
                         </div>
                         <div class="container-fluid my-3">
                             <div class="h-100 d-grid gap-2">
                                 <div class="w-100 d-flex flex-column justify-content-around" v-for=" i in 4 "
-                                    v-bind:key="`${addedDoll.name}-${i}`">
+                                    :key="`${addedDoll.name}-${i}`">
                                     <div class="border-bottom my-1" v-if=" !!addedDoll.weapon.attachments[ i - 1 ] ">
                                         {{ addedDoll.weapon.attachments[ i - 1 ].name }}
                                     </div>
                                     <template v-if=" !!addedDoll.weapon.attachments[ i - 1 ] ">
                                         <div class="d-flex justify-content-between"
                                             v-for=" stat in addedDoll.weapon.attachments[ i - 1 ].stats "
-                                            v-bind:key="`${i}-${stat.stat}`">
+                                            :key="`${i}-${stat.stat}`">
                                             <span>{{ stat.stat }}</span>
                                             <span class="d-flex align-items-center text-white">
                                                 {{ stat.value.toFixed( 1 ) }}
@@ -364,49 +381,102 @@ document.onpaste = function ( event ) {
                             </div>
                         </div>
                         <div class="container-fluid my-3 me-3">
+<<<<<<< Updated upstream
                             <div class="h-100 d-flex flex-column justify-content-around">
                                 <!-- Desktop setters -->
                                 <div class="d-none d-md-flex flex-row">
                                     <div class="me-1" style="width: 25px;">
                                         <img class="img-fluid" :src="helixImgs[ addedDoll.neural_helix ]">
+=======
+                            <nav class="nav nav-pills nav-fill" role="tablist">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#doll-stats-tab"
+                                    type="button" role="tab" aria-controls="doll-stats-tab" aria-selected="true">
+                                    Stats
+                                </button>
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#doll-damage-tab"
+                                    type="button" role="tab" aria-controls="doll-damage-tab" aria-selected="false">
+                                    Damage
+                                </button>
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#doll-settings-tab"
+                                    type="button" role="tab" aria-controls="doll-settings-tab" aria-selected="false">
+                                    Settings
+                                </button>
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#doll-keys-tab"
+                                    type="button" role="tab" aria-controls="doll-common-keys-tab" aria-selected="false">
+                                    Keys
+                                </button>
+                            </nav>
+                            <div class="tab-content">
+                                <div id="doll-stats-tab" class="tab-pane fade show active pt-1">
+                                    <div class="d-flex justify-content-between mb-1"
+                                        v-for=" stat in statsToShow( addedDoll ) "
+                                        :key="`${addedDoll.name}-${stat[ 0 ]}`">
+                                        <span>{{ stat[ 0 ] }}</span>
+                                        <span class="text-white">
+                                            {{ Math.floor( stat[ 1 ] as number ) }}
+                                        </span>
+>>>>>>> Stashed changes
                                     </div>
-                                    <input type="range" class="form-range" min="0" max="6"
-                                        v-model.number="addedDoll.neural_helix">
                                 </div>
-                                <div class="container-fluid d-none d-md-flex flex-row">
-                                    <label for="fortifications-range" class="me-2 text-nowrap">
-                                        Fortifications ({{ addedDoll.fortifications }})
-                                    </label>
-                                    <input id="fortifications-range" type="range" class="form-range" min="0" max="6"
-                                        v-model.number="addedDoll.fortifications">
+                                <div class="tab-pane fade" id="doll-damage-tab">
+                                    <div class="d-flex justify-content-between my-1">
+                                        <span>1 DEF</span>
+                                        <span class="text-white">{{ addedDoll.doAttack().toFixed( 0 ) }}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Fortress Titan Rampart</span>
+                                        <span class="text-white">
+                                            {{ addedDoll.doAttack( EmptyMapField, GSFortressTitanRampart ).toFixed( 0 )
+                                            }}
+                                        </span>
+                                    </div>
                                 </div>
-                                <!-- Mobile setters -->
-                                <div class="d-flex d-md-none form-floating">
-                                    <input type="number" class="form-control" id="mobile-helix-input"
-                                        v-model.number="addedDoll.neural_helix" min="0" max="6">
-                                    <label for="mobile-helix-input">Neural Helix</label>
+                                <div id="doll-settings-tab" class="tab-pane fade">
+                                    <div class="row my-1">
+                                        <label for="neural-helix-input" class="col-4 col-form-label">
+                                            Neural Helix
+                                            <img v-if=" addedDoll.neural_helix " class="helix-img"
+                                                :src="`/hobodrip/images/helix${addedDoll.neural_helix}.png`"
+                                                :alt="addedDoll.neural_helix.toString()">
+                                        </label>
+                                        <div class="col-8">
+                                            <input type="number" id="neural-helix-input" class="form-control" min="0"
+                                                max="6" placeholder="Neural Helix" aria-describedby="neural-helix-label"
+                                                v-model.number="addedDoll.neural_helix">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <label for="fortifications-input"
+                                            class="col-4 col-form-label">Fortifications</label>
+                                        <div class="col-8">
+                                            <input type="number" id="fortifications-input" class="form-control" min="0"
+                                                max="6" placeholder="Fortifications"
+                                                aria-describedby="fortification-label"
+                                                v-model.number="addedDoll.fortifications">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label for="weapon-selector" class="col-4 col-form-label">Weapon</label>
+                                        <div class="col-8">
+                                            <select id="weapon-selector" class="form-select"
+                                                :value="addedDoll.weapon.name"
+                                                @change="addedDoll.changeWeapon( ( $event.target as HTMLSelectElement ).value )">
+                                                <option v-for=" weapon in weaponsByType[ addedDoll.weapon.type ] "
+                                                    :key="`${addedDoll.name}-${weapon.name}`">
+                                                    {{ ( weapon as unknown as Weapon ).name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="d-flex d-md-none form-floating">
-                                    <input type="number" class="form-control" id="mobile-fortification-input"
-                                        v-model.number="addedDoll.fortifications" min="0" max="6">
-                                    <label for="mobile-helix-input">Fortifications</label>
-                                </div>
-                                <!-- End screen-based setters -->
-                                <div class="d-flex justify-content-center my-1">
-                                    <select class="form-select" :value="addedDoll.weapon.name"
-                                        @change="addedDoll.changeWeapon( ( $event.target as HTMLSelectElement ).value )">
-                                        <option v-for=" weapon in weaponsByType[ addedDoll.weapon.type ] "
-                                            v-bind:key="`${addedDoll.name}-${weapon.name}`">
-                                            {{ ( weapon as unknown as Weapon ).name }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="d-flex justify-content-between" v-for=" stat in statsToShow( addedDoll ) "
-                                    v-bind:key="`${addedDoll.name}-${stat[ 0 ]}`">
-                                    <span>{{ stat[ 0 ] }}</span>
-                                    <span class="text-white">
-                                        {{ Math.floor( stat[ 1 ] as number ) }}
-                                    </span>
+                                <div class="tab-pane fade" id="doll-keys-tab">
+                                    <div class="row g-2">
+                                        <div class="col-6" v-for=" i in 6 " :key="i">
+                                            <div class="card">
+                                                Key
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -464,6 +534,11 @@ input[type="text"] {
 .d-grid {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
+}
+
+.helix-img {
+    aspect-ratio: 1/1;
+    width: 21px;
 }
 
 @media (max-width: 767.98px) {

@@ -29,7 +29,7 @@ const formattedItems = computed( () => {
         <div class="accordion-collapse collapse show" :id="`dailies-group-${group}`"
             :aria-labelledby="`dailies-group-${group}-header`">
             <div class="accordion-body">
-                <template v-for=" item in formattedItems " v-bind:key="item.id">
+                <template v-for=" item in formattedItems " :key="item.id">
                     <DailyCommissionCheckbox :id="item.id" :text="item.text"></DailyCommissionCheckbox>
                 </template>
             </div>

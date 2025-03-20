@@ -26,7 +26,7 @@ function toSrc ( path: string ) {
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-4 col-md-2" v-for=" doll in dolls " v-bind:key="doll.name">
+                            <div class="col-4 col-md-2" v-for=" doll in dolls " :key="doll.name">
                                 <figure class="figure w-100 p-2" @click="$emit( 'selectDoll', doll )">
                                     <img :class="[ 'w-100 rounded', doll.rarity === 0 ? 'bg-standard' : 'bg-elite' ]"
                                         :alt="doll.name" :src="toSrc( doll.img_path )">

@@ -130,17 +130,25 @@ function isSupport ( doll: string ) {
                         Hint: Hold Shift while clicking a doll to mark her as not available
                     </div>
                 </div>
+<<<<<<< Updated upstream
                 <div class="row" v-for=" ( dolls, i ) in dollsByFours " v-bind:key="`team-${i}`">
                     <div class="col-12 col-md-3" v-for=" doll in dolls " v-bind:key="`team-${i}-${doll}`">
                         <DollFigure :doll="doll" :dollsToPaths="dollsToPaths" :isSupport="isSupport( doll )" select
                             :selectedTeam="teams.selectedTeam" :supportTeams="getSupportTeams( doll )"
                             :teams="getMainTeams( doll )" @dollSelect="teams.selectDoll( doll )"></DollFigure>
+=======
+                <div class="row g-3">
+                    <div class="col-12 col-md-3" v-for=" doll in Dolls " :key="doll.name">
+                        <DollFigure :doll="doll" :isSupport="isSupport( doll.name )" select
+                            :selectedTeam="teams.selectedTeam" :supportTeams="getSupportTeams( doll.name )"
+                            :teams="getMainTeams( doll.name )" @dollSelect="teams.selectDoll( doll.name )"></DollFigure>
+>>>>>>> Stashed changes
                     </div>
                 </div>
             </div>
 
             <div class="col-9 col-md-8 row d-flex flex-column justify-content-center">
-                <template v-for=" ( team, a ) in 3 " v-bind:key="`team-${a}`">
+                <template v-for=" ( team, a ) in 3 " :key="`team-${a}`">
                     <div :class="[
                         'container-fluid col-md-10 d-flex justify-content-evenly rounded mt-2 pt-4 pe-md-4',
                         a === teams.selectedTeam
@@ -150,8 +158,14 @@ function isSupport ( doll: string ) {
                         <div class="d-none d-md-flex justify-content-center align-items-center">
                             <span class="text-center fw-bold pb-3 user-select-none">Team {{ team }}</span>
                         </div>
+<<<<<<< Updated upstream
                         <div v-for=" ( slot, b ) in 5 " v-bind:key="`slot-${b}`">
                             <DollFigure :doll="teams.selectedDolls[ a * 5 + b ]" :dollsToPaths="dollsToPaths"
+=======
+                        <div v-for=" ( slot, b ) in 5 " :key="`slot-${b}`">
+                            <DollFigure
+                                :doll="Dolls.find( d => d.name === teams.selectedDolls[ a * 5 + b ] ) || PlaceholderDoll"
+>>>>>>> Stashed changes
                                 :index="a * 5 + b" @dollDeselect="teams.deselectDoll">
                             </DollFigure>
                         </div>

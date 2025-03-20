@@ -283,7 +283,7 @@ export class Doll extends Unit {
      * @returns The average damage to be expected (damage is set to the average expected when crit
      * is accounted for).)
      */
-    doAttack ( field: MapField, target: Enemy, skillModifier = 0.8, coverIgnore = 0 ) {
+    doAttack ( field?: MapField, target: Enemy = DefaultEnemy, skillModifier = 0.8, coverIgnore = 0 ) {
         const attack = this.totalAttack
         const scaledAttack = attack / ( 1 + target.defense / attack )
         const critValue = ( this.totalCritDmg - 100 ) / ( 100 / this.crit_rate )

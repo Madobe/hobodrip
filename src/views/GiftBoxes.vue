@@ -66,8 +66,8 @@ function formatField ( data: string | number ) {
                 </tr>
             </thead>
             <tbody id="gift-box-table" class="table-group-divider">
-                <tr v-for=" ( doll, a ) in dolls " v-bind:key="`doll-row-${a}`">
-                    <td v-for=" data in doll " :class="fieldClasses( data )" v-bind:key="`${a}-${data}`">
+                <tr v-for=" ( doll, a ) in dolls " :key="`doll-row-${a}`">
+                    <td v-for=" data in doll " :class="fieldClasses( data )" :key="`${a}-${data}`">
                         {{ formatField( data ) }}
                     </td>
                 </tr>

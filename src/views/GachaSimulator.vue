@@ -364,7 +364,7 @@ const pieOptions = {
                     </div>
                     <div class="container-fluid h-100 p-0">
                         <div class="container-fluid" v-for=" ( pull, i ) in [ ...pulls.pulls ].reverse() "
-                            v-bind:key="`pull-${i}`">
+                            :key="`pull-${i}`">
                             <div v-if=" ( isElite( pull.name ) && showElites ) || ( isStandard( pull.name ) && showStandards ) || ( pull.name.startsWith( 'Retired' ) && showRetired ) "
                                 :class="[ 'row border-bottom border-secondary py-1',
                                     isElite( pull.name ) ? 'bg-elite' : '',

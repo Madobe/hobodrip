@@ -59,9 +59,15 @@ const toggleGreyedOut = ( doll: string ) => {
 <template>
     <figure class="figure position-relative" @click.exact="selectDoll()" @click.shift="toggleGreyedOut( doll )">
         <img :class="[ 'img-fluid rounded mx-auto d-block user-select-none',
+<<<<<<< Updated upstream
             select ? 'bg-secondary' : '', !!teams.length ? 'opacity-25' : '', greyedOut.has( doll ) ? 'opacity-25' : '' ]"
             :src="src" :alt="doll" />
         <template v-for=" ( team, i ) in teams " v-bind:key="i">
+=======
+            select ? 'bg-secondary' : '', !!teams.length ? 'opacity-25' : '', greyedOut.has( doll.name ) ? 'opacity-25' : '' ]"
+            :src="src" :alt="doll.name" />
+        <template v-for=" ( team, i ) in teams " :key="i">
+>>>>>>> Stashed changes
             <span v-if=" !!teams.length " :class="[ `badge rounded-pill position-absolute top-0`,
                 selectedTeam === team - 1 ? 'text-bg-primary' : '' ]">
                 {{ team }}
