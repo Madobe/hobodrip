@@ -61,12 +61,6 @@ const members = [
         username: "clockworkfigure",
     },
     {
-        ign: "Vargas",
-        uid: "1837372",
-        username: "nanamin",
-        notes: "Nanamin's alt",
-    },
-    {
         ign: "RUBEIDO",
         uid: "41218",
         username: "rubeido",
@@ -146,11 +140,6 @@ const members = [
         notes: "Random"
     },
     {
-        ign: "SZX",
-        uid: "229038",
-        username: "shizuocha"
-    },
-    {
         ign: "Makoto",
         uid: "2247726",
         username: "jwuihuissusshsushwhw"
@@ -159,6 +148,16 @@ const members = [
         ign: "Lapsniffer",
         uid: "399006",
         username: "abeiros."
+    },
+    {
+        ign: "Lemon",
+        uid: "28105",
+        username: "lemonblock"
+    },
+    {
+        ign: "GUSU",
+        uid: "11739",
+        username: "gusu"
     }
 ]
 </script>
