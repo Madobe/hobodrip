@@ -158,6 +158,17 @@ const members = [
         ign: "GUSU",
         uid: "11739",
         username: "gusu"
+    },
+    {
+        ign: "Max",
+        uid: "22926",
+        username: "maxxxymooo"
+    },
+    {
+        ign: "Zero",
+        uid: "63206",
+        username: "",
+        notes: "Random"
     }
 ]
 </script>
