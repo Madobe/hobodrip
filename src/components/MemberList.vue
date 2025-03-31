@@ -174,6 +174,11 @@ const members = [
         ign: "Magnets",
         uid: "270852",
         username: "magnetsfgc"
+    },
+    {
+        ign: "Cylnoir",
+        uid: "23800",
+        username: "cylnoir"
     }
 ]
 </script>
