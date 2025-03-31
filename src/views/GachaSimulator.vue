@@ -173,7 +173,7 @@ function doSinglePull () {
 
     if ( roll < eliteRate ) {
         // There's no elite weapon in the doll banner anyway
-        if ( Math.random() * 100 < 50 ) {
+        if ( pulls.pity || Math.random() * 100 < 50 ) {
             // Figure out which doll in the elite pool is in the rate up (it is assumed this exists
             // and only one exists)
             return currentRateUps.filter( d => processedSupply.dolls.elites.includes( d ) )[ 0 ]
@@ -363,7 +363,7 @@ const pieOptions = {
                     </div>
                     <div class="container-fluid h-100 p-0">
                         <div class="container-fluid" v-for=" ( pull, i ) in [ ...pulls.pulls ].reverse() "
-                            v-bind:key="`pull-${i}`">
+                            :key="`pull-${i}`">
                             <div v-if=" ( isElite( pull.name ) && showElites ) || ( isStandard( pull.name ) && showStandards ) || ( pull.name.startsWith( 'Retired' ) && showRetired ) "
                                 :class="[ 'row border-bottom border-secondary py-1',
                                     isElite( pull.name ) ? 'bg-elite' : '',
