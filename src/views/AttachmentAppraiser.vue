@@ -25,7 +25,6 @@ import AffinityDisplay from '@/components/AffinityDisplay.vue';
 import { EmptyMapField } from '@/models/map-field';
 import GSFortressTitanRampart from '@/models/enemies/gs-fortress-titan-rampart';
 
-const helixImgs = [ "", helix1, helix2, helix3, helix4, helix5, helix6 ]
 const weaponsByType = Object.groupBy( Weapons, weapon => weapon.type )
 
 const toasts: {
@@ -381,13 +380,6 @@ document.onpaste = function ( event ) {
                             </div>
                         </div>
                         <div class="container-fluid my-3 me-3">
-<<<<<<< Updated upstream
-                            <div class="h-100 d-flex flex-column justify-content-around">
-                                <!-- Desktop setters -->
-                                <div class="d-none d-md-flex flex-row">
-                                    <div class="me-1" style="width: 25px;">
-                                        <img class="img-fluid" :src="helixImgs[ addedDoll.neural_helix ]">
-=======
                             <nav class="nav nav-pills nav-fill" role="tablist">
                                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#doll-stats-tab"
                                     type="button" role="tab" aria-controls="doll-stats-tab" aria-selected="true">
@@ -415,7 +407,6 @@ document.onpaste = function ( event ) {
                                         <span class="text-white">
                                             {{ Math.floor( stat[ 1 ] as number ) }}
                                         </span>
->>>>>>> Stashed changes
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="doll-damage-tab">

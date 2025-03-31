@@ -2,12 +2,12 @@
 import { computed, reactive } from "vue"
 
 import placeholderImg from "@/assets/images/placeholder.png"
+import type { Doll } from "@/models/doll";
 
 const emit = defineEmits( [ "dollDeselect", "dollSelect" ] )
 const props = withDefaults(
     defineProps<{
-        doll: string
-        dollsToPaths: { [ x: string ]: string },
+        doll: Doll
         index?: number
         isSupport?: boolean
         select?: boolean
@@ -63,22 +63,24 @@ const toggleGreyedOut = ( doll: string ) => {
             select ? 'bg-secondary' : '', !!teams.length ? 'opacity-25' : '', greyedOut.has( doll ) ? 'opacity-25' : '' ]"
             :src="src" :alt="doll" />
         <template v-for=" ( team, i ) in teams " v-bind:key="i">
-=======
-            select ? 'bg-secondary' : '', !!teams.length ? 'opacity-25' : '', greyedOut.has( doll.name ) ? 'opacity-25' : '' ]"
+            =======
+            select ? 'bg-secondary' : '', !!teams.length ? 'opacity-25' : '', greyedOut.has( doll.name ) ? 'opacity-25'
+            : '' ]"
             :src="src" :alt="doll.name" />
-        <template v-for=" ( team, i ) in teams " :key="i">
->>>>>>> Stashed changes
-            <span v-if=" !!teams.length " :class="[ `badge rounded-pill position-absolute top-0`,
-                selectedTeam === team - 1 ? 'text-bg-primary' : '' ]">
-                {{ team }}
+            <template v-for=" ( team, i ) in teams " :key="i">
+                >>>>>>> Stashed changes
+                <span v-if=" !!teams.length " :class="[ `badge rounded-pill position-absolute top-0`,
+                    selectedTeam === team - 1 ? 'text-bg-primary' : '' ]">
+                    {{ team }}
+                </span>
+            </template>
+            <span v-if=" isSupport "
+                :class="[ 'badge rounded-pill position-absolute top-0 end-0', supportBadgeClasses ]">
+                S
             </span>
-        </template>
-        <span v-if=" isSupport " :class="[ 'badge rounded-pill position-absolute top-0 end-0', supportBadgeClasses ]">
-            S
-        </span>
-        <figcaption class="d-none d-md-block figure-caption text-center user-select-none">
-            {{ doll || "&nbsp;" }}
-        </figcaption>
+            <figcaption class="d-none d-md-block figure-caption text-center user-select-none">
+                {{ doll || "&nbsp;" }}
+            </figcaption>
     </figure>
 </template>
 
