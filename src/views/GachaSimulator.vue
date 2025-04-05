@@ -96,7 +96,9 @@ onMounted( () => {
         pulls.elites = pulls.pulls.filter( pull => isElite( pull.name ) ).length
         pulls.standards = pulls.pulls.filter( pull => isStandard( pull.name ) ).length
         pulls.count = pulls.pulls.length ? pulls.pulls[ pulls.pulls.length - 1 ].pity : 0
-        pulls.pity = pulls.pulls.length ? isElite( pulls.pulls[ pulls.pulls.length - 1 ].name ) : false
+        pulls.pity = pulls.pulls.length && isElite( pulls.pulls[ pulls.pulls.length - 1 ].name ) ?
+            currentRateUps.includes( pulls.pulls[ pulls.pulls.length - 1 ].name ) :
+            false
     }
     if ( savedPityCounter ) {
         pulls.count = JSON.parse( savedPityCounter )
