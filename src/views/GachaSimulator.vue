@@ -28,9 +28,9 @@ const modalVideoType = ref( 0 )
 let modalVideoTimeout = 0
 
 const currentRateUps = [
-    "Mechty",
-    "Sharkry",
-    "Nagant"
+    "Yoohee",
+    "Krolik",
+    "Nemesis"
 ]
 
 const processedSupply = supply.data.reduce<GachaSupply>( ( accumulator, value ) => {
