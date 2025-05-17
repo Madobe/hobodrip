@@ -281,7 +281,7 @@ document.onpaste = function ( event ) {
     </DollSelectorModal>
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true"
-            v-for=" toast in toasts " :id="toast.id" v-bind:key="toast.id">
+            v-for=" toast in toasts " :id="toast.id" :key="toast.id">
             <div class="d-flex">
                 <div class="toast-body">{{ toast.message }}</div>
                 <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -302,7 +302,7 @@ document.onpaste = function ( event ) {
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center attachment-category"
                             v-for=" ( attachmentType, i ) in Object.keys( ATTACHMENT_TYPES ) "
-                            v-bind:key="`${attachmentType}-${i}`" @click="showAttachmentViewer( attachmentType )">
+                            :key="`${attachmentType}-${i}`" @click="showAttachmentViewer( attachmentType )">
                             {{ attachmentType }}
                             <span class="badge text-bg-primary rounded-pill">
                                 {{ attachments.data[ Math.floor( i / 4 ) ][ i % 4 ].length }}
@@ -312,7 +312,7 @@ document.onpaste = function ( event ) {
                 </div>
             </div>
             <div class="col-12 col-md-9 py-3 doll-boxes">
-                <template v-for=" addedDoll in addedDolls.ordered " v-bind:key="addedDoll.name">
+                <template v-for=" addedDoll in addedDolls.ordered " :key="addedDoll.name">
                     <div class="border border-3 border-secondary-subtle text-secondary-emphasis d-flex flex-row mb-3">
                         <div
                             class="d-flex justify-content-center justify-content-md-around flex-column flex-md-row ms-md-3">
@@ -335,14 +335,14 @@ document.onpaste = function ( event ) {
                         <div class="container-fluid my-3">
                             <div class="h-100 d-grid gap-2">
                                 <div class="w-100 d-flex flex-column justify-content-around" v-for=" i in 4 "
-                                    v-bind:key="`${addedDoll.name}-${i}`">
+                                    :key="`${addedDoll.name}-${i}`">
                                     <div class="border-bottom my-1" v-if=" !!addedDoll.weapon.attachments[ i - 1 ] ">
                                         {{ addedDoll.weapon.attachments[ i - 1 ].name }}
                                     </div>
                                     <template v-if=" !!addedDoll.weapon.attachments[ i - 1 ] ">
                                         <div class="d-flex justify-content-between"
                                             v-for=" stat in addedDoll.weapon.attachments[ i - 1 ].stats "
-                                            v-bind:key="`${i}-${stat.stat}`">
+                                            :key="`${i}-${stat.stat}`">
                                             <span>{{ stat.stat }}</span>
                                             <span class="d-flex align-items-center text-white">
                                                 {{ stat.value.toFixed( 1 ) }}
@@ -388,13 +388,13 @@ document.onpaste = function ( event ) {
                                     <select class="form-select" :value="addedDoll.weapon.name"
                                         @change="addedDoll.changeWeapon( ( $event.target as HTMLSelectElement ).value )">
                                         <option v-for=" weapon in weaponsByType[ addedDoll.weapon.type ] "
-                                            v-bind:key="`${addedDoll.name}-${weapon.name}`">
+                                            :key="`${addedDoll.name}-${weapon.name}`">
                                             {{ ( weapon as unknown as Weapon ).name }}
                                         </option>
                                     </select>
                                 </div>
                                 <div class="d-flex justify-content-between" v-for=" stat in statsToShow( addedDoll ) "
-                                    v-bind:key="`${addedDoll.name}-${stat[ 0 ]}`">
+                                    :key="`${addedDoll.name}-${stat[ 0 ]}`">
                                     <span>{{ stat[ 0 ] }}</span>
                                     <span class="text-white">
                                         {{ Math.floor( stat[ 1 ] as number ) }}

@@ -56,7 +56,7 @@ function updateValue ( event: Event, slot: number ) {
                             <label for="create-attachment-type-select" class="form-label">Type</label>
                             <select id="create-attachment-type-select" class="form-select"
                                 aria-label="Attachment type select" v-model="formValues.type" required>
-                                <option v-for=" type in Object.keys( ATTACHMENT_TYPES ) " v-bind:key="type">
+                                <option v-for=" type in Object.keys( ATTACHMENT_TYPES ) " :key="type">
                                     {{ type }}
                                 </option>
                             </select>
@@ -65,17 +65,17 @@ function updateValue ( event: Event, slot: number ) {
                             <label for="create-attachment-set-select" class="form-label">Set</label>
                             <select id="create-attachment-set-select" class="form-select"
                                 aria-label="Attachment set select" v-model="formValues.set" required>
-                                <option v-for=" set in [ '' ].concat( ATTACHMENT_SETS ) " v-bind:key="set">
+                                <option v-for=" set in [ '' ].concat( ATTACHMENT_SETS ) " :key="set">
                                     {{ set }}
                                 </option>
                             </select>
                         </div>
-                        <template v-for=" n in statCount " v-bind:key="`stat-${n}`">
+                        <template v-for=" n in statCount " :key="`stat-${n}`">
                             <div class="col-6">
                                 <label class="form-label">Stat {{ n }}</label>
                                 <select class="form-select" @change="updateStat( $event, n - 1 )" required>
                                     <option v-for=" stat in [ '' ].concat( AVAILABLE_STATS ) " :value="stat"
-                                        v-bind:key="`${stat}-${n}`">
+                                        :key="`${stat}-${n}`">
                                         {{ stat }}
                                     </option>
                                 </select>

@@ -27,7 +27,7 @@ defineProps<{
                         <div class="row">
                             <div class="col-6 col-md-3 mb-3"
                                 v-for=" ( attachment, i ) in attachments[ weaponType ][ attachmentSlot ] "
-                                v-bind:key="`${weaponType}-${attachmentSlot}-${i}`">
+                                :key="`${weaponType}-${attachmentSlot}-${i}`">
                                 <div class="card">
                                     <div class="card-body d-flex flex-column justify-content-between">
                                         <div class="card-title d-flex flex-row justify-content-between">
@@ -38,7 +38,7 @@ defineProps<{
                                             </button>
                                         </div>
                                         <div class="d-flex flex-row justify-content-between"
-                                            v-for=" stat in attachment.stats " v-bind:key="`${i}-${stat.stat}`">
+                                            v-for=" stat in attachment.stats " :key="`${i}-${stat.stat}`">
                                             <span>{{ stat.stat }}</span>
                                             <span>{{ stat.value.toFixed( 1 ) }}</span>
                                         </div>

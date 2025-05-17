@@ -56,7 +56,7 @@ const toggleGreyedOut = ( doll: string ) => {
         <img :class="[ 'img-fluid rounded mx-auto d-block user-select-none',
             select ? 'bg-secondary' : '', !!teams.length ? 'opacity-25' : '', greyedOut.has( doll.name ) ? 'opacity-25' : '' ]"
             :src="src" :alt="doll.name" />
-        <template v-for=" ( team, i ) in teams " v-bind:key="i">
+        <template v-for=" ( team, i ) in teams " :key="i">
             <span v-if=" !!teams.length " :class="[ `badge rounded-pill position-absolute top-0`,
                 selectedTeam === team - 1 ? 'text-bg-primary' : '' ]">
                 {{ team }}
