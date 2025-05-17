@@ -89,8 +89,10 @@ const MAX_PULLS = 1000
 onMounted( () => {
     const savedPulls = localStorage.getItem( 'hobodrip.gachaPulls' )
     const savedPityCounter = localStorage.getItem( 'hobodrip.gachaPityCounter' )
+
     if ( savedPulls ) {
         pulls.addPulls( JSON.parse( savedPulls ) )
+
         // Update the chart and text
         pulls.total = pulls.pulls.length
         pulls.elites = pulls.pulls.filter( pull => isElite( pull.name ) ).length
@@ -100,18 +102,15 @@ onMounted( () => {
             currentRateUps.includes( pulls.pulls[ pulls.pulls.length - 1 ].name ) :
             false
     }
+
     if ( savedPityCounter ) {
         pulls.count = JSON.parse( savedPityCounter )
     }
-} )
 
-// Watch for changes in pulls and pity counter, and save to localStorage
-watch( () => pulls.pulls, ( newPulls ) => {
-    localStorage.setItem( 'hobodrip.gachaPulls', JSON.stringify( newPulls ) )
-}, { deep: true } )
-
-watch( () => pulls.count, ( newCount ) => {
-    localStorage.setItem( 'hobodrip.gachaPityCounter', JSON.stringify( newCount ) )
+    // Watch for changes in pity counter and save to localStorage
+    watch( () => pulls.count, ( newCount ) => {
+        localStorage.setItem( 'hobodrip.gachaPityCounter', JSON.stringify( newCount ) )
+    } )
 } )
 
 // Methods
@@ -231,6 +230,19 @@ function isElite ( name: string ) {
  */
 function isStandard ( name: string ) {
     return processedSupply.dolls.standards.includes( name ) || processedSupply.weapons.standards.includes( name )
+}
+
+/**
+ * Determines whether the given pull is visible in the results list.
+ * @param name The name of the pull result to check.
+ */
+function isVisible ( name: string ): boolean {
+    return !!name &&
+        (
+            ( isElite( name ) && showElites.value ) ||
+            ( isStandard( name ) && showStandards.value ) ||
+            ( name.startsWith( 'Retired' ) && showRetired.value )
+        )
 }
 
 /**
@@ -364,12 +376,11 @@ const pieOptions = {
                         </button>
                     </div>
                     <div class="container-fluid h-100 p-0">
-                        <div class="container-fluid" v-for=" ( pull, i ) in [ ...pulls.pulls ].reverse() "
+                        <div class="container-fluid" v-for=" ( pull, i ) in pulls.pulls.toReversed() "
                             :key="`pull-${i}`">
-                            <div v-if=" ( isElite( pull.name ) && showElites ) || ( isStandard( pull.name ) && showStandards ) || ( pull.name.startsWith( 'Retired' ) && showRetired ) "
-                                :class="[ 'row border-bottom border-secondary py-1',
-                                    isElite( pull.name ) ? 'bg-elite' : '',
-                                    isStandard( pull.name ) ? 'bg-standard' : '' ]">
+                            <div v-if=" isVisible( pull.name ) " :class="[ 'row border-bottom border-secondary py-1',
+                                isElite( pull.name ) ? 'bg-elite' : '',
+                                isStandard( pull.name ) ? 'bg-standard' : '' ]">
                                 <div class="col-3">{{ pulls.pulls.length - i }}</div>
                                 <div class="col-6">{{ pull.name }}</div>
                                 <div class="col-3" v-if=" isElite( pull.name ) ">Pity: {{ pull.pity }}</div>
