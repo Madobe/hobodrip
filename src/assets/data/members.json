@@ -1,6 +1,7 @@
 [
     {
         "ign": "AgguBaggu",
+        "inactive": true,
         "uid": "1122607",
         "username": "aggubaggu"
     },
@@ -163,6 +164,11 @@
         "ign": "RUBEIDO",
         "uid": "41218",
         "username": "rubeido"
+    },
+    {
+        "ign": "RuRu",
+        "uid": "14530",
+        "username": "ruru22"
     },
     {
         "ign": "SHIDONī",
