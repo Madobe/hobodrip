@@ -29,6 +29,7 @@
     },
     {
         "ign": "Chrose",
+        "inactive": true,
         "uid": "846409",
         "username": "chrose"
     },
@@ -169,6 +170,12 @@
         "ign": "RuRu",
         "uid": "14530",
         "username": "ruru22"
+    },
+    {
+        "ign": "Seyemei",
+        "notes": "Random",
+        "uid": "947887",
+        "username": ""
     },
     {
         "ign": "SHIDONī",
