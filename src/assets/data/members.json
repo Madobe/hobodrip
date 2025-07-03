@@ -93,6 +93,7 @@
     },
     {
         "ign": "John Frontline",
+        "inactive": true,
         "uid": "2231453",
         "username": "",
         "notes": "Random"
