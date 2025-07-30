@@ -30,6 +30,7 @@
     },
     {
         "ign": "Chin Chin",
+        "inactive": true,
         "uid": "51138",
         "username": "chievic2030"
     },
@@ -47,7 +48,7 @@
     {
         "ign": "Commander",
         "uid": "668152",
-        "username": "themilkman050"
+        "username": "thetwinturbo"
     },
     {
         "ign": "cupkate",
@@ -188,6 +189,7 @@
     },
     {
         "ign": "RuRu",
+        "inactive": true,
         "uid": "14530",
         "username": "ruru22"
     },
@@ -217,6 +219,7 @@
     },
     {
         "ign": "UnJ",
+        "inactive": true,
         "uid": "137630",
         "username": "",
         "notes": "Kuu Aro's friend"
@@ -226,6 +229,12 @@
         "uid": "1837372",
         "username": "nanamin",
         "notes": "Nanamin's alt"
+    },
+    {
+        "ign": "VoidGnome",
+        "uid": "2296073",
+        "username": "",
+        "notes": "Random"
     },
     {
         "ign": "Vyntusius",
