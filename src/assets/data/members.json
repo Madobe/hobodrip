@@ -62,6 +62,7 @@
     },
     {
         "ign": "DeltaReckoner",
+        "inactive": true,
         "uid": "421412",
         "username": "deltareckoner"
     },
