@@ -28,9 +28,9 @@ const modalVideoType = ref( 0 )
 let modalVideoTimeout = 0
 
 const currentRateUps = [
-    "Qiuhua",
-    "Groza",
-    "Colphne"
+    "Nikketa",
+    "Krolik",
+    "Nemesis"
 ]
 
 const processedSupply = supply.data.reduce<GachaSupply>( ( accumulator, value ) => {
@@ -405,7 +405,7 @@ const pieOptions = {
                             <div class="container d-flex justify-content-between">
                                 <span>Elites: </span>
                                 <span>{{ pulls.elites }} ({{ ( pulls.elites / pulls.total * 100 || 0 ).toFixed( 2 )
-                                }}%)</span>
+                                    }}%)</span>
                             </div>
                             <div class="container d-flex justify-content-between">
                                 <span>Standards: </span>
