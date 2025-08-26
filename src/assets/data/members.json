@@ -6,6 +6,12 @@
         "username": "aggubaggu"
     },
     {
+        "ign": "Agis",
+        "uid": "182253",
+        "username": "",
+        "notes": "Random"
+    },
+    {
         "ign": "Ain",
         "inactive": true,
         "uid": "280464",
@@ -145,6 +151,7 @@
     },
     {
         "ign": "Koreli",
+        "inactive": true,
         "uid": "18766",
         "username": "",
         "notes": "Random"
@@ -181,6 +188,7 @@
     },
     {
         "ign": "Max",
+        "inactive": true,
         "uid": "22926",
         "username": "maxxxymooo"
     },
@@ -241,6 +249,7 @@
     },
     {
         "ign": "SleepyTomato",
+        "inactive": true,
         "uid": "2328665",
         "username": "",
         "notes": "Random"
