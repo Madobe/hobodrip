@@ -42,6 +42,12 @@
         "notes": "Nathin's friend"
     },
     {
+        "ign": "Brodyaga",
+        "uid": "310849",
+        "username": "",
+        "notes": "Random"
+    },
+    {
         "ign": "Chin Chin",
         "inactive": true,
         "uid": "51138",
@@ -55,6 +61,7 @@
     },
     {
         "ign": "Cixe",
+        "inactive": true,
         "uid": "205947",
         "username": "weezybuttjr"
     },
@@ -152,6 +159,7 @@
     },
     {
         "ign": "Koreli",
+        "inactive": true,
         "uid": "18766",
         "username": "",
         "notes": "Random"
@@ -199,6 +207,7 @@
     },
     {
         "ign": "Nataly",
+        "inactive": true,
         "uid": "727922",
         "username": "nathin1"
     },
@@ -251,6 +260,12 @@
         "ign": "SleepyTomato",
         "inactive": true,
         "uid": "2328665",
+        "username": "",
+        "notes": "Random"
+    },
+    {
+        "ign": "SpicyNuggets",
+        "uid": "2678690",
         "username": "",
         "notes": "Random"
     },
