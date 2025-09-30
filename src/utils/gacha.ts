@@ -81,7 +81,7 @@ export function useGacha ( { id, rateUp, type = GachaType.DOLL, onFirstFn }: Use
             softPity: 48
         }
     }[ type ]
-    const pity = computed( () => clamp( pullCount.value - pulls.value.findLastIndex( p => p.category & Category.ELITE ), 0, params.hardPity ) )
+    const pity = computed( () => pullCount.value - clamp( pulls.value.findLastIndex( p => p.category & Category.ELITE ), 0, params.hardPity ) )
     const pulls = ref( [] as PullRecord[] )
     const pullCount = computed( () => pulls.value.length )
     const standardPity = computed( () => pullCount.value - pulls.value.findLastIndex( p => p.category & Category.STANDARD ) - 1 )
