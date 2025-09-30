@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export function getRandomElement ( arr: any[] ) {
+
+export function getRandomElement<T> ( arr: T[] ) {
     return arr[ Math.floor( Math.random() * arr.length ) ]
 }

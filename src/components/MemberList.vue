@@ -1,23 +1,19 @@
 <script setup lang="ts">
-import untypedMembers from '@/assets/data/members.json'
+import { useMembers } from '@/data-providers/members'
 
-interface Member {
-    ign: string
-    inactive?: boolean
-    notes?: string
-    uid: string
-    username: string
-}
+const {
+    getActive,
+    getInactive
+} = useMembers()
 
-const members: Member[] = untypedMembers
 const tableData = [
     {
         title: "Current",
-        data: members.filter( m => !m.inactive )
+        data: getActive()
     },
     {
         title: "Former",
-        data: members.filter( m => m.inactive )
+        data: getInactive()
     }
 ]
 </script>

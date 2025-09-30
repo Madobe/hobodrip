@@ -1,4 +1,12 @@
-[
+export type Member = {
+    ign: string
+    inactive?: boolean
+    notes?: string
+    uid: string
+    username: string
+}
+
+const members: Member[] = [
     {
         "ign": "AgguBaggu",
         "inactive": true,
@@ -316,3 +324,19 @@
         "username": "zniper20"
     }
 ]
+
+export function useMembers () {
+    function getActive () {
+        return members.filter( member => !member.inactive )
+    }
+
+    function getInactive () {
+        return members.filter( member => member.inactive )
+    }
+
+    return {
+        members,
+        getActive,
+        getInactive
+    }
+}
